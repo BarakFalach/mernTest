@@ -59,16 +59,25 @@ async (req,res) => {
 
   await user.save();
 
-  res.send('user upload')
+    // return jsonWebToken 
+    const payload = {
+      user: {
+        id: user.id
+      }
+    }
 
-  // return jsonWebToken 
-
-
+    jwt.sign(
+      payload, 
+      config.get("jwtSecret"),
+      {expiresIn: 3600000},
+      (err, token)=> {
+        if (err) throw err;
+        res.json({token});
+      });
   }
   catch(err) {
     console.error(err.message);
     res.status(500).send('server Error');
-
   }
 
 }
