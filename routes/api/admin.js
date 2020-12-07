@@ -10,7 +10,7 @@ const {check,validationResult} = require('express-validator');
 const Admin = require('../../models/Admin');
 
 // @route   POST api/admin
-// @desc    Register user
+// @desc    Register admin
 // @access  Public
 
 router.post('/', [
@@ -47,14 +47,14 @@ async (req,res) => {
 
   const salt = await bcrypt.genSalt(10);
 
-  user.password = await bcrypt.hash(password,salt);
+  admin.password = await bcrypt.hash(password,salt);
 
-  await user.save();
+  await admin.save();
 
     // return jsonWebToken 
     const payload = {
-      user: {
-        id: user.id
+      admin: {
+        id: admin.id
       }
     }
 

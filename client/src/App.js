@@ -7,7 +7,6 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import managerIcon from './assets/managar2.png';
 import playerIcon from './assets/player.png';
 
-
   const App = () => (
     <Router>
       <Fragment>  
@@ -19,7 +18,7 @@ import playerIcon from './assets/player.png';
         </section>
       </Fragment>
     </Router>
-     
+
   );
 
 

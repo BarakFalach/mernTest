@@ -1,6 +1,26 @@
 body {
+<<<<<<< HEAD
   background-color: rgb(255, 240, 240);
   text-align: center;
+=======
+	background: burlywood;
+}
+h1 {
+	text-align: center;
+}
+input {
+	margin: 30px;
+}
+p {
+	margin: 30px;
+}
+#input_div {
+	text-align: center;
+}
+button {
+	height: 30px;
+	width: 100px;
+>>>>>>> 2cb1f4d7dc3766578879722258450133aebc867e
 }
 
 /* Three image containers (use 25% for four, and 50% for two, etc) */
