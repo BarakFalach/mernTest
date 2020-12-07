@@ -10,7 +10,7 @@ const User = require("../../models/Admin");
 const Admin = require('../../models/Admin');
 
 // @route   POST api/admin
-// @desc    Register user
+// @desc    Register admin
 // @access  Public
 
 router.post('/', [
@@ -31,13 +31,13 @@ async (req,res) => {
   try {
 
   // See if the User exists
-    let user = await Admin.findOne({email});
+    let admin = await Admin.findOne({email});
 
-    if(user) {
+    if(admin) {
       return res.status(400).json({ errors: [{ msg: "admin already exists"}] });
     }
 
-  user = new User ({
+  admin = new Admin ({
     name,
     email,
     password
@@ -47,14 +47,14 @@ async (req,res) => {
 
   const salt = await bcrypt.genSalt(10);
 
-  user.password = await bcrypt.hash(password,salt);
+  admin.password = await bcrypt.hash(password,salt);
 
-  await user.save();
+  await admin.save();
 
     // return jsonWebToken 
     const payload = {
-      user: {
-        id: user.id
+      admin: {
+        id: admin.id
       }
     }
 
