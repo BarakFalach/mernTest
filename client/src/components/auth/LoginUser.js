@@ -1,10 +1,11 @@
 import React from 'react'
+import playerIcon from '../../assets/player.png'
+
 
 const LoginUser = () => {
     return (
         <div>
-            User
-            
+            <h1> Welcome User </h1>            
         </div>
     )
 }
