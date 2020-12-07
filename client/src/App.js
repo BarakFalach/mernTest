@@ -1,15 +1,14 @@
 import React, {Fragment} from 'react'
 import LoginUser from './components/auth/LoginUser';
 import LoginAdmin from './components/auth/LoginAdmin';
-
+import Landing from './components/layouts/landing';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import managerIcon from './assets/managar2.png';
-import playerIcon from './assets/player.png';
 
   const App = () => (
     <Router>
-      <Fragment>  
+      <Fragment>
+      <Route exact path="/" component={Landing}/>  
         <section className="container">
           <Switch>
             <Route exact path="/loginUser" component={LoginUser}/>
