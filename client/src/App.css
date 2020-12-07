@@ -1,6 +1,21 @@
 body {
-  background-color: red;
-  text-align: center;
+	background: burlywood;
+}
+h1 {
+	text-align: center;
+}
+input {
+	margin: 30px;
+}
+p {
+	margin: 30px;
+}
+#input_div {
+	text-align: center;
+}
+button {
+	height: 30px;
+	width: 100px;
 }
 
 /**
