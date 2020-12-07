@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 const {check,validationResult} = require('express-validator');
 
-const User = require("../../models/Admin");
+//const User = require("../../models/Admin");
 const Admin = require('../../models/Admin');
 
 // @route   POST api/admin
@@ -31,13 +31,13 @@ async (req,res) => {
   try {
 
   // See if the User exists
-    let user = await Admin.findOne({email});
+    let admin = await Admin.findOne({email});
 
-    if(user) {
+    if(admin) {
       return res.status(400).json({ errors: [{ msg: "admin already exists"}] });
     }
 
-  user = new User ({
+  admin = new Admin ({
     name,
     email,
     password
