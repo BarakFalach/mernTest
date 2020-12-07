@@ -1,4 +1,8 @@
 body {
+<<<<<<< HEAD
+  background-color: rgb(255, 240, 240);
+  text-align: center;
+=======
 	background: burlywood;
 }
 h1 {
@@ -16,12 +20,27 @@ p {
 button {
 	height: 30px;
 	width: 100px;
+>>>>>>> 2cb1f4d7dc3766578879722258450133aebc867e
+}
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
 /**
 .App {
   text-align: center;
-}
+}'
 
 .App-logo {
   height: 40vmin;
