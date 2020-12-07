@@ -1,5 +1,7 @@
 import React, {Fragment, useState} from 'react'
 import axios from 'axios';
+import DribbleButton from 'react-dribble-button';
+import styles from './EdenCss.css';
 
 
 
@@ -40,14 +42,13 @@ const LoginAdmin = () => {
             <title>Welcome To The Developer Connector</title>
         </head>
         <body>
-            
             <section class="container">
-            <h1 class="large text-primary">
+            <h1 class="large text-primary" class="col-centered">
                 Sign In
             </h1>
-
-                <div class="form-group">
+                <div class="form-group" class="col-centered">
                     <input 
+                        className="formField"
                         type="text"
                         placeholder="Email Adress"
                         name="email" 
@@ -56,8 +57,9 @@ const LoginAdmin = () => {
                         required/>
                 </div>
 
-                <div class="form-group">
-                    <input 
+                <div class="form-group" class="col-centered" >
+                    <input
+                        className="formField"
                         type="password"
                         placeholder="* Password"
                         name="password"
@@ -66,16 +68,18 @@ const LoginAdmin = () => {
                         required />
                 </div>
                 
-                <div class="signIn">
-                    <button type="button" class="btn sign_in">
-                        sign in
-                    </button>
+                <div class="sign In" class="col-centered">
+                    <DribbleButton className="AnimateButton" color="deep-orange" onClick={"TODO"} animationDuration={1000} >
+                      <div className="LogInText">
+                          התחבר
+                        </div>   
+                    </DribbleButton>
                 </div>
 
-                <div class="sign Up">
-                    <button type="button" class="btn sign Up">
-                        sign up
-                    </button>
+                <div class="sign Up" class="col-centered">
+                <DribbleButton className="AnimateButton" color="yellow" onClick={"TODO"} animationDuration={1000} >
+                         הרשם
+                    </DribbleButton>
                 </div>
 
                 
