@@ -30,11 +30,11 @@ async (req,res) => {
 
   try {
 
-  // See if the User exists
+  // See if the Admin exists
     let admin = await Admin.findOne({email});
 
     if(admin) {
-      return res.status(400).json({ errors: [{ msg: "admin already exists"}] });
+      return res.status(400).json({ errors: [{ msg: "Mail is already exists"}] });
     }
 
   admin = new Admin ({
@@ -44,7 +44,6 @@ async (req,res) => {
   });
 
   // Encrypt password
-
   const salt = await bcrypt.genSalt(10);
 
   admin.password = await bcrypt.hash(password,salt);
