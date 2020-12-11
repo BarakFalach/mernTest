@@ -1,10 +1,11 @@
 import React from 'react'
+import './EdenCss.css'
 
 
 const LoginUser = () => {
     return (
-        <div>
-            <h1> Welcome User </h1>            
+        <div className="LoginClass">
+            <h1> Welcome User </h1>
         </div>
     )
 }

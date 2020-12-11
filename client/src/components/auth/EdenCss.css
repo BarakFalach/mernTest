@@ -1,0 +1,26 @@
+.LoginClass {
+  font-size: 25px;
+}
+.LogInText {
+  font-size: 17px;
+}
+.AnimateButton {
+  min-width: 60px;
+  font-size: 10px;
+  max-width: 130px;
+  max-height: 20px;
+}
+.formField {
+  min-width: 60px;
+  font-size: 10px;
+  max-width: 120px;
+  max-height: 20px;
+}
+
+.col-centered {
+  height: 100%;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
