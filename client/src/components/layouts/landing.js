@@ -1,34 +1,25 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import managerIcon from '../../assets/managar2.png'
-import playerIcon from '../../assets/player.png'
-import '../../App.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import managerIcon from "../../assets/managar2.png";
+import playerIcon from "../../assets/player.png";
+import "../../App.css";
 
+const Landing = () => (
+  <span>
+    <h1 className='aaa'> Welcome to LCE </h1>
+    <Link to='/loginAdmin'>
+      <img
+        alt='mangerIcon'
+        src={managerIcon}
+        width='350px'
+        height='400px'
+        className='avatar'
+      />
+    </Link>
+    <Link to='/loginUser'>
+      <img alt='playerIcon' src={playerIcon} width='350px' height='400px' />
+    </Link>
+  </span>
+);
 
-const Landing = () => (   
-    <div>
-        <h1 className="aaa"> Welcome to LCE </h1>
-        <Link to='/loginAdmin'> 
-            <div> 
-                <img 
-                  alt = "mangerIcon"
-                  src={managerIcon} 
-                  width="350px" 
-                  height="400px" 
-                  className="avatar"/> 
-            </div> 
-        </Link>
-        <Link to='/loginUser'> 
-            <div>
-              <img 
-                alt = "playerIcon"
-                src={playerIcon}
-                width="350px" 
-                height="400px"/>
-            </div>            
-        </Link>
-        
-    </div>
-)
-
-export default Landing
+export default Landing;
