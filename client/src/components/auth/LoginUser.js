@@ -1,5 +1,4 @@
 import React from 'react'
-import playerIcon from '../../assets/player.png'
 
 
 const LoginUser = () => {

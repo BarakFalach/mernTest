@@ -10,13 +10,22 @@ const Landing = () => (
         <h1 className="aaa"> Welcome to LCE </h1>
         <Link to='/loginAdmin'> 
             <div> 
-                <img src={managerIcon} width="350px" height="400px" className="avatar"/> 
+                <img 
+                  alt = "mangerIcon"
+                  src={managerIcon} 
+                  width="350px" 
+                  height="400px" 
+                  className="avatar"/> 
             </div> 
-            
         </Link>
-
         <Link to='/loginUser'> 
-            <div> <img src={playerIcon} width="350px" height="400px"/> </div>            
+            <div>
+              <img 
+                alt = "playerIcon"
+                src={playerIcon}
+                width="350px" 
+                height="400px"/>
+            </div>            
         </Link>
         
     </div>
