@@ -1,6 +1,6 @@
 import React from 'react'
-import playerIcon from '../../assets/player.png'
 import './EdenCss.css'
+
 
 const LoginUser = () => {
     return (

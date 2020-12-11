@@ -12,7 +12,8 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
         <section className="container">
           <Switch>
             <Route exact path="/loginUser" component={LoginUser}/>
-            <Route exact path="/loginAdmin" component={LoginAdmin}/>            
+            <Route exact path="/loginAdmin" component={LoginAdmin}/>       
+            {/* <Route exact path="/admin" component={AdminLanding}/>         */}
           </Switch>                   
         </section>
       </Fragment>
