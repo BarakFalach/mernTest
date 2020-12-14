@@ -25,7 +25,7 @@ export const loadAdmin = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    console.log("2");
+    console.log(err);
     dispatch({
       type: AUTH_ERROR,
     });

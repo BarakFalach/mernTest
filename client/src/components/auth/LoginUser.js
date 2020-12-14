@@ -1,7 +1,4 @@
 import React, { Fragment, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-
 const LoginUser = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -12,7 +9,6 @@ const LoginUser = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("SUCCESS");
   };
   const { name, gameKey } = formData;
   return (
@@ -33,7 +29,7 @@ const LoginUser = () => {
         <div className='form-group'>
           <input
             className='formField'
-            type='text'
+            type='number'
             placeholder='gameKey'
             name='gameKey'
             value={gameKey}
