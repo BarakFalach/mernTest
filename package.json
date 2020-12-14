@@ -17,9 +17,11 @@
     "express": "^4.17.1",
     "express-validator": "^6.7.0",
     "gravatar": "^1.8.1",
+    "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.2",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "websocket": "^1.0.33"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
