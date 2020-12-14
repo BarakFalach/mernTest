@@ -1,3 +1,4 @@
+const CHANGE_SCREEN = "CHANGE_SCREEN";
 //Node.js file
 const webSocketsServerPort = require("../ServerUtils").WebSocketServerPort;
 const TEMP_KEYGAME = "123";
@@ -21,6 +22,7 @@ wsServer = new WebSocketServer({
 });
 
 const clients = {};
+var id_counter = 1; //TODO:: for testing adding a unqiue id for player
 
 // This code generates unique userid for everyuser.
 const getUniqueID = () => {
@@ -38,16 +40,36 @@ wsServer.on("request", function (request) {
   console.log(request.origin);
   connection.on("message", function (message) {
     const userlog = JSON.parse(message.utf8Data);
-    if (userlog.type === "REQ_USER_LOGIN") {
-      if (userlog.keygame == TEMP_KEYGAME) {
-        d_AuthenticatedUsers[userlog.name] = connection;
-        console.log(userlog.name + " successfuly logged in");
-        console.log(
-          "all the users logged in are -> " + Object.keys(d_AuthenticatedUsers)
-        );
-      } else {
-        console.log("Bad password insertion from " + userlog.name);
-      }
+    const type = userlog.type;
+    switch (type) {
+      case "REQ_USER_LOGIN":
+        if (userlog.keygame == TEMP_KEYGAME) {
+          d_AuthenticatedUsers[userlog.name] = connection;
+          connection.send(
+            JSON.stringify({
+              id: id_counter,
+              name: userlog.name,
+              keygame: 123,
+            })
+          );
+
+          console.log(userlog.name + " successfuly logged in");
+          console.log(
+            "all the users logged in are -> " +
+              Object.keys(d_AuthenticatedUsers)
+          );
+        } else {
+          console.log("Bad password insertion from " + userlog.name);
+        }
+        break;
+      case CHANGE_SCREEN:
+        for (key in d_AuthenticatedUsers) {
+          d_AuthenticatedUsers[key].send(
+            JSON.stringify({
+              screen: userlog.screen,
+            })
+          );
+        }
     }
   });
 

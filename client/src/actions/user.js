@@ -1,11 +1,14 @@
-import { KEYGAME_SUCCESS, KEYGAME_FAIL } from "./types";
+import { KEYGAME_SUCCESS, KEYGAME_FAIL, CHANGE_SCREEN } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;
 //Login User
 export const login = ({ name, keygame }) => async (dispatch) => {
   try {
+    console.log("Baraka");
     client = new W3CWebSocket(PATH + ":" + ServerPORT);
+    console.log("Baraka2");
+
     client.onopen = () => {
       console.log("WebSocket Client Connected");
       console.log("name is" + name);
@@ -20,24 +23,15 @@ export const login = ({ name, keygame }) => async (dispatch) => {
     };
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
+      const type = dataFromServer.type;
       console.log("got reply! ", dataFromServer);
-      if (dataFromServer.type === "message") {
-        this.setState((state) => ({
-          messages: [
-            ...state.messages,
-            {
-              msg: dataFromServer.msg,
-              user: dataFromServer.user,
-            },
-          ],
-        }));
+      if (dataFromServer) {
+        dispatch({
+          type: type,
+          payload: dataFromServer,
+        });
       }
     };
-
-    dispatch({
-      type: KEYGAME_SUCCESS,
-      keygame: keygame,
-    });
   } catch (err) {
     // const errors = err.response.data.errors;
     // if (errors) {

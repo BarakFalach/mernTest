@@ -9,3 +9,4 @@ export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const KEYGAME_SUCCESS = "KEYGAME_SUCCESS";
 export const KEYGAME_FAIL = "KEYGAME_FAIL";
+export const CHANGE_SCREEN = "CHANGE_SCREEN"

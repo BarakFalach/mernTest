@@ -1,6 +1,8 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import { setAlert } from "./alert";
+import { httpPath } from "../utils/ClientUtils";
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -19,7 +21,7 @@ export const loadAdmin = () => async (dispatch) => {
 
   try {
     console.log("1");
-    const res = await axios.get("/api/auth");
+    const res = await axios.get("https://localhost:5000/api/auth");
     dispatch({
       type: ADMIN_LOADED,
       payload: res.data,
@@ -44,7 +46,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
   const body = JSON.stringify({ name, email, password });
 
   try {
-    const res = await axios.post("/api/admin", body, config);
+    const res = await axios.post(httpPath + "/api/admin", body, config);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -52,10 +54,10 @@ export const register = ({ name, email, password }) => async (dispatch) => {
     });
     dispatch(loadAdmin());
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors = err;
 
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      // errors.foreach((error) => dispatch(setAlert(error.msg, "danger")));
     }
 
     dispatch({
@@ -74,7 +76,7 @@ export const login = (email, password) => async (dispatch) => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post("/api/auth", body, config);
+    const res = await axios.post(httpPath + "/api/auth", body, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -100,3 +102,5 @@ export const logout = () => (dispatch) => {
     type: LOGOUT,
   });
 };
+
+//StartGame
