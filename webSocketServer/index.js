@@ -8,7 +8,6 @@ const server = http.createServer(function () {
 });
 server.listen(webSocketsServerPort);
 console.log("listening on port 8000");
-
 const wsServer = new webSocketServer({
   httpServer: server,
 });
@@ -25,31 +24,20 @@ const getUniqueID = () => {
 };
 
 wsServer.on("request", function (request) {
-  var userID = getUniqueID();
-  console.log(
-    new Date() +
-      " Recieved a new connection from origin " +
-      request.origin +
-      "."
-  );
-  console.log("MADE HERE");
-
+  console.log("server got connection request");
+  const userID = getUniqueID();
   // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
   clients[userID] = connection;
   console.log(
     "connected: " + userID + " in " + Object.getOwnPropertyNames(clients)
   );
-
   connection.on("message", function (message) {
-    if (message.type === "utf8") {
-      console.log("Received Message: ", message.utf8Data);
+    console.log(message);
+    console.log(message.utf8Data);
 
-      // broadcasting message to all connected clients
-      for (key in clients) {
-        clients[key].sendUTF(message.utf8Data);
-        console.log("sent Message to: ", clients[key]);
-      }
+    if (message.type === "VALIDATION") {
+      console.log(userID, message.utf8Data);
     }
   });
 });
