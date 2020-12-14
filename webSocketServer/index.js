@@ -1,5 +1,5 @@
 //Node.js file
-const webSocketsServerPort = require("../ServerUtils").ServerPort;
+const webSocketsServerPort = require("../ServerUtils").WebSocketServerPort;
 const TEMP_KEYGAME = "123";
 var WebSocketServer = require("websocket").server;
 var http = require("http");

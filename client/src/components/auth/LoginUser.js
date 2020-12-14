@@ -1,16 +1,27 @@
 import React, { Fragment, useState } from "react";
-const LoginUser = () => {
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/user";
+
+const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
-    gameKey: "",
+    keygame: "",
   });
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("key game is " + keygame);
+    login({ name, keygame });
   };
-  const { name, gameKey } = formData;
+
+  if (isAuthenticated) {
+    console.log("user - isAuthenticated");
+  }
+
+  const { name, keygame } = formData;
   return (
     <Fragment>
       <h1 className='large text-primary'>User Interface</h1>
@@ -30,9 +41,9 @@ const LoginUser = () => {
           <input
             className='formField'
             type='number'
-            placeholder='gameKey'
-            name='gameKey'
-            value={gameKey}
+            placeholder='keygame'
+            name='keygame'
+            value={keygame}
             onChange={(e) => onChange(e)}
             required
           />
@@ -43,4 +54,12 @@ const LoginUser = () => {
   );
 };
 
-export default LoginUser;
+LoginUser.propTypes = {
+  isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(LoginUser);
