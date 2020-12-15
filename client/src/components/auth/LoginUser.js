@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from "../../actions/user";
+import { login, raiseScore } from "../../actions/user";
 
-const LoginUser = ({ login, isAuthenticated }) => {
+const LoginUser = ({ login, isAuthenticated, raiseScore }) => {
   const [formData, setFormData] = useState({
     name: "",
     keygame: "",
@@ -15,6 +15,10 @@ const LoginUser = ({ login, isAuthenticated }) => {
     e.preventDefault();
     console.log("key game is " + keygame);
     login({ name, keygame });
+  };
+
+  const onSubmitScore = async () => {
+    raiseScore(10);
   };
 
   if (isAuthenticated) {
@@ -50,6 +54,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
         </div>
         <input type='submit' className='btn btn-primary' value='Login'></input>
       </form>
+      <button className="raiseScore" on onClick={() => onSubmitScore()}> Press to Raise Score in 10 points</button>
     </Fragment>
   );
 };
@@ -62,4 +67,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login })(LoginUser);
+export default connect(mapStateToProps, { login, raiseScore })(LoginUser);

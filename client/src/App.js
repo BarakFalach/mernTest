@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import LoginUser from "./components/auth/LoginUser";
 import LoginAdmin from "./components/auth/LoginAdmin";
 import Register from "./components/auth/Register";
-import Landing from "./components/layouts/Landing";
+import Landing from "./components/layouts/landing";
 import Dashboard from "./components/dashboard/Dashboard";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import "./App.css";
