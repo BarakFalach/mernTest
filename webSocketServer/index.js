@@ -50,9 +50,10 @@ wsServer.on("request", function (request) {
               id: id_counter,
               name: userlog.name,
               keygame: 123,
+              type: "KEYGAME_SUCCESS",
             })
           );
-
+          id_counter++;
           console.log(userlog.name + " successfuly logged in");
           console.log(
             "all the users logged in are -> " +
@@ -66,6 +67,7 @@ wsServer.on("request", function (request) {
         for (key in d_AuthenticatedUsers) {
           d_AuthenticatedUsers[key].send(
             JSON.stringify({
+              type: "CHANGE_SCREEN",
               screen: userlog.screen,
             })
           );

@@ -3,16 +3,15 @@ import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
-import {startGame} from '../../actions/dashboard'
+import { startGame } from "../../actions/dashboard";
 
-const Dashboard = ({ isAuthenticated, loading, logout,startGame }) => {
+const Dashboard = ({ isAuthenticated, loading, logout, startGame }) => {
   console.log("ENTER DASH");
   return (
     <span>
-      <h1 className='aaa'> Welcome to Dashboard </h1>
+      <h1 className="aaa"> Welcome to Dashboard </h1>
       <button onClick={logout}>LogOut</button>
-      <button onClick={startGame}>LogOut</button>
-
+      <button onClick={startGame}>StartGame</button>
     </span>
   );
 };
@@ -27,4 +26,4 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading,
 });
 
-export default connect(mapStateToProps, { logout , startGame })(Dashboard);
+export default connect(mapStateToProps, { logout, startGame })(Dashboard);

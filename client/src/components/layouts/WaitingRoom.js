@@ -20,7 +20,7 @@ const WaitingRoom = ({ id, login, screen, isAuthenticated }) => {
 WaitingRoom.propTypes = {
   isAuthenticated: PropTypes.bool,
   login: PropTypes.func.isRequired,
-  id: PropTypes,
+  id: PropTypes.number,
   screen: PropTypes.bool,
 };
 const mapStateToProps = (state) => ({
