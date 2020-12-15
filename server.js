@@ -1,3 +1,5 @@
+console.log("BAD SERVER RUNS");
+
 const express = require("express");
 const connectDB = require("./config/db");
 
@@ -7,7 +9,6 @@ connectDB();
 
 //init Middleware
 app.use(express.json({ extended: false }));
-app.get("/", (req, res) => res.send("it is working!"));
 
 // Define Routesnpm
 app.use("/api/users", require("./routes/api/users"));
