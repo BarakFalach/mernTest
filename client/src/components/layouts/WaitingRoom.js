@@ -9,6 +9,8 @@ const WaitingRoom = ({ id, login, screen, isAuthenticated }) => {
     return <Question />;
   }
 
+  //TODO:: add authetiract in this page, {PrivateRouth}
+
   return (
     <Fragment>
       <h1 className="large text-primary">Waiting Room</h1>
