@@ -1,5 +1,5 @@
 import React from "react";
 
-export const Question = () => {
+export const Top3 = () => {
   return <div></div>;
 };
