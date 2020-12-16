@@ -17,10 +17,14 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log("Server Started at: " + PORT));
 
-import { countReset } from 'console';
 //#################################################################################################################################################################################################################
 
-import {CHANGE_SCREEN, REQ_USER_LOGIN, CREATE_NEW_GAME_INSTANCE, GAME_KEY_SUCCESS} from './types';
+const CHANGE_SCREEN = "CHANGE_SCREEN";
+const REQ_USER_LOGIN = "REQ_USER_LOGIN";
+const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
+const USER_ANSWER = "USER_ANSWER";
+const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
+
 const TEMP_KEYGAME = "123";
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 
@@ -79,7 +83,7 @@ const getUniqueID = () => {
 */ 
 const getUniqueGameKey = () => {
   max = 9999, min = 11111;
-  const gameKey;
+  var gameKey;
   do {
     gameKey = Math.floor(Math.random() * (max - min) ) + min;
   } while (gameKey in currentGamesKeys);
@@ -92,7 +96,7 @@ const getUniqueGameKey = () => {
 /** This function change the next group num
  *  return: The new group number
 */ 
-getGroupNum = () => {
+const getGroupNum = () => {
   group_num +=1;
   return(group_num % numberOfGroups);
 };
@@ -101,7 +105,7 @@ getGroupNum = () => {
 /** This function update the group total score with the given score
  *  return: null
 */ 
-updateScoreForGroup = (group, score) => {
+const updateScoreForGroup = (group, score) => {
   if (group in d_groups.keys()){
       d_groups[group] += score;
       return;
@@ -114,7 +118,7 @@ updateScoreForGroup = (group, score) => {
  *  Structure: d_users_answers = {key: userID, value: [answer, time]}
  *  return: null
 */ 
-updateScoreForUsers = () => {
+const updateScoreForUsers = () => {
   const items = list(d_users_answers.items())
   items.sort(function (a, b) {
 		return -(a[1][1] - b[1][1]);
@@ -147,7 +151,7 @@ const sortByScore = (usersOrGroups) => {
 /** This function check who is the winning group at this point
  *  return: The currently winning group
 */ 
-currentWinningGroup = () => {
+const currentWinningGroup = () => {
   const groups = sortByScore("groups");
   return groups[0];
 }
@@ -156,7 +160,7 @@ currentWinningGroup = () => {
 /** This function get the top 3 users by score
  *  return: array of 3 top users by score
 */ 
-top3Users = () => {
+const top3Users = () => {
   const users = sortByScore("users");
   const topUsers = users.slice(0, 3);
   return topUsers;
@@ -166,7 +170,7 @@ top3Users = () => {
 /** This function update the user's properties to the relevant dictionaries
  *  return: send a success message
 */ 
-handle_req_user_login = (userID, userName, connection, keyGame) => {    
+const handle_req_user_login = (userID, userName, connection, keyGame) => {    
   d_users[userID] = [userName, getGroupNum() , 0, false];
   d_connections[userID] = connection;
   connection.send(
@@ -178,15 +182,16 @@ handle_req_user_login = (userID, userName, connection, keyGame) => {
     })
   );  
   // TODO: remove these prints
-  console.log(userlog.name + " successfuly logged in");
-  console.log("all the users logged in are -> " + Object.keys(d_AuthenticatedUsers));
+  console.log(userName + " successfuly logged in");
+  console.log("all the users logged in are -> " + Object.keys(d_users));
 };
 
 
 /** This function create a new game key 
  *  return: send the admin the new game key
+ *  TODO: handle in admin - present the game key in the admin dashboard
 */ 
-handle_new_game_instance = (userID) => {    
+const handle_new_game_instance = (userID) => {    
   const keyGame = getUniqueGameKey();
   userID.send(
     JSON.stringify({
@@ -200,7 +205,7 @@ handle_new_game_instance = (userID) => {
 /** This function change the users screen 
  *  return: send to all users the new screen to show
 */ 
-handle_change_screen = (adminScreen) => {    
+const handle_change_screen = (adminScreen) => {    
   for (key in d_connections) {
     d_connections[key].send(
       JSON.stringify({
@@ -213,9 +218,9 @@ handle_change_screen = (adminScreen) => {
 
 
 /** This function update the user answer and score 
- *  return: send to all users if they right and the updated score
+ *  return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
 */ 
-handle_user_answer = (user_ID, answer, time) => {
+const handle_user_answer = (user_ID, answer, time) => {
   d_users_answers[user_ID] = [answer, time]
   counter_users_answerd++;
   if (counter_users_answerd === size(d_connections.keys())-1){
@@ -237,8 +242,7 @@ handle_user_answer = (user_ID, answer, time) => {
 
 
 wsServer.on("request", function (request) {
-  // console.log("server got connection request");
-  // console.log(request.origin);
+  console.log("server got connection request");
   const userID = getUniqueID();
   const connection = request.accept(null, request.origin);
   
@@ -247,7 +251,8 @@ wsServer.on("request", function (request) {
     switch (userlog.type) {
       
       case REQ_USER_LOGIN:
-        if (userlog.keygame in currentGamesKeys) {
+        // TODO: remove the "TEMP_KEYGAME OPTION"
+        if (userlog.keygame in currentGamesKeys || userlog.keygame === TEMP_KEYGAME) {
           handle_req_user_login(userID, userlog.name, connection ,userlog.keyGame);
         }
         break;
