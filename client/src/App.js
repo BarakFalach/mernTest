@@ -8,6 +8,7 @@ import PrivateRoute from "./components/routing/PrivateRoute";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Alert from "./components/layouts/Alert";
+import Game from "./components/game/Game";
 // Redux
 import { Provider } from "react-redux";
 import store from "./store";
@@ -28,14 +29,14 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Route exact path='/' component={Landing} />
-          <section className='container'>
+          <Route exact path="/" component={Landing} />
+          <section className="container">
             <Alert />
             <Switch>
-              <Route exact path='/loginUser' component={LoginUser} />
-              <Route exact path='/loginAdmin' component={LoginAdmin} />
-              <Route exact path='/Register' component={Register} />
-              <PrivateRoute exact path='/Dashboard' component={Dashboard} />
+              <Route exact path="/loginUser" component={LoginUser} />
+              <Route exact path="/loginAdmin" component={LoginAdmin} />
+              <Route exact path="/Register" component={Register} />
+              <PrivateRoute exact path="/Dashboard" component={Dashboard} />
             </Switch>
           </section>
         </Fragment>

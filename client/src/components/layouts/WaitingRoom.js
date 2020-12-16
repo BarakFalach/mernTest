@@ -2,11 +2,11 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
-import Question from "../game/Question";
+import Game from "../game/Game";
 
 const WaitingRoom = ({ id, login, screen, isAuthenticated }) => {
   if (screen) {
-    return <Question />;
+    return <Game />;
   }
 
   //TODO:: add authetiract in this page, {PrivateRouth}
