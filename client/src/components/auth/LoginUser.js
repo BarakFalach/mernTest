@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
 import WaitingRoom from "../layouts/WaitingRoom";
+import Game from "../game/Game";
 
 const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
 
   if (isAuthenticated) {
     console.log("user - isAuthenticated");
-    return <WaitingRoom />;
+    return <Game />;
   }
 
   const { name, keygame } = formData;

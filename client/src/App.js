@@ -37,7 +37,6 @@ const App = () => {
               <Route exact path="/loginAdmin" component={LoginAdmin} />
               <Route exact path="/Register" component={Register} />
               <PrivateRoute exact path="/Dashboard" component={Dashboard} />
-              <PrivateRoute exact path="/Game" component={Game} />
             </Switch>
           </section>
         </Fragment>
