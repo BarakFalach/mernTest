@@ -12,3 +12,4 @@ export const KEYGAME_FAIL = "KEYGAME_FAIL";
 export const CHANGE_SCREEN = "CHANGE_SCREEN";
 export const START_GAME = "START_GAME";
 export const GAME_PROP = "GAME_PROP";
+export const SERVER_FEEDBACK_TO_ANSWER = "SERVER_FEEDBACK_TO_ANSWER";

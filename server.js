@@ -75,6 +75,7 @@ wsServer.on("request", function (request) {
               name: userlog.name,
               keygame: 123,
               type: "KEYGAME_SUCCESS",
+              questions: ["q", "a1", "a2", "a3", "a4"],
             })
           );
           id_counter++;
