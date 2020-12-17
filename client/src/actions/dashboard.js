@@ -2,7 +2,7 @@ import {
   KEYGAME_SUCCESS,
   KEYGAME_FAIL,
   CHANGE_SCREEN,
-  START_GAME,
+  CREATE_NEW_GAME_INSTANCE,
 } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
@@ -15,7 +15,7 @@ export const startGame = () => async (dispatch) => {
     client.onopen = () => {
       client.send(
         JSON.stringify({
-          type: START_GAME,
+          type: CREATE_NEW_GAME_INSTANCE,
         })
       );
     };
