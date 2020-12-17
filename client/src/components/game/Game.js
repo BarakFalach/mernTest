@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
-import { Question } from "./Question";
+// import { Question } from "./Question";
 import { Answer } from "./Answer";
 import { Video } from "./Video";
 import { Top3 } from "./Top3";
@@ -11,7 +11,7 @@ import { Poll } from "./Poll";
 const Game = ({ screen }) => {
   switch (screen) {
     case "question":
-      return <Question />;
+    // return <Question />;
     case "answer":
       return <Answer />;
     case "video":
