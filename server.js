@@ -22,6 +22,7 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 //#################################################################################################################################################################################################################
 
 const CHANGE_SCREEN = "CHANGE_SCREEN";
+const START_GAME = "START_GAME";
 //Node.js file
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 const TEMP_KEYGAME = "123";
@@ -43,7 +44,7 @@ wsServer = new WebSocketServer({
   httpServer: server,
   autoAcceptConnections: false,
 });
-
+var AdminConnetction;
 const clients = {};
 var id_counter = 1; //TODO:: for testing adding a unqiue id for player
 
@@ -91,10 +92,22 @@ wsServer.on("request", function (request) {
           d_AuthenticatedUsers[key].send(
             JSON.stringify({
               type: "CHANGE_SCREEN",
-              screen: userlog.screen,
+              screenType: userlog.screenType,
+              screenNamne: userlog.screenNamne,
             })
           );
         }
+        break;
+      case START_GAME:
+        AdminConnetction = connection;
+        connection.send(
+          JSON.stringify({
+            type: "GAME_PROP",
+            Q: ["question1", "question2", "question3", "question4"],
+            Video: ["video1", "video2", "video3", "video4"],
+            Game_key: "123",
+          })
+        );
     }
   });
 

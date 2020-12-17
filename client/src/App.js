@@ -3,11 +3,11 @@ import LoginUser from "./components/auth/LoginUser";
 import LoginAdmin from "./components/auth/LoginAdmin";
 import Register from "./components/auth/Register";
 import Landing from "./components/layouts/Landing";
-import Dashboard from "./components/dashboard/Dashboard";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Alert from "./components/layouts/Alert";
+import ControlPanel from "./components/dashboard/ControlPanel";
 import Game from "./components/game/Game";
 // Redux
 import { Provider } from "react-redux";
@@ -36,7 +36,12 @@ const App = () => {
               <Route exact path="/loginUser" component={LoginUser} />
               <Route exact path="/loginAdmin" component={LoginAdmin} />
               <Route exact path="/Register" component={Register} />
-              <PrivateRoute exact path="/Dashboard" component={Dashboard} />
+              <PrivateRoute
+                exact
+                path="/ControlPanel"
+                component={ControlPanel}
+              />
+              <Route exact path="/game" component={Game} />
             </Switch>
           </section>
         </Fragment>

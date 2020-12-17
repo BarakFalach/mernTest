@@ -1,0 +1,10 @@
+.container {
+  background: blue;
+  width: 200px;
+}
+.out {
+  background-color: brown;
+}
+button {
+  color: cornflowerblue;
+}
