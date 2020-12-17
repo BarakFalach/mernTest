@@ -1,5 +1,3 @@
-console.log("BAD SERVER RUNS");
-
 const express = require("express");
 const connectDB = require("./config/db");
 
@@ -22,13 +20,34 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 //#################################################################################################################################################################################################################
 
 const CHANGE_SCREEN = "CHANGE_SCREEN";
-const START_GAME = "START_GAME";
-//Node.js file
-const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
+const REQ_USER_LOGIN = "REQ_USER_LOGIN";
+const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
+const USER_ANSWER = "USER_ANSWER";
+const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
 const TEMP_KEYGAME = "123";
+const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
+
+/**
+ * Data Structure of dicts:
+ *    d_users = {key: server_given_user_id, value: [user_name, group_num, curr_score, boolean_last_answer_currectnes]}    
+ *    d_group = {key: server_given_group_id, value: group_score}
+ *    d_connections = {key: server_given_user_id, value: connection}
+ *    d_users_answers = {key: user_id, value: [answer (number), time (number)]}
+ */
+
+const d_users = {};
+const d_group = {};
+const d_users_answers = {};
+const d_connections = {}; 
+const currentGamesKeys = [];
+const numberOfGroups = 2;
+var group_num = 0;
+var counter_users_answerd = 0;
+
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 var d_AuthenticatedUsers = {};
+
 var server = http.createServer(function (req, res) {
   console.log(new Date() + " Received request for ");
   res.write("Hello World!");
@@ -44,11 +63,11 @@ wsServer = new WebSocketServer({
   httpServer: server,
   autoAcceptConnections: false,
 });
-var AdminConnetction;
-const clients = {};
-var id_counter = 1; //TODO:: for testing adding a unqiue id for player
 
-// This code generates unique userid for everyuser.
+
+/** This function generates unique userId for every user
+ *  return: The uniqe userId
+*/ 
 const getUniqueID = () => {
   const s4 = () =>
     Math.floor((1 + Math.random()) * 0x10000)
@@ -56,59 +75,199 @@ const getUniqueID = () => {
       .substring(1);
   return s4() + s4() + "-" + s4();
 };
+
+
+/** This function generates unique Game-Key
+ *  return: Array of the sorted users
+*/ 
+const getUniqueGameKey = () => {
+  max = 9999, min = 11111;
+  var gameKey;
+  do {
+    gameKey = Math.floor(Math.random() * (max - min) ) + min;
+  } while (gameKey in currentGamesKeys);
+
+  currentGamesKeys.push(gameKey);
+  return gameKey;
+};
+
+
+/** This function change the next group num
+ *  return: The new group number
+*/ 
+const getGroupNum = () => {
+  group_num +=1;
+  return(group_num % numberOfGroups);
+};
+
+
+/** This function update the group total score with the given score
+ *  return: null
+*/ 
+const updateScoreForGroup = (group, score) => {
+  if (group in d_groups.keys()){
+      d_groups[group] += score;
+      return;
+  }
+  d_groups[group] = score;
+}
+
+
+/** This function update the users and group score after timeOut / all users answered
+ *  Structure: d_users_answers = {key: userID, value: [answer, time]}
+ *  return: null
+*/ 
+const updateScoreForUsers = () => {
+  const items = list(d_users_answers.items())
+  items.sort(function (a, b) {
+		return -(a[1][1] - b[1][1]);
+  });
+
+  var counter = 1;
+  for (item in items){
+    if (items[item][0] === currentRightAnswer){
+        d_users[item][2] += counter;
+        d_users[item][3] = true;
+        updateScoreForGroup(d_users[item][1], counter);
+        counter++;
+    }
+  }
+};
+
+
+/** This function sort the users or groups dictionaries by score
+ *  return: Array of the sorted users
+*/ 
+const sortByScore = (usersOrGroups) => { 
+	const items = list(usersOrGroups === "users"? d_users.items() : d_groups.items())
+	items.sort(function (a, b) {
+		return a.score - b.score;
+	});
+	return items;
+};
+
+
+/** This function check who is the winning group at this point
+ *  return: The currently winning group
+*/ 
+const currentWinningGroup = () => {
+  const groups = sortByScore("groups");
+  return groups[0];
+}
+
+
+/** This function get the top 3 users by score
+ *  return: array of 3 top users by score
+*/ 
+const top3Users = () => {
+  const users = sortByScore("users");
+  const topUsers = users.slice(0, 3);
+  return topUsers;
+}
+
+
+/** This function update the user's properties to the relevant dictionaries
+ *  return: send a success message
+*/ 
+const handle_req_user_login = (userID, userName, connection, keyGame) => {    
+  d_users[userID] = [userName, getGroupNum() , 0, false];
+  d_connections[userID] = connection;
+  connection.send(
+    JSON.stringify({
+      type: GAME_KEY_SUCCESS,
+      id: userID,
+      name: userName,
+      keygame:keyGame,
+    })
+  );  
+  // TODO: remove these prints
+  console.log(userName + " successfuly logged in");
+  console.log("all the users logged in are -> " + Object.keys(d_users));
+};
+
+
+/** This function create a new game key 
+ *  return: send the admin the new game key
+ *  TODO: handle in admin - present the game key in the admin dashboard
+*/ 
+const handle_new_game_instance = (userID) => {    
+  const keyGame = getUniqueGameKey();
+  userID.send(
+    JSON.stringify({
+      type: NEW_KEY_GAME,
+      keyGame: keyGame,
+    })
+  );
+};
+
+
+/** This function change the users screen 
+ *  return: send to all users the new screen to show
+*/ 
+const handle_change_screen = (adminScreen) => {    
+  for (key in d_connections) {
+    d_connections[key].send(
+      JSON.stringify({
+        type: CHANGE_SCREEN,
+        screen: adminScreen,
+      })
+    );
+  }
+}
+
+
+/** This function update the user answer and score 
+ *  return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
+*/ 
+const handle_user_answer = (user_ID, answer, time) => {
+  d_users_answers[user_ID] = [answer, time]
+  counter_users_answerd++;
+  if (counter_users_answerd === size(d_connections.keys())-1){
+    counter_users_answerd = 0;
+    updateScoreForUsers();
+
+    for (key in d_connections) {
+      d_connections[key].send(
+        JSON.stringify({
+          type: UPDATE_SCORE,
+          answer: d_users[user_ID][3], 
+          score: d_users[user_ID][2],
+        })
+      );
+    }
+  }
+}
+
+
+
 wsServer.on("request", function (request) {
   console.log("server got connection request");
   const userID = getUniqueID();
-  // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
-  console.log(request.origin);
+  
   connection.on("message", function (message) {
     const userlog = JSON.parse(message.utf8Data);
-    const type = userlog.type;
-    switch (type) {
-      case "REQ_USER_LOGIN":
-        if (userlog.keygame == TEMP_KEYGAME) {
-          d_AuthenticatedUsers[userlog.name] = connection;
-          connection.send(
-            JSON.stringify({
-              id: id_counter,
-              name: userlog.name,
-              keygame: 123,
-              type: "KEYGAME_SUCCESS",
-              questions: ["q", "a1", "a2", "a3", "a4"],
-            })
-          );
-          id_counter++;
-          console.log(userlog.name + " successfuly logged in");
-          console.log(
-            "all the users logged in are -> " +
-              Object.keys(d_AuthenticatedUsers)
-          );
-        } else {
-          console.log("Bad password insertion from " + userlog.name);
+    switch (userlog.type) {
+      
+      case REQ_USER_LOGIN:
+        // TODO: remove the "TEMP_KEYGAME OPTION"
+        if (userlog.keygame in currentGamesKeys || userlog.keygame === TEMP_KEYGAME) {
+          handle_req_user_login(userID, userlog.name, connection ,userlog.keyGame);
+
         }
         break;
+      
+      case CREATE_NEW_GAME_INSTANCE:
+        handle_new_game_instance(user_ID);
+        break;
+
       case CHANGE_SCREEN:
-        for (key in d_AuthenticatedUsers) {
-          d_AuthenticatedUsers[key].send(
-            JSON.stringify({
-              type: "CHANGE_SCREEN",
-              screenType: userlog.screenType,
-              screenNamne: userlog.screenNamne,
-            })
-          );
-        }
+        handle_change_screen(userlog.screen);
         break;
-      case START_GAME:
-        AdminConnetction = connection;
-        connection.send(
-          JSON.stringify({
-            type: "GAME_PROP",
-            Q: ["question1", "question2", "question3", "question4"],
-            Video: ["video1", "video2", "video3", "video4"],
-            Game_key: "123",
-          })
-        );
+
+      case USER_ANSWER:
+        handle_user_answer(user_ID, userlog.answer, userlog.time);
+        break;
     }
   });
 
