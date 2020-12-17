@@ -1,7 +1,6 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import { setAlert } from "./alert";
-import { httpPath } from "../utils/ClientUtils";
 
 import {
   REGISTER_SUCCESS,
@@ -36,6 +35,7 @@ export const loadAdmin = () => async (dispatch) => {
 
 // actions/auth.js must have same name as reducers/auth.js
 //Register Admin
+
 export const register = ({ name, email, password }) => async (dispatch) => {
   const config = {
     headers: {
@@ -65,6 +65,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
     });
   }
 };
+
 //Login Admin
 export const login = (email, password) => async (dispatch) => {
   const config = {

@@ -1,23 +1,27 @@
-import { CHANGE_SCREEN, KEYGAME_FAIL, KEYGAME_SUCCESS } from "../actions/types";
+import {
+  CHANGE_SCREEN,
+  KEYGAME_FAIL,
+  KEYGAME_SUCCESS,
+  SERVER_FEEDBACK_TO_ANSWER,
+} from "../actions/types";
 const initialState = {
   id: null,
   keygame: "",
-  score: 0,
+  score: "0",
   isAuthenticated: false,
   screen: null,
+  questions: [],
 };
-
-export default function userReducer(state = initialState, action) {
+//func name Changed from login to UserReducer
+export default function UserReducer(state = initialState, action) {
   const { type, payload } = action;
-  console.log("userReduce" + type);
   switch (type) {
     case KEYGAME_SUCCESS:
+      console.log("User Reducer Fine");
+      console.log(payload.questions[0]);
       return {
         ...state,
-        id: payload.id,
-        isAuthenticated: true,
-        keygame: payload.keygame,
-        score: 1,
+        questions: payload.questions,
       };
     case KEYGAME_FAIL:
       return {
@@ -29,6 +33,10 @@ export default function userReducer(state = initialState, action) {
         ...state,
         screen: true,
         //TODO:: change the screen state to name of the screen and not bool
+      };
+    case SERVER_FEEDBACK_TO_ANSWER:
+      return {
+        score: payload.score,
       };
     default:
       return state;

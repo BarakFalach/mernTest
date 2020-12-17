@@ -1,5 +1,3 @@
-console.log("BAD SERVER RUNS");
-
 const express = require("express");
 const connectDB = require("./config/db");
 
@@ -35,7 +33,7 @@ var server = http.createServer(function (req, res) {
 });
 server.listen(webSocketsServerPort, function () {
   console.log(
-    new Date() + " Server is listening on port " + webSocketsServerPort
+    new Date() + " WebSocketServer is listening on port " + webSocketsServerPort
   );
 });
 
@@ -74,8 +72,10 @@ wsServer.on("request", function (request) {
               name: userlog.name,
               keygame: 123,
               type: "KEYGAME_SUCCESS",
+              questions: ["ques", "an1", "an2", "an3", "an4"],
             })
           );
+          console.log("Admin sent questions");
           id_counter++;
           console.log(userlog.name + " successfuly logged in");
           console.log(
