@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { UserLogin } from "../../actions/user";
+import { Dashboard } from "../dashboard/Dashboard";
 import { Question } from "../game/Question";
 // import Game from "../game/Game";
 
@@ -20,7 +21,7 @@ const LoginUser = ({ UserLogin, isAuthenticated }) => {
 
   if (isAuthenticated) {
     console.log("user - isAuthenticated");
-    return <Question />;
+    return <Dashboard />;
     // return <Game />;
   }
 

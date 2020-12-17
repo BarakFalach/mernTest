@@ -33,7 +33,6 @@ export const loadAdmin = () => async (dispatch) => {
   }
 };
 
-// actions/auth.js must have same name as reducers/auth.js
 //Register Admin
 
 export const register = ({ name, email, password }) => async (dispatch) => {

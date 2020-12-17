@@ -16,14 +16,10 @@ export const UserLogin = ({ name, keygame }) => async (dispatch) => {
       );
     };
     client.onmessage = (message) => {
-      console.log(message);
       const dataFromServer = JSON.parse(message.data);
       const type = dataFromServer.type;
       if (dataFromServer) {
-        console.log(
-          "Recieved message from server: questions are : " +
-            dataFromServer.payload.questions
-        );
+        console.log("Data type from server is " + type);
         dispatch({
           type: type,
           payload: dataFromServer,

@@ -12,8 +12,8 @@ const initialState = {
   screen: null,
   questions: [],
 };
-//func name Changed from login to UserReducer
-export default function UserReducer(state = initialState, action) {
+//func name Changed from login to userReducer
+export default function userReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case KEYGAME_SUCCESS:
@@ -21,6 +21,7 @@ export default function UserReducer(state = initialState, action) {
       console.log(payload.questions[0]);
       return {
         ...state,
+        isAuthenticated: true,
         questions: payload.questions,
       };
     case KEYGAME_FAIL:

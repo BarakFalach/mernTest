@@ -9,7 +9,7 @@ const Dashboard = ({ isAuthenticated, loading, logout, startGame }) => {
   console.log("ENTER DASH");
   return (
     <span>
-      <h1 className="aaa"> Welcome to Dashboard </h1>
+      <h1 className='aaa'> Welcome to Dashboard </h1>
       <button onClick={logout}>LogOut</button>
       <button onClick={startGame}>StartGame</button>
     </span>
