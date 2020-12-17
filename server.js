@@ -24,7 +24,6 @@ const REQ_USER_LOGIN = "REQ_USER_LOGIN";
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const USER_ANSWER = "USER_ANSWER";
 const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
-
 const TEMP_KEYGAME = "123";
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 
@@ -254,6 +253,7 @@ wsServer.on("request", function (request) {
         // TODO: remove the "TEMP_KEYGAME OPTION"
         if (userlog.keygame in currentGamesKeys || userlog.keygame === TEMP_KEYGAME) {
           handle_req_user_login(userID, userlog.name, connection ,userlog.keyGame);
+
         }
         break;
       
