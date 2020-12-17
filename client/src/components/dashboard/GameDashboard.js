@@ -4,7 +4,7 @@ import "../../App.css";
 import { connect } from "react-redux";
 import { ChangeScreen } from "../../actions/dashboard";
 import "./GameDashboard.css";
-
+//comment
 const Gamedashboard = ({
   ChangeScreen,
   questionNames,
