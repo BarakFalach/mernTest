@@ -19,17 +19,21 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 
 //#################################################################################################################################################################################################################
 
+// Const enums
+const UPDATE_SCORE = "UPDATE_SCORE"
+const USER_ANSWER = "USER_ANSWER";
 const CHANGE_SCREEN = "CHANGE_SCREEN";
 const REQ_USER_LOGIN = "REQ_USER_LOGIN";
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
-const USER_ANSWER = "USER_ANSWER";
+const GAME_KEY_FAIL = "GAME_KEY_FAIL";
 const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
-const TEMP_KEYGAME = "123";
+const NUMBER_OF_CONNECTED_USERS = "NUMBER_OF_CONNECTED_USERS";
+
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 
 /**
- * Data Structure of dicts:
- *    d_users = {key: server_given_user_id, value: [user_name, group_num, curr_score, boolean_last_answer_currectnes]}
+ * Data Structure explenation for dictionaries:
+ *    d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,  last_answer_currectnes: boolean}
  *    d_group = {key: server_given_group_id, value: group_score}
  *    d_connections = {key: server_given_user_id, value: connection}
  *    d_users_answers = {key: user_id, value: [answer (number), time (number)]}
@@ -38,7 +42,6 @@ const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 
 const d_users = {};
 const d_group = {};
-const d_users_answers = {};
 const d_connections = {};
 const d_activeGames = {};
 const numberOfGroups = 2;
@@ -74,7 +77,11 @@ const setGameProperties = (gameKey ,admin_ID, gameType, numOfParticipates) => {
   var gameProps = {
     admin: admin_ID,
     game_type: gameType,
-    participates_num: numOfParticipates,
+    groups: {1: 0, 2: 0},
+    d_users_answers: {},
+    num_of_participates: numOfParticipates,
+    curr_connected_users: 0,
+    curr_answered_questions: 0,
     curr_pos: 0
   }
   d_activeGames[gameKey] = gameProps;
@@ -110,9 +117,10 @@ const getUniqueGameKey = (admin_ID, gameType, numOfParticipates) => {
 /** This function change the next group num
  *  return: The new group number
  */
-const getGroupNum = () => {
-  group_num += 1;
-  return group_num % numberOfGroups;
+const getGroupNum = (gameKey) => {  
+  let tmp_dict = d_activeGames[gameKey].groups;
+  let key = Object.keys(tmp_dict).reduce((key, v) => tmp_dict[v] < tmp_dict[key] ? v : key);
+  return key;
 };
 
 /** This function update the group total score with the given score
@@ -120,45 +128,65 @@ const getGroupNum = () => {
  */
 const updateScoreForGroup = (group, score) => {
   if (!group in d_groups) 
-    d_groups[group] = 0;
-  d_groups[group] += score;
+    d_groups[group] = {
+      curr_score: 0
+    }
+  d_groups[group].curr_score += score;
 };
 
 /** This function update the users and group score after timeOut / all users answered
  *  Structure: d_users_answers = {key: userID, value: [answer, time]}
  *  return: null
  */
-const updateScoreForUsers = () => {
-  var items = Object.keys(d_users_answers).map(function(key) {
-    return [key, dict[key]];
+const cleanUsersLastAnswer = (gameKey) => {
+  var items = d_users.filter(function(key) {
+    return d_users[key].gameKey === gameKey;
   });
 
-  items.sort(function(first, second) {
-    return first[1][1] - second[1][1];
-  });
-
-  var counter = 1;
   for (item in items) {
-    if (items[item][0] === currentRightAnswer) {
-      d_users[item][2] += counter;
-      d_users[item][3] = true;
-      updateScoreForGroup(d_users[item][1], counter);
-      counter++;
-    }
+    d_users[item].last_answer_correctness = false;
   }
 };
 
+/** This function clean the last_answer_correctness to all game's users to false
+ *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
+ *  return: null
+ */
+const updateScoreForUsers = (gameKey) => {
+  var items = Object.keys(d_activeGames[gameKey].d_users_answers).map(function(key) {
+    return [key, d_activeGames[gameKey].d_users_answers[key]];
+  });
+
+  items.sort(function(first, second) {
+    return first[1].time - second[1].time;
+  });
+
+  var scoreCounter = 1;
+  for (item in items) {
+    if (items[item].answer === currentRightAnswer) {
+      d_users[item].curr_score += scoreCounter;
+      d_users[item].last_answer_correctness = true;
+      updateScoreForGroup(d_users[item].group_num, scoreCounter);
+      scoreCounter++;
+    }
+
+    else {
+      d_users[item].last_answer_correctness = false;
+    }
+  }
+};
 
 /** This function sort the users or groups dictionaries by score
  *  return: Array of the sorted users
  */
 const sortByScore = (usersOrGroups) => {
-  var items = Object.keys(usersOrGroups === "users" ? d_users : d_groups ).map(function(key) {
-    return [key, dict[key]];
+  let refDict = usersOrGroups === "users" ? d_users : d_groups;
+  var items = Object.keys(refDict).map(function(key) {
+    return [key, refDict[key]];
   });
 
   items.sort(function(first, second) {
-    return second[1] - first[1];
+    return second[1].curr_score - first[1].curr_score;
   });
   return items;
 };
@@ -180,6 +208,96 @@ const top3Users = () => {
   return topUsers;
 };
 
+/** This function print the instance of a new user 
+ *  return: null
+ */
+const log_activated_new_user_instance = (userID, userName) => {
+  console.log("-------- New User Created (" + userID +") -----------");
+  for (const [key, value] of Object.entries(d_users[userID])) {
+    console.log(key + ": " + value);
+  }
+  console.log("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
+  console.log(userName + " successfuly logged in");
+    console.log("all the users logged in are -> " + Object.keys(d_users));
+  console.log("-----------------------------------------------------");
+};
+
+/** This function update the user's properties to the relevant dictionaries
+ *  updated dicts: d_users, d_connections
+ *  return: send a success message
+ */
+const handle_req_user_login = (userID, userName, connection, gameKey) => {
+
+  const userProp = {
+    user_name: userName, 
+    game_key: gameKey,
+    group_num: getGroupNum(gameKey), 
+    curr_score: 0,  
+    last_answer_correctness: false
+  }
+  
+  d_users[userID] = userProp;
+  d_connections[userID] = connection;
+  
+  connection.send(
+    JSON.stringify({
+      type: GAME_KEY_SUCCESS,
+      id: userID,
+      // TODO: send all the game structure
+    })
+  );
+
+  // update users connecting
+  d_activeGames[gameKey].curr_connected_users++;
+  d_activeGames[gameKey].groups[userProp.group_num]++;
+  
+  // update the admin on the number of users that get in
+  d_connections[d_activeGames[gameKey].admin].send (
+    JSON.stringify({
+      type: NUMBER_OF_CONNECTED_USERS,
+      curr_connected_users: d_activeGames[gameKey].curr_connected_users,
+    })
+  )
+
+  // TODO: remove these prints
+  if (true){
+    log_activated_new_user_instance(userID, userName);
+    for (const [key, value] of Object.entries(d_activeGames[gameKey])) {
+      if (typeof(value) === "object"){
+        console.log(key + ": ");
+        for (const [keyS, valueS] of Object.entries(value)) {
+          console.log("\t" + keyS + ": " + valueS);
+        }
+        continue;
+      }
+      console.log(key + ": " + value);
+    }
+  };
+};
+
+/** This function print that the user insert not active game 
+ *  return: null
+ */
+const log_fail_game_key = (gameKey) => {
+  console.log("------------- Game Key Error ----------------");
+};
+
+/** This function update the user that there is no such a game key in the server
+ *  return: send a fail message
+ */
+const handle_bad_req_user_login = (connection, gameKey) => {
+
+  connection.send(
+    JSON.stringify({
+      type: GAME_KEY_FAIL,
+    })
+  );
+
+  // TODO: remove these prints
+  if (true)
+    log_fail_game_key(gameKey)
+  
+};
 
 /** This function print the instance of a new game 
  *  return: null
@@ -192,38 +310,19 @@ const log_activated_new_game_instance = (gameKey) => {
   console.log("-----------------------------------------------------");
 };
 
-/** This function update the user's properties to the relevant dictionaries
- *  return: send a success message
- */
-const handle_req_user_login = (userID, userName, connection, keyGame) => {
-  d_users[userID] = [userName, getGroupNum(), 0, false];
-  d_connections[userID] = connection;
-  connection.send(
-    JSON.stringify({
-      type: GAME_KEY_SUCCESS,
-      id: userID,
-      name: userName,
-      keygame: keyGame,
-    })
-  );
-  // TODO: remove these prints
-  console.log(userName + " successfuly logged in");
-  console.log("all the users logged in are -> " + Object.keys(d_users));
-  console.log("users details -> " + Object.values(d_users));
-};
-
 /** This function create a new game key
  *  return: send the admin the new game key
  *  TODO: handle in admin - present the game key in the admin dashboard
  */
 const handle_new_game_instance = (userID, connection, gameType = 1, numOfParticipates = 1) => {
-  const keyGame = getUniqueGameKey(userID, gameType, numOfParticipates);
-  log_activated_new_game_instance(keyGame)
+  const gameKey = getUniqueGameKey(userID, gameType, numOfParticipates);
+  log_activated_new_game_instance(gameKey)
+  d_connections[userID] = connection;
 
   connection.send(
     JSON.stringify({
       type: CREATE_NEW_GAME_INSTANCE,
-      keyGame: keyGame,
+      keyGame: gameKey,
       Video: ["correct Movie"],
       Q: ["correct answer"],
     })
@@ -245,25 +344,44 @@ const handle_change_screen = (adminScreen) => {
 };
 
 /** This function update the user answer and score
+ *  updated dicts: d_users_answers, d_activeGames
  *  return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
  */
-const handle_user_answer = (user_ID, answer, time) => {
-  d_users_answers[user_ID] = [answer, time];
-  counter_users_answerd++;
-  if (counter_users_answerd === size(d_connections.keys()) - 1) {
-    counter_users_answerd = 0;
-    updateScoreForUsers();
+const handle_user_answer = (gameKey, userID, answer, time) => {
+  const answerProp = {
+    answer: answer, 
+    time: time
+  }
+  d_activeGames[gameKey].d_users_answers[userID] = answerProp;
+  d_activeGames[gameKey].curr_answered_questions++; 
+
+  // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
+  if (d_activeGames[gameKey].curr_answered_questions === size(d_connections.keys()) - 1) {
+    d_activeGames[gameKey].curr_answered_questions = 0;
+    updateScoreForUsers(gameKey);
 
     for (key in d_connections) {
       d_connections[key].send(
         JSON.stringify({
           type: UPDATE_SCORE,
-          answer: d_users[user_ID][3],
-          score: d_users[user_ID][2],
+          answer: d_users[userID].last_answer_correctness, // return true or false
+          score: d_users[userID].curr_score,  // send the new score 
         })
       );
     }
+    cleanUsersLastAnswer(gameKey);
   }
+};
+
+/** This function delete the user from server (and his connections)
+ * updated dict: d_users, d_connections, d_activatedGames
+ *  return: null
+ */
+const habdle_delete_user = (userID, gameKey) => {
+  delete d_users[userID];
+  delete d_connections[userID];
+  delete d_activeGames[gameKey].curr_connected_users--;
+  console.log("SERVER : conenction closed (userID: "+userID+")");
 };
 
 
@@ -271,17 +389,21 @@ wsServer.on("request", function (request) {
   console.log("server got connection request");
   const userID = getUniqueID();
   const connection = request.accept(null, request.origin);
+  var gameKey;
+  var userName; 
 
   connection.on("message", function (message) {
     const userlog = JSON.parse(message.utf8Data);
-    console.log(userlog.name)
-    if (userName === null)
+    if (userName === undefined)
       userName = userlog.name;
+    if (gameKey === undefined)
+      gameKey = userlog.keygame;
     switch (userlog.type) {
       case REQ_USER_LOGIN:
-        if (userlog.keygame in d_activeGames) {
-          handle_req_user_login(userID, userlog.name, connection, userlog.keyGame);
-        }
+        if (gameKey in d_activeGames)
+          handle_req_user_login(userID, userName, connection, gameKey);
+        else 
+          handle_bad_req_user_login(connection, gameKey);
         break;
 
       case CREATE_NEW_GAME_INSTANCE:
@@ -293,12 +415,12 @@ wsServer.on("request", function (request) {
         break;
 
       case USER_ANSWER:
-        handle_user_answer(user_ID, userlog.answer, userlog.time);
+        handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
         break;
     }
   });
 
   connection.on("close", function (connection) {
-    console.log("SERVER : conenction closed (userID: "+userID+")");
+    habdle_delete_user(userID, gameKey);
   });
 });
