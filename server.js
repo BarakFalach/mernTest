@@ -20,6 +20,7 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 //#################################################################################################################################################################################################################
 
 // Const enums
+const printLogs = true;
 const MAKAF = 40;
 const UPDATE_SCORE = "UPDATE_SCORE";
 const USER_ANSWER = "USER_ANSWER";
@@ -34,25 +35,24 @@ const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 
 /**
  * Data Structure explenation for dictionaries:
- *    d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,  last_answer_currectnes: boolean}
- *    d_group = {key: server_given_group_id, value: group_score}
+ *    d_admins = {key: server_given_user_id, value: gameKey: number
  *    d_connections = {key: server_given_user_id, value: connection}
- *    d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  *    d_activeGame = {key: gameKey, value: gameProperties - see function: "setGameProperties" }
+ *        d_group = {key: server_given_group_id, value: group_score}
+ *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,  last_answer_currectnes: boolean}
+ *        d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  */
 
 const d_users = {};
-const d_group = {};
+const d_admins = {};
 const d_connections = {};
 const d_activeGames = {};
 
 var WebSocketServer = require("websocket").server;
 var http = require("http");
-var d_AuthenticatedUsers = {};
+const { connection } = require("mongoose");
 
 var server = http.createServer(function (req, res) {
-  console.log(new Date() + " Received request for ");
-  res.write("Hello World!");
   res.end();
 });
 server.listen(webSocketsServerPort, function () {
@@ -89,6 +89,7 @@ const setGameProperties = (gameKey, admin_ID, gameType, numOfParticipates) => {
         curr_score: 0
       },
     },
+    d_users: {},
     d_users_answers: {},
     num_of_participates: numOfParticipates,
     curr_connected_users: 0,
@@ -146,12 +147,8 @@ const updateScoreForGroup = (gameKey, group, score) => {
  *  return: null
  */
 const cleanUsersLastAnswer = (gameKey) => {
-  var items = d_users.filter(function (key) {
-    return d_users[key].gameKey === gameKey;
-  });
-
-  for (item in items) {
-    d_users[item].last_answer_correctness = false;
+    for (item in d_activeGames[gameKey].d_users) {
+      d_activeGames[gameKey].d_users[item].last_answer_correctness = false;
   }
 };
 
@@ -171,14 +168,14 @@ const updateScoreForUsers = (gameKey) => {
   var scoreCounter = 1;
   for (item in items) {
     if (items[item].answer === currentRightAnswer) {
-      d_users[item].curr_score += scoreCounter;
-      d_users[item].last_answer_correctness = true;
-      updateScoreForGroup(d_users[item].group_num, scoreCounter);
+      d_activeGames[gameKey].d_users[item].curr_score += scoreCounter;
+      d_activeGames[gameKey].d_users[item].last_answer_correctness = true;
+      updateScoreForGroup(d_activeGames[gameKey].d_users[item].group_num, scoreCounter);
       scoreCounter++;
     }
 
     else {
-      d_users[item].last_answer_correctness = false;
+      d_activeGames[gameKey].d_users[item].last_answer_correctness = false;
     }
   }
 };
@@ -187,7 +184,7 @@ const updateScoreForUsers = (gameKey) => {
  *  return: Array of the sorted users
  */
 const sortByScore = (gameKey, usersOrGroups) => {
-  let refDict = usersOrGroups === "users" ? d_users : d_activeGames[gameKey].groups;
+  let refDict = usersOrGroups === "users" ? d_activeGames[gameKey].d_users : d_activeGames[gameKey].groups;
   var items = Object.keys(refDict).map(function (key) {
     return [key, refDict[key]];
   });
@@ -218,62 +215,76 @@ const top3Users = () => {
 /** This function print the instance of a new user 
  *  return: null
  */
-const log_activated_new_user_instance = (userID, userName) => {
-  console.log("-------- New User Created (" + userID + ") -----------");
-  for (const [key, value] of Object.entries(d_users[userID])) {
-    console.log(key + ": " + value);
+const log_activated_new_user_instance = (gameKey, userID) => {
+  log_print_structure_head("New User Created (" + userID + ")");
+  for (const [key, value] of Object.entries(d_activeGames[gameKey].d_users[userID])) {
+    log_print_structure_body(key + ": " + value);
   }
-  console.log("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
-  console.log(userName + " successfuly logged in");
-  console.log("all the users logged in are -> " + Object.keys(d_users));
-  console.log("-----------------------------------------------------");
+  log_print_structure_end();
 };
 
+/** 
+*  These 3 function beloew (log_prints) create a structure of an order message
+*/
+const log_print_structure_head = (header) => {
+  const newMakaf = "-".repeat(((MAKAF-header.length)/2));
+  console.log("\n" + newMakaf + header + newMakaf);
+}
+
+const log_print_structure_body = (body) => {
+  const spaces = " ".repeat((MAKAF-(body.length+4)))
+  console.log("# "+ body + spaces  +" #");
+}
+
+const log_print_structure_end = () => {
+  console.log("-".repeat(MAKAF) + "\n");
+}
 
 /** This function is a recursive function to help "log_game_status" function
  *  return: null
  */
 const log_game_status_sub = (key, value, i) => {
   if (typeof (value) === "object") {
-    console.log("  ".repeat(i) + key + ": ");
+    log_print_structure_body(" ".repeat(i) + key + ": ")
+
     for (const [keyS, valueS] of Object.entries(value)) {
       log_game_status_sub(keyS, valueS, i + 1)
     }
   }
   else {
-    console.log("  ".repeat(i) + key + ": " + value);
+    log_print_structure_body(" ".repeat(i) + key + ": " + value)
   }
 };
-
-const log_print_structure_head = (header) => {
-  const newMakaf = "-".repeat(((MAKAF-header.length)/2));
-  console.log("\n" + newMakaf + header + newMakaf);
-}
-
-
-const log_print_structure_end = () => {
-  console.log("-".repeat(MAKAF) + "\n");
-}
-
 
 /** This function print the game status by given a game key
  *  return: null
  */
 const log_game_status = (gameKey) => {
-  
   const printName = " Game Status "+ gameKey + " ";
   log_print_structure_head(printName);
   for (const [key, value] of Object.entries(d_activeGames[gameKey])) {
-    if (typeof (value) === "object") {
-      log_game_status_sub(key, value, 1);
-    }
-    else {
-      console.log(key + ": " + value);
+    if (key !== "d_users"){
+      if (typeof (value) === "object") {
+        log_game_status_sub(key, value, 0);
+      }
+      else {
+        log_print_structure_body(key + ": " + value)
+      }
     }
   }
   log_print_structure_end();
 };
 
+/** This function print the game status by given a game key
+ *  return: null
+ */
+const log_activeGames = () => {
+  log_print_structure_head("Current Activated Games (" + Object.keys(d_activeGames).length + ")")
+  for (var key in d_activeGames) {
+    log_print_structure_body(key)
+  }
+  log_print_structure_end();
+};
 
 /** This function update the user's properties to the relevant dictionaries
  *  updated dicts: d_users, d_connections
@@ -289,7 +300,7 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
     last_answer_correctness: false
   }
 
-  d_users[userID] = userProp;
+  d_activeGames[gameKey].d_users[userID] = userProp;
   d_connections[userID] = connection;
 
   connection.send(
@@ -313,8 +324,8 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
   )
 
   // TODO: remove these prints
-  if (true) {
-    log_activated_new_user_instance(userID, userName);
+  if (printLogs) {
+    log_activated_new_user_instance(gameKey, userID);
     log_game_status(gameKey);
   };
 };
@@ -323,7 +334,9 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
  *  return: null
  */
 const log_fail_game_key = (gameKey) => {
-  console.log("------------- Game Key Error ----------------");
+  log_print_structure_head("Game Key Error (" + gameKey + ")");
+  log_print_structure_body("User insert not activate game key")
+  log_print_structure_end();
 };
 
 /** This function update the user that there is no such a game key in the server
@@ -338,20 +351,8 @@ const handle_bad_req_user_login = (connection, gameKey) => {
   );
 
   // TODO: remove these prints
-  if (true)
+  if (printLogs)
     log_fail_game_key(gameKey)
-
-};
-
-/** This function print the instance of a new game 
- *  return: null
- */
-const log_activated_new_game_instance = (gameKey) => {
-  console.log("------------- New Game Created (" + gameKey + ")----------------");
-  for (const [key, value] of Object.entries(d_activeGames[gameKey])) {
-    console.log(key + ": " + value);
-  }
-  console.log("-----------------------------------------------------");
 };
 
 /** This function create a new game key
@@ -360,8 +361,11 @@ const log_activated_new_game_instance = (gameKey) => {
  */
 const handle_new_game_instance = (userID, connection, gameType = 1, numOfParticipates = 1) => {
   const gameKey = getUniqueGameKey(userID, gameType, numOfParticipates);
-  log_activated_new_game_instance(gameKey)
+  if (printLogs)
+    log_activeGames();
+    log_game_status(gameKey);
   d_connections[userID] = connection;
+  d_admins[userID] = gameKey;
 
   connection.send(
     JSON.stringify({
@@ -404,12 +408,12 @@ const handle_user_answer = (gameKey, userID, answer, time) => {
     d_activeGames[gameKey].curr_answered_questions = 0;
     updateScoreForUsers(gameKey);
 
-    for (key in d_connections) {
+    for (key in d_activeGames[gameKey].d_users) {
       d_connections[key].send(
         JSON.stringify({
           type: UPDATE_SCORE,
-          answer: d_users[userID].last_answer_correctness, // return true or false
-          score: d_users[userID].curr_score,  // send the new score 
+          answer: d_activeGames[gameKey].d_users[key].last_answer_correctness, // return true or false
+          score: d_activeGames[gameKey].d_users[key].curr_score,  // send the new score 
         })
       );
     }
@@ -421,18 +425,47 @@ const handle_user_answer = (gameKey, userID, answer, time) => {
  * updated dict: d_users, d_connections, d_activatedGames
  *  return: null
  */
-const habdle_delete_user = (userID, gameKey) => {
-  delete d_activeGames[gameKey].groups[d_users[userID].group_num].participants--;
-  delete d_activeGames[gameKey].curr_connected_users--;
-  delete d_connections[userID];
-  delete d_users[userID];
-  console.log("SERVER : conenction closed (userID: " + userID + ")");
-  log_game_status(gameKey);
+const handle_delete_user = (userID, gameKey) => {
+  try {
+    const groupNumber = d_activeGames[gameKey].d_users[userID].group_num;
+    delete d_activeGames[gameKey].groups[groupNumber].participants--;
+    delete d_connections[userID];
+    delete d_activeGames[gameKey].d_users[userID];
+    delete d_activeGames[gameKey].curr_connected_users--;
+    console.log("SERVER : Player conenction closed (userID: " + userID + ")");
+
+    // TODO: Redirect the user to another page (like loginUser/home)
+
+    log_game_status(gameKey);
+  } catch (err) {
+    console.log("problem in handle_delete_user failed");
+  }
 };
+
+/** This function delete the admin from server (and his connections)
+ * updated dict: d_users, d_connections, d_activatedGames
+ *  return: null
+ */
+const handle_delete_admin = (userID, gameKey) => {
+  // TODO: decide if admin logout create finish game action
+  delete_game_instance(gameKey);
+  delete d_connections[userID];
+  console.log("SERVER : Admin conenction closed (userID: " + userID + ")");
+};
+
+/** This function delete the game instance from the server
+ * 
+ */
+const delete_game_instance = (gameKey) => {
+  for (let user in d_activeGames[gameKey].d_users)
+    handle_delete_user(user, gameKey)
+  delete d_activeGames[gameKey];
+  log_activeGames();
+}
 
 
 wsServer.on("request", function (request) {
-  console.log("server got connection request");
+  log_print_structure_head("Server: Connection Request")
   const userID = getUniqueID();
   const connection = request.accept(null, request.origin);
   var gameKey;
@@ -440,21 +473,25 @@ wsServer.on("request", function (request) {
 
   connection.on("message", function (message) {
     const userlog = JSON.parse(message.utf8Data);
-    if (userName === undefined)
+    
+    // first message
+    if (undefined === (userName || gameKey)){
       userName = userlog.name;
-    if (gameKey === undefined)
       gameKey = userlog.keygame;
+    }
+      
     switch (userlog.type) {
+      
+      case CREATE_NEW_GAME_INSTANCE:
+        handle_new_game_instance(userID, connection);
+        break;
+      
       case REQ_USER_LOGIN:
         if (gameKey in d_activeGames)
           handle_req_user_login(userID, userName, connection, gameKey);
         else
           handle_bad_req_user_login(connection, gameKey);
-        break;
-
-      case CREATE_NEW_GAME_INSTANCE:
-        handle_new_game_instance(userID, connection);
-        break;
+        break; 
 
       case CHANGE_SCREEN:
         handle_change_screen(userlog.screen);
@@ -467,6 +504,11 @@ wsServer.on("request", function (request) {
   });
 
   connection.on("close", function (connection) {
-    habdle_delete_user(userID, gameKey);
+    if (gameKey in d_activeGames)
+      if (userID in d_activeGames[gameKey].d_users)   
+        handle_delete_user(userID, gameKey);
+      
+      if (userID in d_admins)
+        handle_delete_admin(userID, d_admins[userID]);
   });
 });
