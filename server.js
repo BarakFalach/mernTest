@@ -171,6 +171,8 @@ const handle_req_user_login = (userID, userName, connection, keyGame) => {
       id: userID,
       name: userName,
       keygame: keyGame,
+      //EDEN DEBUGGING REMOVE QUESTIONS FROM HERE
+      questions: ["q", "a12", "a2", "a3", "a4"],
     })
   );
   // TODO: remove these prints
@@ -239,11 +241,15 @@ wsServer.on("request", function (request) {
     const userlog = JSON.parse(message.utf8Data);
     switch (userlog.type) {
       case REQ_USER_LOGIN:
+        //* EDEN DEBUGGING
         // TODO: remove the "TEMP_KEYGAME OPTION"
-        if (
-          userlog.keygame in currentGamesKeys ||
-          userlog.keygame === TEMP_KEYGAME
-        ) {
+        // if (
+        //   userlog.keygame in currentGamesKeys ||
+        //   userlog.keygame === TEMP_KEYGAME
+        // ) {
+        //MUST RETURN IF STATEMENTS-FOR EDEN TESTING ***
+        //*/
+        {
           handle_req_user_login(
             userID,
             userlog.name,

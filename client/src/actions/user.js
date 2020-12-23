@@ -1,4 +1,4 @@
-import { KEYGAME_SUCCESS, KEYGAME_FAIL, CHANGE_SCREEN } from "./types";
+import { GAME_KEY_SUCCESS, KEYGAME_FAIL, CHANGE_SCREEN } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;
@@ -44,19 +44,13 @@ export const login = ({ name, keygame }) => async (dispatch) => {
   }
 };
 
-export const UserAnswer = (res) => async (dispatch) => {
+//TODO MIGHT NEED =>async dispatch
+export const UserAnswer = (AnswerNum, time) => async () => {
+  console.log("Answer Num" + AnswerNum);
+  console.log("Time" + time);
   const ansAsJSON = JSON.stringify({
     type: "USER_ANSWER",
-    answer: res,
-    time: 3,
+    answer: AnswerNum,
+    time: time,
   });
-  dispatch({});
-  client.send(ansAsJSON);
 };
-
-// //LOGOUT Admin
-// export const logout = () => (dispatch) => {
-//   dispatch({
-//     type: LOGOUT,
-//   });
-// };

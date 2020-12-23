@@ -1,7 +1,7 @@
 import {
   CHANGE_SCREEN,
   KEYGAME_FAIL,
-  KEYGAME_SUCCESS,
+  GAME_KEY_SUCCESS,
   SERVER_FEEDBACK_TO_ANSWER,
 } from "../actions/types";
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
 export default function userReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case KEYGAME_SUCCESS:
+    case GAME_KEY_SUCCESS:
       console.log("User Reducer Fine");
       console.log(payload.questions[0]);
       return {
