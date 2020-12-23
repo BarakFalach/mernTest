@@ -1,7 +1,9 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
+import Button from "@material-ui/core/Button";
 import { UserAnswer } from "../../actions/user";
+import "../layouts/css/Question.css";
 const Question = ({ question, answers, UserAnswer }) => {
   const ques1 = question;
   if (ques1 == null) {
@@ -22,18 +24,64 @@ const Question = ({ question, answers, UserAnswer }) => {
 
   return (
     <Fragment>
-      <div>{qu}</div>
-      <div value="1" onClick={onAnswerClick}>
-        {ans1}
+      <div className="col-centered">
+        <Button
+          fullWidth="true"
+          size="large"
+          href="#text-buttons"
+          variant="contained"
+          color="secondary"
+        >
+          {qu}
+        </Button>
       </div>
-      <div value="2" onClick={onAnswerClick}>
-        {ans2}
+      <div>
+        <p className="left-side">
+          <Button
+            fullWidth="true"
+            variant="contained"
+            color="primary"
+            value="1"
+            onClick={onAnswerClick}
+          >
+            {ans1}
+          </Button>
+        </p>
+        <p className="right-side">
+          <Button
+            fullWidth="true"
+            variant="contained"
+            color="primary"
+            value="2"
+            onClick={onAnswerClick}
+          >
+            {ans2}
+          </Button>
+        </p>
       </div>
-      <div value="3" onClick={onAnswerClick}>
-        {ans3}
-      </div>
-      <div value="4" onClick={onAnswerClick}>
-        {ans4}
+      <div>
+        <p className="left-side">
+          <Button
+            variant="contained"
+            fullWidth="true"
+            color="primary"
+            value="3"
+            onClick={onAnswerClick}
+          >
+            {ans3}
+          </Button>
+        </p>
+        <p className="right-side">
+          <Button
+            fullWidth="true"
+            variant="contained"
+            color="primary"
+            value="4"
+            onClick={onAnswerClick}
+          >
+            {ans4}
+          </Button>
+        </p>
       </div>
     </Fragment>
   );
