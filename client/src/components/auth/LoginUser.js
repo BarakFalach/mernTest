@@ -2,11 +2,11 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
+import { DialogTitle, Typography, TextField } from "@material-ui/core";
 import Game from "../game/Game";
 import { Redirect } from "react-router-dom";
-import moduleName from "module";
 
-const LoginUser = ({ login, isAuthenticated }) => {
+const LoginUser = ({ login, isAuthenticated, questions }) => {
   const [formData, setFormData] = useState({
     name: "",
     keygame: "",
@@ -16,6 +16,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("key game is " + keygame);
     login({ name, keygame });
   };
 
@@ -26,10 +27,12 @@ const LoginUser = ({ login, isAuthenticated }) => {
   const { name, keygame } = formData;
   return (
     <Fragment>
-      <h1 className="large text-primary">User Interface</h1>
+      <Typography variant="h2" color="primary">
+        User Interface
+      </Typography>
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
-          <input
+          <TextField
             className="formField"
             type="text"
             placeholder="Full Name"
@@ -40,7 +43,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
           />
         </div>
         <div className="form-group">
-          <input
+          <TextField
             className="formField"
             type="number"
             placeholder="keygame"
@@ -50,7 +53,11 @@ const LoginUser = ({ login, isAuthenticated }) => {
             required
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Login"></input>
+        <TextField
+          type="submit"
+          className="btn btn-primary"
+          value="Login"
+        ></TextField>
       </form>
     </Fragment>
   );

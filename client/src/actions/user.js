@@ -39,14 +39,15 @@ export const login = ({ name, keygame }) => async (dispatch) => {
   }
 };
 
-export const UserAnswer = (res) => async (dispatch) => {
+//TODO MIGHT NEED =>async dispatch
+export const UserAnswer = (AnswerNum, time) => async () => {
+  console.log("Answer Num" + AnswerNum);
+  console.log("Time" + time);
   const ansAsJSON = JSON.stringify({
     type: "USER_ANSWER",
-    answer: res,
-    time: 3,
+    answer: AnswerNum,
+    time: time,
   });
-  dispatch({});
-  client.send(ansAsJSON);
 };
 
 // //LOGOUT Admin
