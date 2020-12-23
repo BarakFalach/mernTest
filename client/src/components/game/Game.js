@@ -1,36 +1,29 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from "../../actions/user";
+import Phase from "./Phase";
 // import { Question } from "./Question";
-import { Answer } from "./Answer";
-import { Video } from "./Video";
-import { Top3 } from "./Top3";
-import { Poll } from "./Poll";
 
-const Game = ({ screen }) => {
-  switch (screen) {
-    case "question":
-    // return <Question />;
-    case "answer":
-      return <Answer />;
-    case "video":
-      return <Video />;
-    case "poll":
-      return <Poll />;
-    case "top3":
-      return <Top3 />;
-    default:
-      return <h1>Defult Screen</h1>;
-  }
-  return <div></div>;
+const Game = ({ score, name }) => {
+  return (
+    <Fragment>
+      <h1>
+        {" "}
+        welcome {name} you current score is: {score}
+      </h1>
+      <div>
+        <Phase />
+      </div>
+    </Fragment>
+  );
 };
-
 Game.propTypes = {
-  screen: PropTypes.string,
+  score: PropTypes.number,
+  name: PropTypes.string,
 };
 const mapStateToProps = (state) => ({
-  screen: state.user.screen,
+  score: state.user.userState.score,
+  name: state.user.name,
 });
 
-export default connect(mapStateToProps, { login })(Game);
+export default connect(mapStateToProps, {})(Game);

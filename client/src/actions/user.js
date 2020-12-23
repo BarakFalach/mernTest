@@ -5,14 +5,9 @@ var client;
 //Login User
 export const login = ({ name, keygame }) => async (dispatch) => {
   try {
-    console.log("Baraka");
     client = new W3CWebSocket(PATH + ":" + ServerPORT);
-    console.log("Baraka2");
 
     client.onopen = () => {
-      console.log("WebSocket Client Connected");
-      console.log("name is" + name);
-      console.log("keygame is" + keygame);
       client.send(
         JSON.stringify({
           type: "REQ_USER_LOGIN",

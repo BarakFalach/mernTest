@@ -19,7 +19,7 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 
 //#################################################################################################################################################################################################################
 
-const CHANGE_SCREEN = "CHANGE_SCREEN";
+const PHASE = "PHASE";
 const REQ_USER_LOGIN = "REQ_USER_LOGIN";
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const USER_ANSWER = "USER_ANSWER";
@@ -41,6 +41,12 @@ const d_users_answers = {};
 const d_connections = {};
 const currentGamesKeys = [];
 const numberOfGroups = 2;
+const phaseList = {};
+phaseList["question1"] = {
+  question: "how are you today",
+  answers: ["good", "great", "OK", "comsi comsa"],
+  time: 8,
+};
 var group_num = 0;
 var counter_users_answerd = 0;
 
@@ -163,14 +169,20 @@ const top3Users = () => {
  *  return: send a success message
  */
 const handle_req_user_login = (userID, userName, connection, keyGame) => {
-  d_users[userID] = [userName, getGroupNum(), 0, false];
+  d_users[userID] = {
+    name: userName,
+    group: getGroupNum(),
+    score: 0,
+    lastAnswerCorrect: false,
+  };
   d_connections[userID] = connection;
   connection.send(
     JSON.stringify({
       type: GAME_KEY_SUCCESS,
-      id: userID,
+      id: userID, // TODO:: not in use right now
       name: userName,
-      keygame: keyGame,
+      score: d_users[userID].score,
+      keygame: keyGame, //TODO:: why we need to send the gameKey to client.
     })
   );
   // TODO: remove these prints
@@ -188,8 +200,8 @@ const handle_new_game_instance = (connection) => {
     JSON.stringify({
       type: CREATE_NEW_GAME_INSTANCE,
       keyGame: keyGame,
-      Video: ["correct Movie"],
-      Q: ["correct answer"],
+      Video: ["video1"],
+      Q: ["question1"],
     })
   );
 };
@@ -197,12 +209,13 @@ const handle_new_game_instance = (connection) => {
 /** This function change the users screen
  *  return: send to all users the new screen to show
  */
-const handle_change_screen = (adminScreen) => {
+const handle_change_screen = (phase, phaseName) => {
   for (key in d_connections) {
     d_connections[key].send(
       JSON.stringify({
-        type: CHANGE_SCREEN,
-        screen: adminScreen,
+        type: PHASE,
+        phase: phase,
+        phaseProp: phaseList[phaseName],
       })
     );
   }
@@ -257,8 +270,8 @@ wsServer.on("request", function (request) {
         handle_new_game_instance(connection);
         break;
 
-      case CHANGE_SCREEN:
-        handle_change_screen(userlog.screen);
+      case PHASE:
+        handle_change_screen(userlog.phase, userlog.phaseName);
         break;
 
       case USER_ANSWER:

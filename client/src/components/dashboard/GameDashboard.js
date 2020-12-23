@@ -2,17 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
-import { ChangeScreen } from "../../actions/dashboard";
+import { ChangePhase } from "../../actions/dashboard";
 import "./GameDashboard.css";
 //comme
-const Gamedashboard = ({
-  ChangeScreen,
-  questionNames,
-  videoNames,
-  GameKey,
-}) => {
+const Gamedashboard = ({ ChangePhase, questionNames, videoNames, GameKey }) => {
   console.log("ENTER GameDashBoard");
-  const ScreenButton = (e) => ChangeScreen(e.target.className, e.target.name);
+  const ScreenButton = (e) => ChangePhase(e.target.className, e.target.name);
   return (
     <div className="out">
       <h1> Welcome to Game </h1>
@@ -31,7 +26,7 @@ const Gamedashboard = ({
       </span>
       <span className="container">
         {videoNames.map((video) => (
-          <button key={video} className="video" name={video}>
+          <button key={video} className="Video" name={video}>
             {video}
           </button>
         ))}
@@ -40,7 +35,7 @@ const Gamedashboard = ({
   );
 };
 Gamedashboard.propTypes = {
-  ChangeScreen: PropTypes.func.isRequired,
+  ChangePhase: PropTypes.func.isRequired,
   videoNames: PropTypes.array,
   questionNames: PropTypes.array,
   GameKey: PropTypes.string,
@@ -50,4 +45,4 @@ const mapStateToProps = (state) => ({
   questionNames: state.dashboard.questionNames,
   GameKey: state.dashboard.GameKey,
 });
-export default connect(mapStateToProps, { ChangeScreen })(Gamedashboard);
+export default connect(mapStateToProps, { ChangePhase })(Gamedashboard);
