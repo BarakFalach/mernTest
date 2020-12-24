@@ -26,7 +26,12 @@ const Gamedashboard = ({ ChangePhase, questionNames, videoNames, GameKey }) => {
       </span>
       <span className="container">
         {videoNames.map((video) => (
-          <button key={video} className="Video" name={video}>
+          <button
+            key={video}
+            className="video"
+            name={video}
+            onClick={(e) => ScreenButton(e)}
+          >
             {video}
           </button>
         ))}

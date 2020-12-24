@@ -56,7 +56,10 @@ phaseList["question1"] = {
   answers: ["good", "great", "OK", "comsi comsa"],
   time: 8,
 };
-
+phaseList["video1"] = {
+  videoUrl:
+    "https://player.vimeo.com/video/494218419?autoplay=1&title=0&byline=0&portrait=0&background=1&muted=1",
+};
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 const { connection } = require("mongoose");

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { login } from "../../actions/user";
 import Question from "./Question";
 import { Answer } from "./Answer";
-import { Video } from "./Video";
+import Video from "./Video";
 import { Top3 } from "./Top3";
 import { Poll } from "./Poll";
 
