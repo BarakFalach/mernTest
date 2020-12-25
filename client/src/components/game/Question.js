@@ -24,35 +24,35 @@ const Question = ({ question, answers, UserAnswer }) => {
 
   return (
     <Fragment>
-      <div className="col-centered">
+      <div className='col-centered'>
         <Button
-          fullWidth="true"
-          size="large"
-          href="#text-buttons"
-          variant="contained"
-          color="secondary"
+          fullWidth='true'
+          size='large'
+          href='#text-buttons'
+          variant='contained'
+          color='secondary'
         >
           {qu}
         </Button>
       </div>
       <div>
-        <p className="left-side">
+        <p className='left-side'>
           <Button
-            fullWidth="true"
-            variant="contained"
-            color="primary"
-            value="1"
+            fullWidth='true'
+            variant='contained'
+            color='primary'
+            value='1'
             onClick={onAnswerClick}
           >
             {ans1}
           </Button>
         </p>
-        <p className="right-side">
+        <p className='right-side'>
           <Button
-            fullWidth="true"
-            variant="contained"
-            color="primary"
-            value="2"
+            fullWidth='true'
+            variant='contained'
+            color='primary'
+            value='2'
             onClick={onAnswerClick}
           >
             {ans2}
@@ -60,23 +60,23 @@ const Question = ({ question, answers, UserAnswer }) => {
         </p>
       </div>
       <div>
-        <p className="left-side">
+        <p className='left-side'>
           <Button
-            variant="contained"
-            fullWidth="true"
-            color="primary"
-            value="3"
+            variant='contained'
+            fullWidth='true'
+            color='primary'
+            value='3'
             onClick={onAnswerClick}
           >
             {ans3}
           </Button>
         </p>
-        <p className="right-side">
+        <p className='right-side'>
           <Button
-            fullWidth="true"
-            variant="contained"
-            color="primary"
-            value="4"
+            fullWidth='true'
+            variant='contained'
+            color='primary'
+            value='4'
             onClick={onAnswerClick}
           >
             {ans4}
