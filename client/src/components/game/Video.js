@@ -1,18 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Player from "@vimeo/player";
+import Vimeo from "@u-wave/react-vimeo";
 
 const Video = ({ videoUrl }) => {
   return (
     <div>
-      <iframe
-        src={videoUrl}
-        width="640"
-        height="360"
-        frameborder="0"
-        allow="autoplay; fullscreen"
-        allowfullscreen
-      ></iframe>
+      <Vimeo
+        video={videoUrl}
+        controls="false"
+        autoplaygit
+        onEnd={() => console.log("VIDEO ENDED")}
+      />
     </div>
   );
 };
