@@ -53,7 +53,7 @@ const gameDefenition = {};
 gameDefenition["video1"] = {
   type: "video",
   phaseProp: {
-    videoUrl: "https://vimeo.com/jasperdekloet/kherrazi-1111",
+    videoUrl: "https://vimeo.com/204414561",
   },
 };
 gameDefenition["question1"] = {
