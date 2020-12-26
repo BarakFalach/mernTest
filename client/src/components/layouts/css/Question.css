@@ -1,0 +1,17 @@
+.col-centered {
+  float: none;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 200px;
+  margin-right: 200px;
+}
+.left-side {
+  width: 20%;
+  float: left;
+  margin-left: 200px;
+}
+.right-side {
+  width: 20%;
+  float: right;
+  margin-right: 200px;
+}

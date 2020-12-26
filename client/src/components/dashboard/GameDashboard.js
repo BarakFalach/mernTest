@@ -2,37 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
-import { ChangeScreen } from "../../actions/dashboard";
+import { ChangePhase } from "../../actions/dashboard";
 import "./GameDashboard.css";
 //comme
-const Gamedashboard = ({
-  ChangeScreen,
-  questionNames,
-  videoNames,
-  GameKey,
-}) => {
+const Gamedashboard = ({ ChangePhase, phaseList, GameKey }) => {
   console.log("ENTER GameDashBoard");
-  const ScreenButton = (e) => ChangeScreen(e.target.className, e.target.name);
+  const ScreenButton = (e) => ChangePhase(e.target.name);
+
   return (
     <div className="out">
       <h1> Welcome to Game </h1>
       <h1> Game key: {GameKey} </h1>
       <span className="container">
-        {questionNames.map((Q) => (
-          <button
-            key={Q}
-            className="Question"
-            name={Q}
-            onClick={(e) => ScreenButton(e)}
-          >
-            {Q}
-          </button>
-        ))}
-      </span>
-      <span className="container">
-        {videoNames.map((video) => (
-          <button key={video} className="video" name={video}>
-            {video}
+        {phaseList.map((Phase) => (
+          <button key={Phase} name={Phase} onClick={(e) => ScreenButton(e)}>
+            {Phase}
           </button>
         ))}
       </span>
@@ -40,14 +24,12 @@ const Gamedashboard = ({
   );
 };
 Gamedashboard.propTypes = {
-  ChangeScreen: PropTypes.func.isRequired,
-  videoNames: PropTypes.array,
-  questionNames: PropTypes.array,
+  ChangePhase: PropTypes.func.isRequired,
+  phaseList: PropTypes.array,
   GameKey: PropTypes.string,
 };
 const mapStateToProps = (state) => ({
-  videoNames: state.dashboard.videoNames,
-  questionNames: state.dashboard.questionNames,
+  phaseList: state.dashboard.phaseList,
   GameKey: state.dashboard.GameKey,
 });
-export default connect(mapStateToProps, { ChangeScreen })(Gamedashboard);
+export default connect(mapStateToProps, { ChangePhase })(Gamedashboard);

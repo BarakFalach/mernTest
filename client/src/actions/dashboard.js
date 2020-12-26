@@ -1,7 +1,7 @@
 import {
   KEYGAME_SUCCESS,
   KEYGAME_FAIL,
-  CHANGE_SCREEN,
+  PHASE,
   CREATE_NEW_GAME_INSTANCE,
 } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
@@ -38,15 +38,13 @@ export const startGame = () => async (dispatch) => {
   }
 };
 
-export const ChangeScreen = (screenType, screenName = "") => async (
-  dispatch
-) => {
+export const ChangePhase = (phaseName = "") => async (dispatch) => {
   try {
     client.send(
       JSON.stringify({
-        type: CHANGE_SCREEN, //TODO::need to write func in server.
-        screen: screenType,
-        screenName: screenName,
+        type: PHASE, //TODO::need to write func in server.
+        // phase: phaseType,
+        phaseName: phaseName,
       })
     );
   } catch (err) {

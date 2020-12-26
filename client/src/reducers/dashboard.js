@@ -5,8 +5,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  videoNames: ["errorVideo"],
-  questionNames: ["errorQuestion"],
+  phaseList: [],
   Gamekey: "000",
 };
 
@@ -17,8 +16,7 @@ export default function dashBoardReducer(state = initialState, action) {
     case CREATE_NEW_GAME_INSTANCE:
       return {
         ...state,
-        videoNames: payload.Video,
-        questionNames: payload.Q,
+        phaseList: payload.phaseList,
         GameKey: payload.keyGame,
       };
     default:

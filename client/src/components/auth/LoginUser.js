@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
-import WaitingRoom from "../layouts/WaitingRoom";
+import { DialogTitle, Typography, TextField } from "@material-ui/core";
 import Game from "../game/Game";
-import Question from "../game/Question";
+import { Redirect } from "react-router-dom";
 
 const LoginUser = ({ login, isAuthenticated, questions }) => {
   const [formData, setFormData] = useState({
@@ -20,44 +20,44 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
     login({ name, keygame });
   };
 
-  if (questions.length > 0) {
-    console.log("Login User Got THe Question");
-    return <Question />;
-  }
-
   if (isAuthenticated) {
-    console.log("user - isAuthenticated");
-    return <Game />;
+    return <Redirect to="/game" />;
   }
 
   const { name, keygame } = formData;
   return (
     <Fragment>
-      <h1 className='large text-primary'>User Interface</h1>
-      <form className='form' onSubmit={(e) => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            className='formField'
-            type='text'
-            placeholder='Full Name'
-            name='name'
+      <Typography variant="h2" color="primary">
+        User Interface
+      </Typography>
+      <form className="form" onSubmit={(e) => onSubmit(e)}>
+        <div className="form-group">
+          <TextField
+            className="formField"
+            type="text"
+            placeholder="Full Name"
+            name="name"
             value={name}
             onChange={(e) => onChange(e)}
             required
           />
         </div>
-        <div className='form-group'>
-          <input
-            className='formField'
-            type='number'
-            placeholder='keygame'
-            name='keygame'
+        <div className="form-group">
+          <TextField
+            className="formField"
+            type="number"
+            placeholder="keygame"
+            name="keygame"
             value={keygame}
             onChange={(e) => onChange(e)}
             required
           />
         </div>
-        <input type='submit' className='btn btn-primary' value='Login'></input>
+        <TextField
+          type="submit"
+          className="btn btn-primary"
+          value="Login"
+        ></TextField>
       </form>
     </Fragment>
   );
