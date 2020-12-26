@@ -22,7 +22,7 @@ Game.propTypes = {
   name: PropTypes.string,
 };
 const mapStateToProps = (state) => ({
-  score: state.user.userState.score,
+  score: state.user.score,
   name: state.user.name,
 });
 

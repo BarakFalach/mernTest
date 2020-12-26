@@ -49,17 +49,48 @@ const d_connections = {};
 const d_activeGames = {};
 
 // temp data stracure , only for testing
-const phaseList = {};
+const gameDefenition = {};
+gameDefenition["video1"] = {
+  type: "video",
+  phaseProp: {
+    videoUrl: "https://vimeo.com/204414561",
+  },
+};
+gameDefenition["question1"] = {
+  type: "Question",
+  phaseProp: {
+    question: "how are you today",
+    answers: ["good", "great", "OK", "comsi comsa"],
+    time: 8,
+  },
+};
+gameDefenition["question2"] = {
+  type: "Question",
+  phaseProp: {
+    question: "how are you Tommorow",
+    answers: ["good", "great", "OK", "comsi comsa"],
+    time: 8,
+  },
+};
+gameDefenition["video2"] = {
+  type: "video",
+  phaseProp: {
+    videoUrl: "https://player.vimeo.com/video/494218419",
+  },
+};
+gameDefenition["question3"] = {
+  type: "Question",
+  phaseProp: {
+    question: "how are you in the day after Tommorow",
+    answers: ["good", "great", "OK", "comsi comsa"],
+    time: 8,
+  },
+};
+phaseList = [];
+for (key in gameDefenition) {
+  phaseList.push(key);
+}
 
-phaseList["question1"] = {
-  question: "how are you today",
-  answers: ["good", "great", "OK", "comsi comsa"],
-  time: 8,
-};
-phaseList["video1"] = {
-  videoUrl:
-    "https://player.vimeo.com/video/494218419?autoplay=1&title=0&byline=0&portrait=0&background=1&muted=1",
-};
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 const { connection } = require("mongoose");
@@ -394,8 +425,7 @@ const handle_new_game_instance = (
     JSON.stringify({
       type: CREATE_NEW_GAME_INSTANCE,
       keyGame: gameKey,
-      Video: ["video1"],
-      Q: ["question1"],
+      phaseList: phaseList,
     })
   );
 };
@@ -408,8 +438,8 @@ const handle_change_screen = (phase, phaseName) => {
     d_connections[key].send(
       JSON.stringify({
         type: PHASE,
-        phase: phase,
-        phaseProp: phaseList[phaseName],
+        phase: gameDefenition[phaseName].type,
+        phaseProp: gameDefenition[phaseName].phaseProp,
       })
     );
   }

@@ -9,6 +9,7 @@ const initialState = {
   name: "",
   isAuthenticated: false,
   userState: {},
+  score: "0",
 };
 //func name Changed from login to userReducer
 export default function userReducer(state = initialState, action) {

@@ -38,12 +38,12 @@ export const startGame = () => async (dispatch) => {
   }
 };
 
-export const ChangePhase = (phaseType, phaseName = "") => async (dispatch) => {
+export const ChangePhase = (phaseName = "") => async (dispatch) => {
   try {
     client.send(
       JSON.stringify({
         type: PHASE, //TODO::need to write func in server.
-        phase: phaseType,
+        // phase: phaseType,
         phaseName: phaseName,
       })
     );
