@@ -1,11 +1,33 @@
-import Webcam from "react-webcam";
-import React from "react";
+import Webcam from 'react-webcam';
 
-const videoConstraints = {
-  width: 1280,
-  height: 720,
-  facingMode: "user",
+import React, { Component, useState, useEffect } from 'react';
+
+const WebcamCapture = () => {
+	const [toCapture, setToCapture] = useState(false);
+
+	const webcamRef = React.useRef(null);
+	const [imgSrc, setImgSrc] = React.useState(null);
+
+	const capture = React.useCallback(() => {
+		const imageSrc = webcamRef.current.getScreenshot();
+		setImgSrc(imageSrc);
+	}, [webcamRef, setImgSrc]);
+
+	// if (toCapture){capture()}
+
+	useEffect(() => {
+		setTimeout(() => {
+			capture();
+		}, 3000);
+	});
+	return (
+		<>
+			<Webcam audio={false} ref={webcamRef} screenshotFormat='image/jpeg' />
+			{/* <button onClick={capture}>Capture photo</button> */}
+			{imgSrc && <img src={imgSrc} />}
+		</>
+	);
 };
-
-const WebcamCapture = () => <Webcam />;
 export default WebcamCapture;
+
+// https://www.npmjs.com/package/react-webcam
