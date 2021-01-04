@@ -14,3 +14,4 @@ export const PHASE = "PHASE";
 export const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
 export const GAME_PROP = "GAME_PROP"; //i think this type is redundent
 export const SERVER_FEEDBACK_TO_ANSWER = "SERVER_FEEDBACK_TO_ANSWER";
+export const USER = "USER";
