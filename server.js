@@ -39,11 +39,11 @@ const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
  *    d_connections = {key: server_given_user_id, value: connection}
  *    d_activeGame = {key: gameKey, value: gameProperties - see function: "setGameProperties" }
  *        d_group = {key: server_given_group_id, value: group_score}
- *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,  last_answer_currectnes: boolean}
+ *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,
+ *                  last_answer_currectnes: boolean, general_question_list}
  *        d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  */
 
-const d_users = {};
 const d_admins = {};
 const d_connections = {};
 const d_activeGames = {};
@@ -113,11 +113,6 @@ wsServer = new WebSocketServer({
  *  return: null
  */
 const setGameProperties = (gameKey, admin_ID, gameType, numOfParticipates) => {
-  var newGroup = {
-    participants: 0,
-    curr_score: 0,
-  };
-
   var gameProps = {
     admin: admin_ID,
     game_type: gameType,
@@ -133,8 +128,11 @@ const setGameProperties = (gameKey, admin_ID, gameType, numOfParticipates) => {
     },
     d_users: {},
     d_users_answers: {},
+    knowledge_questions_answers: {},
+    general_questions_answers: {},
     num_of_participates: numOfParticipates,
     curr_connected_users: 0,
+    curr_right_answer: "",
     curr_answered_questions: 0,
     curr_pos: 0,
   };
@@ -194,6 +192,22 @@ const cleanUsersLastAnswer = (gameKey) => {
   }
 };
 
+/** this function sum the values of a given dict */
+const sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b);
+
+/** This function calculate knowledge distribution of the answers
+ *  update dicts: d_activatedGames
+ *  return: null
+ */
+const calculateKnowledgeDist = (gameKey) => {
+  const sum = sumValues(d_activeGames[gameKey].knowledge_question_answers);
+  if (sum !== 0) {
+    for (key in d_activeGames[gameKey].knowledge_question_answers)
+      d_activeGames[gameKey].knowledge_question_dist[key] =
+        knowledge_question_answers / sum;
+  }
+};
+
 /** This function clean the last_answer_correctness to all game's users to false
  *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
  *  return: null
@@ -211,7 +225,7 @@ const updateScoreForUsers = (gameKey) => {
 
   var scoreCounter = 1;
   for (item in items) {
-    if (items[item].answer === currentRightAnswer) {
+    if (items[item].answer === d_activeGames[gameKey].curr_right_answer) {
       d_activeGames[gameKey].d_users[item].curr_score += scoreCounter;
       d_activeGames[gameKey].d_users[item].last_answer_correctness = true;
       updateScoreForGroup(
@@ -223,6 +237,7 @@ const updateScoreForUsers = (gameKey) => {
       d_activeGames[gameKey].d_users[item].last_answer_correctness = false;
     }
   }
+  calculateKnowledgeDist(gameKey);
 };
 
 /** This function sort the users or groups dictionaries by score
@@ -352,15 +367,6 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
   d_activeGames[gameKey].d_users[userID] = userProp;
   d_connections[userID] = connection;
 
-  for (key in d_connections) {
-    d_connections[key].send(
-      JSON.stringify({
-        type: "USER",
-        usersData: d_activeGames[gameKey].d_users,
-      })
-    );
-  }
-
   connection.send(
     JSON.stringify({
       type: GAME_KEY_SUCCESS,
@@ -380,8 +386,8 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
   // update the admin on the number of users that get in
   d_connections[d_activeGames[gameKey].admin].send(
     JSON.stringify({
-      type: NUMBER_OF_CONNECTED_USERS,
-      curr_connected_users: d_activeGames[gameKey].curr_connected_users,
+      type: "USER",
+      usersData: d_activeGames[gameKey].d_users,
     })
   );
 
