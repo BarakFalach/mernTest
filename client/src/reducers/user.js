@@ -9,7 +9,8 @@ const initialState = {
   name: "",
   isAuthenticated: false,
   userState: {},
-  score: "0",
+  // score: "0",
+  group: "",
 };
 //func name Changed from login to userReducer
 export default function userReducer(state = initialState, action) {
@@ -20,6 +21,7 @@ export default function userReducer(state = initialState, action) {
       return {
         ...state,
         name: payload.name,
+        group: payload.group,
         isAuthenticated: true,
         userState: payload,
       };

@@ -83,6 +83,9 @@ const Question = ({ question, answers, UserAnswer }) => {
           </Button>
         </p>
       </div>
+      <audio autoPlay>
+        <source src="https://www.dropbox.com/s/z8qky594e03dyzm/file_example_MP3_700KB.mp3?raw=1" />
+      </audio>
     </Fragment>
   );
 };
