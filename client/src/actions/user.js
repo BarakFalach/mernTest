@@ -43,11 +43,11 @@ export const login = ({ name, keygame }) => async (dispatch) => {
 export const UserAnswer = (AnswerNum, time) => async () => {
   console.log("Answer Num" + AnswerNum);
   console.log("Time" + time);
-  const ansAsJSON = JSON.stringify({
+  client.send(JSON.stringify({
     type: "USER_ANSWER",
     answer: AnswerNum,
     time: time,
-  });
+  }));
 };
 
 // //LOGOUT Admin
