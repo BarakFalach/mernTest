@@ -352,13 +352,23 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
   d_activeGames[gameKey].d_users[userID] = userProp;
   d_connections[userID] = connection;
 
+  for (key in d_connections) {
+    d_connections[key].send(
+      JSON.stringify({
+        type: "USER",
+        usersData: d_activeGames[gameKey].d_users,
+      })
+    );
+  }
+
   connection.send(
     JSON.stringify({
       type: GAME_KEY_SUCCESS,
       id: userID,
       name: userName,
-      score: d_activeGames[gameKey].d_users[userID].score,
+      score: d_activeGames[gameKey].d_users[userID].curr_score,
       keygame: gameKey, //TODO:::  change this veriable in client
+      group: d_activeGames[gameKey].d_users[userID].group_num,
       // TODO: send all the game structure
     })
   );
