@@ -39,11 +39,11 @@ const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
  *    d_connections = {key: server_given_user_id, value: connection}
  *    d_activeGame = {key: gameKey, value: gameProperties - see function: "setGameProperties" }
  *        d_group = {key: server_given_group_id, value: group_score}
- *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,  last_answer_currectnes: boolean}
+ *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,
+ *                  last_answer_currectnes: boolean, general_question_list}
  *        d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  */
 
-const d_users = {};
 const d_admins = {};
 const d_connections = {};
 const d_activeGames = {};
@@ -63,6 +63,7 @@ gameDefenition["question1"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
+  correct_answer: 0,
 };
 gameDefenition["question2"] = {
   type: "Question",
@@ -71,6 +72,7 @@ gameDefenition["question2"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
+  correct_answer: 1,
 };
 gameDefenition["video2"] = {
   type: "video",
@@ -85,6 +87,7 @@ gameDefenition["question3"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
+  correct_answer: 2,
 };
 phaseList = [];
 for (key in gameDefenition) {
@@ -113,11 +116,6 @@ wsServer = new WebSocketServer({
  *  return: null
  */
 const setGameProperties = (gameKey, admin_ID, gameType, numOfParticipates) => {
-  var newGroup = {
-    participants: 0,
-    curr_score: 0,
-  };
-
   var gameProps = {
     admin: admin_ID,
     game_type: gameType,
@@ -133,10 +131,14 @@ const setGameProperties = (gameKey, admin_ID, gameType, numOfParticipates) => {
     },
     d_users: {},
     d_users_answers: {},
+    knowledge_question_answers: {},
+    knowledge_question_dist: {},
+    general_questions_answers: {},
     num_of_participates: numOfParticipates,
     curr_connected_users: 0,
+    curr_right_answer: "",
     curr_answered_questions: 0,
-    curr_pos: 0,
+    curr_phase: {},
   };
   d_activeGames[gameKey] = gameProps;
 };
@@ -161,6 +163,7 @@ const getUniqueGameKey = (admin_ID, gameType, numOfParticipates) => {
   do {
     gameKey = Math.floor(Math.random() * (max - min)) + min;
   } while (gameKey.toString() in d_activeGames);
+  gameKey = 1;
 
   setGameProperties(gameKey, admin_ID, gameType, numOfParticipates);
   return gameKey.toString();
@@ -194,6 +197,22 @@ const cleanUsersLastAnswer = (gameKey) => {
   }
 };
 
+/** this function sum the values of a given dict */
+const sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b);
+
+/** This function calculate knowledge distribution of the answers
+ *  update dicts: d_activatedGames
+ *  return: null
+ */
+const calculateKnowledgeDist = (gameKey) => {
+  const sum = sumValues(d_activeGames[gameKey].knowledge_question_answers);
+  if (sum !== 0) {
+    for (key in d_activeGames[gameKey].knowledge_question_answers)
+      d_activeGames[gameKey].knowledge_question_dist[key] =
+        d_activeGames[gameKey].knowledge_question_answers[key] / sum;
+  }
+};
+
 /** This function clean the last_answer_correctness to all game's users to false
  *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
  *  return: null
@@ -210,19 +229,28 @@ const updateScoreForUsers = (gameKey) => {
   });
 
   var scoreCounter = 1;
-  for (item in items) {
-    if (items[item].answer === currentRightAnswer) {
-      d_activeGames[gameKey].d_users[item].curr_score += scoreCounter;
-      d_activeGames[gameKey].d_users[item].last_answer_correctness = true;
+  for (index in items) {
+    item = items[index];
+    console.log(item);
+    if (
+      !(item[1].answer in d_activeGames[gameKey].knowledge_question_answers)
+    ) {
+      d_activeGames[gameKey].knowledge_question_answers[item[1].answer] = 0;
+    }
+    d_activeGames[gameKey].knowledge_question_answers[item[1].answer] += 1;
+    if (item[1].answer === d_activeGames[gameKey].curr_phase.correct_answer) {
+      d_activeGames[gameKey].d_users[item[0]].curr_score += scoreCounter;
+      d_activeGames[gameKey].d_users[item[0]].last_answer_correctness = true;
       updateScoreForGroup(
-        d_activeGames[gameKey].d_users[item].group_num,
+        d_activeGames[gameKey].d_users[item[0]].group_num,
         scoreCounter
       );
       scoreCounter++;
     } else {
-      d_activeGames[gameKey].d_users[item].last_answer_correctness = false;
+      d_activeGames[gameKey].d_users[item[0]].last_answer_correctness = false;
     }
   }
+  calculateKnowledgeDist(gameKey);
 };
 
 /** This function sort the users or groups dictionaries by score
@@ -357,8 +385,9 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
       type: GAME_KEY_SUCCESS,
       id: userID,
       name: userName,
-      score: d_activeGames[gameKey].d_users[userID].score,
+      score: d_activeGames[gameKey].d_users[userID].curr_score,
       keygame: gameKey, //TODO:::  change this veriable in client
+      group: d_activeGames[gameKey].d_users[userID].group_num,
       // TODO: send all the game structure
     })
   );
@@ -370,8 +399,8 @@ const handle_req_user_login = (userID, userName, connection, gameKey) => {
   // update the admin on the number of users that get in
   d_connections[d_activeGames[gameKey].admin].send(
     JSON.stringify({
-      type: NUMBER_OF_CONNECTED_USERS,
-      curr_connected_users: d_activeGames[gameKey].curr_connected_users,
+      type: "USER",
+      usersData: d_activeGames[gameKey].d_users,
     })
   );
 
@@ -428,13 +457,15 @@ const handle_new_game_instance = (
       phaseList: phaseList,
     })
   );
+  return gameKey;
 };
 
 /** This function change the users screen
  *  return: send to all users the new screen to show
  */
-const handle_change_screen = (phase, phaseName) => {
-  for (key in d_connections) {
+const handle_change_screen = (gameKey, phase, phaseName) => {
+  d_activeGames[gameKey].curr_phase = gameDefenition[phaseName];
+  for (key in d_activeGames[gameKey].d_users) {
     d_connections[key].send(
       JSON.stringify({
         type: PHASE,
@@ -460,17 +491,25 @@ const handle_user_answer = (gameKey, userID, answer, time) => {
   // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
   if (
     d_activeGames[gameKey].curr_answered_questions ===
-    size(d_connections.keys()) - 1
+    Object.keys(d_activeGames[gameKey].d_users).length
   ) {
     d_activeGames[gameKey].curr_answered_questions = 0;
     updateScoreForUsers(gameKey);
-
+    console.log({
+      distribution: d_activeGames[gameKey].knowledge_question_dist,
+      correct: d_activeGames[gameKey].d_users[userID].last_answer_correctness,
+    });
+    //TODO:: remove this loop
     for (key in d_activeGames[gameKey].d_users) {
       d_connections[key].send(
         JSON.stringify({
-          type: UPDATE_SCORE,
-          answer: d_activeGames[gameKey].d_users[key].last_answer_correctness, // return true or false
-          score: d_activeGames[gameKey].d_users[key].curr_score, // send the new score
+          type: PHASE,
+          phase: "bars",
+          phaseProp: {
+            distribution: d_activeGames[gameKey].knowledge_question_dist,
+            correct:
+              d_activeGames[gameKey].d_users[key].last_answer_correctness,
+          },
         })
       );
     }
@@ -538,7 +577,7 @@ wsServer.on("request", function (request) {
 
     switch (userlog.type) {
       case CREATE_NEW_GAME_INSTANCE:
-        handle_new_game_instance(userID, connection);
+        gameKey = handle_new_game_instance(userID, connection);
         break;
 
       case REQ_USER_LOGIN:
@@ -548,10 +587,11 @@ wsServer.on("request", function (request) {
         break;
 
       case PHASE:
-        handle_change_screen(userlog.phase, userlog.phaseName);
+        handle_change_screen(gameKey, userlog.phase, userlog.phaseName);
         break;
 
       case USER_ANSWER:
+        console.log(userlog.answer);
         handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
         break;
     }

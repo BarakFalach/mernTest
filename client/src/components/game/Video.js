@@ -11,7 +11,7 @@ const Video = ({ videoUrl }) => {
     <div>
       <Vimeo
         video={videoUrl}
-        controls="false"
+        controls={false}
         height={height - 100}
         width={width}
         autoplay
