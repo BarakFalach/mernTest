@@ -123,6 +123,4 @@ const mapStateToProps = (state) => ({
   answers: state.user.userState.phaseProp.answers,
   time: state.user.userState.phaseProp.time,
 });
-
-// export default connect(mapStateToProps, { UserAnswer })(Question);
 export default connect(mapStateToProps, { UserAnswer })(Question);

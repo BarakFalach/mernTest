@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
 import Question from "./Question";
+import Bars from "./Bars";
 import { Answer } from "./Answer";
 import Video from "./Video";
 import { Top3 } from "./Top3";
@@ -20,6 +21,8 @@ const Phase = ({ phase }) => {
       return <Poll />;
     case "top3":
       return <Top3 />;
+    case "bars":
+      return <Bars />;
     default:
       return <h1>Defult Screen</h1>;
   }
