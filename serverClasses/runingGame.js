@@ -4,9 +4,12 @@ const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const PHASE = "PHASE";
 
 class RuningGame {
-  constructor(admin, gameType, numOfParticipates) {
+  constructor(admin, gameType, numOfParticipates, phaseList, gameDefenition) {
     this.admin = admin;
     this.game_type = gameType; //TODO:: what is gameType
+    this.phaseList = phaseList;
+    this.gameDefenition = gameDefenition;
+    this.nextPhase = 0;
     this.groups = {
       1: {
         participants: 0,
@@ -25,8 +28,9 @@ class RuningGame {
     this.num_of_participates = numOfParticipates;
     this.curr_connected_users = 0;
     this.curr_right_answer;
-    this.curr_answered_questions = 0;
+    this.user_semaphore = 0;
     this.curr_phase = {};
+    this.pause = false;
   }
 
   /** This function change the next group num
@@ -163,28 +167,41 @@ class RuningGame {
     // }
   }
 
+  reset_question_dict() {
+    const cur_answers_dict = {};
+    for (var index in this.curr_phase.phaseProp.answers) {
+      cur_answers_dict[index] = 0;
+    }
+    this.knowledge_question_answers = cur_answers_dict;
+    this.knowledge_question_dist = cur_answers_dict;
+  }
+
   /** This function change the users screen
    *  return: send to all users the new screen to show
    */
-  handle_change_screen(gameKey, phase, phaseName, gameDefenition) {
-    this.curr_phase = gameDefenition[phaseName];
-    if (gameDefenition[phaseName].type == "Question") {
-      const cur_answers_dict = {};
-      for (var index in gameDefenition[phaseName].phaseProp.answers) {
-        cur_answers_dict[index] = 0;
-      }
-      this.knowledge_question_answers = cur_answers_dict;
-      this.knowledge_question_dist = cur_answers_dict;
+  handle_change_screen(phaseName = null) {
+    if (this.pause) {
+      return;
+    }
+    if (phaseName == null) {
+      this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
+      phaseName = this.curr_phase.key;
+    } else {
+      this.curr_phase = this.gameDefenition[phaseName];
+    }
+    if (this.curr_phase.type == "Question") {
+      this.reset_question_dict();
     }
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
           type: PHASE,
-          phase: gameDefenition[phaseName].type,
-          phaseProp: gameDefenition[phaseName].phaseProp,
+          phase: this.curr_phase.type,
+          phaseProp: this.curr_phase.phaseProp,
         })
       );
     }
+    this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
   }
   /** This function update the user answer and score
    *  updated dicts: d_users_answers, d_activeGames
@@ -196,11 +213,11 @@ class RuningGame {
       time: time,
     };
     this.d_users_answers[userID] = answerProp;
-    this.curr_answered_questions++;
+    this.user_semaphore++;
 
     // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
-    if (this.curr_answered_questions == Object.keys(this.d_users).length) {
-      this.curr_answered_questions = 0;
+    if (this.user_semaphore == Object.keys(this.d_users).length) {
+      this.user_semaphore = 0;
       this.updateScoreForUsers();
       console.log({
         distribution: this.knowledge_question_dist,
@@ -219,6 +236,19 @@ class RuningGame {
         );
       }
       this.cleanUsersLastAnswer();
+      var that = this;
+      setTimeout(function () {
+        that.handle_change_screen();
+      }, 4000);
+      return;
+    }
+  }
+
+  handler_user_video_end() {
+    this.user_semaphore++;
+    if (this.user_semaphore == Object.keys(this.d_users).length) {
+      this.user_semaphore = 0;
+      this.handle_change_screen();
     }
   }
 

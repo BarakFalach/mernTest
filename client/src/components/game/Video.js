@@ -4,9 +4,13 @@ import PropTypes from "prop-types";
 import Player from "@vimeo/player";
 import Vimeo from "@u-wave/react-vimeo";
 import useWindowDimensions from "./windeoResize";
+import { videoEnd } from "../../actions/user";
 
-const Video = ({ videoUrl }) => {
+const Video = ({ videoUrl, videoEnd }) => {
   const { height, width } = useWindowDimensions();
+
+  const onVideoEnd = () => videoEnd();
+
   return (
     <div>
       <Vimeo
@@ -15,16 +19,17 @@ const Video = ({ videoUrl }) => {
         height={height - 100}
         width={width}
         autoplay
-        onEnd={() => console.log("VIDEO ENDED")}
+        onEnd={onVideoEnd}
       />
     </div>
   );
 };
 Video.prototype = {
   videoUrl: PropTypes.string,
+  videoEnd: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   videoUrl: state.user.userState.phaseProp.videoUrl,
 });
-export default connect(mapStateToProps, {})(Video);
+export default connect(mapStateToProps, { videoEnd })(Video);

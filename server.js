@@ -20,7 +20,7 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 //#################################################################################################################################################################################################################
 
 // Const enums
-const printLogs = true;
+const printLogs = false;
 const MAKAF = 40;
 const UPDATE_SCORE = "UPDATE_SCORE";
 const USER_ANSWER = "USER_ANSWER";
@@ -30,6 +30,7 @@ const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const GAME_KEY_FAIL = "GAME_KEY_FAIL";
 const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
 const NUMBER_OF_CONNECTED_USERS = "NUMBER_OF_CONNECTED_USERS";
+const VIDEO_END = "VIDEO_END";
 
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 const User = require("./serverClasses/user");
@@ -47,9 +48,8 @@ var gameDefenition = gameDefenition.gameDefenition;
  *                  last_answer_currectnes: boolean, general_question_list}
  *        d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  */
-
 const d_admins = {};
-// const d_connections = {};
+const d_connections = {};
 const d_activeGames = {};
 phaseList = [];
 for (key in gameDefenition) {
@@ -106,7 +106,9 @@ const getUniqueGameKey = (admin_ID, gameType, numOfParticipates) => {
   d_activeGames[gameKey] = new RuningGame(
     d_admins[gameKey],
     gameType,
-    numOfParticipates
+    numOfParticipates,
+    phaseList,
+    gameDefenition
   );
   // setGameProperties(gameKey, admin_ID, gameType, numOfParticipates);
   return gameKey.toString();
@@ -222,8 +224,10 @@ const handle_new_game_instance = (
   numOfParticipates = 1
 ) => {
   const gameKey = getUniqueGameKey(userID, gameType, numOfParticipates);
-  if (printLogs) log_activeGames();
-  log_game_status(gameKey);
+  if (printLogs) {
+    log_activeGames();
+    log_game_status(gameKey);
+  }
   d_admins[gameKey].setConnection(connection);
   // d_connections[userID] = connection;
 
@@ -291,12 +295,7 @@ wsServer.on("request", function (request) {
         break;
 
       case PHASE:
-        d_activeGames[gameKey].handle_change_screen(
-          gameKey,
-          userlog.phase,
-          userlog.phaseName,
-          gameDefenition
-        );
+        d_activeGames[gameKey].handle_change_screen(userlog.phaseName);
         break;
 
       case USER_ANSWER:
@@ -307,6 +306,9 @@ wsServer.on("request", function (request) {
           userlog.answer,
           userlog.time
         );
+        break;
+      case VIDEO_END:
+        d_activeGames[gameKey].handler_user_video_end();
         // handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
         break;
     }

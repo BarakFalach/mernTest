@@ -43,16 +43,19 @@ export const login = ({ name, keygame }) => async (dispatch) => {
 export const UserAnswer = (AnswerNum, time) => async () => {
   console.log("Answer Num" + AnswerNum);
   console.log("Time" + time);
-  client.send(JSON.stringify({
-    type: "USER_ANSWER",
-    answer: AnswerNum,
-    time: time,
-  }));
+  client.send(
+    JSON.stringify({
+      type: "USER_ANSWER",
+      answer: AnswerNum,
+      time: time,
+    })
+  );
 };
 
-// //LOGOUT Admin
-// export const logout = () => (dispatch) => {
-//   dispatch({
-//     type: LOGOUT,
-//   });
-// };
+export const videoEnd = () => async () => {
+  client.send(
+    JSON.stringify({
+      type: "VIDEO_END",
+    })
+  );
+};
