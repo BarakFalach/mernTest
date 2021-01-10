@@ -143,8 +143,7 @@ class RuningGame {
         name: userName,
         score: this.d_users[userID].curr_score,
         keygame: gameKey, //TODO:::  change this veriable in client
-        group: this.d_users[userID].group_num,
-        // TODO: send all the game structure
+        group: this.d_users[userID].group,
       })
     );
 
@@ -198,6 +197,7 @@ class RuningGame {
           type: PHASE,
           phase: this.curr_phase.type,
           phaseProp: this.curr_phase.phaseProp,
+          score: this.d_users[key].curr_score,
         })
       );
     }
@@ -237,6 +237,7 @@ class RuningGame {
               distribution: this.knowledge_question_dist,
               correct: this.d_users[key].last_answer_correctness,
             },
+            score: this.d_users[key].curr_score,
           })
         );
       }
