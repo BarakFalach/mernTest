@@ -31,6 +31,8 @@ const GAME_KEY_FAIL = "GAME_KEY_FAIL";
 const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
 const NUMBER_OF_CONNECTED_USERS = "NUMBER_OF_CONNECTED_USERS";
 const VIDEO_END = "VIDEO_END";
+const PAUSE = "PAUSE";
+const RESUME = "RESUME";
 
 const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 const User = require("./serverClasses/user");
@@ -310,6 +312,13 @@ wsServer.on("request", function (request) {
       case VIDEO_END:
         d_activeGames[gameKey].handler_user_video_end();
         // handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
+        break;
+      case PAUSE:
+        d_activeGames[gameKey].setPause();
+        break;
+      case RESUME:
+        d_activeGames[gameKey].setResume();
+        d_activeGames[gameKey].handle_change_screen();
         break;
     }
   });
