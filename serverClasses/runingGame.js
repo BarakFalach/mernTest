@@ -201,6 +201,11 @@ class RuningGame {
         })
       );
     }
+    //TODO:: only for devoloping , after last phase the game Restart.
+    if (this.phaseList.indexOf(phaseName) == this.phaseList.length - 1) {
+      this.nextPhase = 0;
+      return;
+    }
     this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
   }
   /** This function update the user answer and score
@@ -240,7 +245,6 @@ class RuningGame {
       setTimeout(function () {
         that.handle_change_screen();
       }, 4000);
-      return;
     }
   }
 
@@ -304,6 +308,13 @@ class RuningGame {
     const users = sortByScore("users");
     const topUsers = users.slice(0, 3);
     return topUsers;
+  }
+
+  setPause() {
+    this.pause = true;
+  }
+  setResume() {
+    this.pause = false;
   }
 }
 module.exports = RuningGame;

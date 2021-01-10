@@ -43,8 +43,23 @@ export const ChangePhase = (phaseName = "") => async (dispatch) => {
     client.send(
       JSON.stringify({
         type: PHASE, //TODO::need to write func in server.
-        // phase: phaseType,
         phaseName: phaseName,
+      })
+    );
+  } catch (err) {
+    console.log(err.message);
+    dispatch({
+      type: KEYGAME_FAIL, //TODO:: change to more reasonable Error
+    });
+  }
+};
+
+export const resumePause = (resumeOrPause) => async (dispatch) => {
+  console.log(resumeOrPause);
+  try {
+    client.send(
+      JSON.stringify({
+        type: resumeOrPause, //TODO::need to write func in server.
       })
     );
   } catch (err) {
