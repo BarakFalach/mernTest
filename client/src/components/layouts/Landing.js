@@ -6,18 +6,18 @@ import "../../App.css";
 
 const Landing = () => (
   <span>
-    <h1 className='aaa'> Welcome to LCE </h1>
-    <Link to='/loginAdmin'>
+    <h1 className="aaa"> Welcome to LCE </h1>
+    <Link to="/loginAdmin">
       <img
-        alt='mangerIcon'
+        alt="mangerIcon"
         src={managerIcon}
-        width='350px'
-        height='400px'
-        className='avatar'
+        width="350px"
+        height="400px"
+        className="avatar"
       />
     </Link>
-    <Link to='/loginUser'>
-      <img alt='playerIcon' src={playerIcon} width='350px' height='400px' />
+    <Link to="/loginUser">
+      <img alt="playerIcon" src={playerIcon} width="350px" height="400px" />
     </Link>
   </span>
 );
