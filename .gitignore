@@ -1,6 +1,3 @@
 node_modules/
-client/node_modules/
-client/.eslintcache
-client/debug.log
 config/default.json
 client/setupProxy.js
