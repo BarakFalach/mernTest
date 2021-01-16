@@ -68,23 +68,35 @@ for (key in gameDefenition) {
   phaseList.push(key);
 }
 
+const WS_PORT = 8000;
+const INDEX = "/index.html";
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(WS_PORT, () => console.log(`Listening on ${WS_PORT}`));
+
+const { Server } = require("ws");
+
+const wsServer = new Server({ server });
+
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 const { connection } = require("mongoose");
 
-var server = http.createServer(function (req, res) {
-  res.end();
-});
-server.listen(webSocketsServerPort, function () {
-  console.log(
-    new Date() + " Server is listening on port " + webSocketsServerPort
-  );
-});
+// var server = http.createServer(function (req, res) {
+//   res.end();
+// });
+// server.listen(webSocketsServerPort, function () {
+//   console.log(
+//     new Date() + " Server is listening on port " + webSocketsServerPort
+//   );
+// });
 
-wsServer = new WebSocketServer({
-  httpServer: server,
-  autoAcceptConnections: false,
-});
+// wsServer = new WebSocketServer({
+//   httpServer: server,
+
+//   autoAcceptConnections: false,
+// });
 
 /** This function generates unique userId for every user
  *  return: The uniqe userId
