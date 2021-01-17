@@ -13,7 +13,9 @@ app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
 
+
 //Server static assets in production
+
 if (process.env.NODE_ENV === "production") {
   // Set static folder
   app.use(express.static("client/build"));
@@ -67,18 +69,7 @@ phaseList = [];
 for (key in gameDefenition) {
   phaseList.push(key);
 }
-
-const WS_PORT = 8000;
-const INDEX = "/index.html";
-
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(WS_PORT, () => console.log(`Listening on ${WS_PORT}`));
-
-const { Server } = require("ws");
-
-const wsServer = new Server({ server });
-
+const WebSocket = require("ws");
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 const { connection } = require("mongoose");
@@ -92,6 +83,10 @@ const { connection } = require("mongoose");
 //   );
 // });
 
+const wsServer = new WebSocket.Server({ port: 8000 });
+
+// wsServer = new WebSocketServer({
+//   httpServer: server,
 // wsServer = new WebSocketServer({
 //   httpServer: server,
 
@@ -286,15 +281,15 @@ const delete_game_instance = (gameKey) => {
   log_activeGames();
 };
 
-wsServer.on("request", function (request) {
+wsServer.on("connection", (request) => {
   log_print_structure_head("Server: Connection Request");
   const userID = getUniqueID();
-  const connection = request.accept(null, request.origin);
+  const connection = request;
   var gameKey;
   var userName;
 
   connection.on("message", function (message) {
-    const userlog = JSON.parse(message.utf8Data);
+    const userlog = JSON.parse(message);
 
     // first message
     if (undefined === (userName || gameKey)) {
