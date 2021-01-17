@@ -13,7 +13,6 @@ app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
 
-
 //Server static assets in production
 
 if (process.env.NODE_ENV === "production") {
@@ -69,21 +68,16 @@ phaseList = [];
 for (key in gameDefenition) {
   phaseList.push(key);
 }
-const WebSocket = require("ws");
-var WebSocketServer = require("websocket").server;
-var http = require("http");
+const ws_PORT = 8000;
+const INDEX = "/index.html";
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(ws_PORT, () => console.log(`Listening on ${ws_PORT}`));
+
+const { Server } = require("ws");
 const { connection } = require("mongoose");
-
-// var server = http.createServer(function (req, res) {
-//   res.end();
-// });
-// server.listen(webSocketsServerPort, function () {
-//   console.log(
-//     new Date() + " Server is listening on port " + webSocketsServerPort
-//   );
-// });
-
-const wsServer = new WebSocket.Server({ port: 8000 });
+const wsServer = new Server({ server });
 
 // wsServer = new WebSocketServer({
 //   httpServer: server,
