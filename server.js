@@ -1,6 +1,6 @@
 const express = require("express");
 const connectDB = require("./config/db");
-
+const path = require("path");
 const app = express();
 //  Connect Database
 connectDB();
@@ -12,6 +12,9 @@ app.use(express.json({ extended: false }));
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
+
+
+//Server static assets in production
 
 if (process.env.NODE_ENV === "production") {
   // Set static folder
@@ -84,6 +87,9 @@ const wsServer = new WebSocket.Server({ port: 8000 });
 
 // wsServer = new WebSocketServer({
 //   httpServer: server,
+// wsServer = new WebSocketServer({
+//   httpServer: server,
+
 //   autoAcceptConnections: false,
 // });
 

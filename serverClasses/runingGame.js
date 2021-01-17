@@ -2,6 +2,7 @@ const User = require("./user");
 const Admin = require("./admin");
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const PHASE = "PHASE";
+const USER = "USER";
 
 class RuningGame {
   constructor(admin, gameType, numOfParticipates, phaseList, gameDefenition) {
@@ -154,7 +155,7 @@ class RuningGame {
     // update the admin on the number of users that get in
     this.admin.connection.send(
       JSON.stringify({
-        type: "USER",
+        type: USER,
         usersData: this.usersToJson(),
       })
     );
@@ -241,6 +242,12 @@ class RuningGame {
           })
         );
       }
+      this.admin.connection.send(
+        JSON.stringify({
+          type: USER,
+          usersData: this.usersToJson(),
+        })
+      );
       this.cleanUsersLastAnswer();
       var that = this;
       setTimeout(function () {

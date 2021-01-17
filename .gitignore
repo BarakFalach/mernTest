@@ -1,8 +1,3 @@
 node_modules/
-client/node_modules/
-client/.eslintcache
-./ServerUtils.js
-client/src/utils/ClientUtils.js
-package-lock.json
-client/package-lock.json
-client/debug.log
+config/default.json
+client/setupProxy.js
