@@ -57,24 +57,26 @@ phaseList = [];
 for (key in gameDefenition) {
   phaseList.push(key);
 }
-
+const WebSocket = require("ws");
 var WebSocketServer = require("websocket").server;
 var http = require("http");
 const { connection } = require("mongoose");
 
-var server = http.createServer(function (req, res) {
-  res.end();
-});
-server.listen(webSocketsServerPort, function () {
-  console.log(
-    new Date() + " Server is listening on port " + webSocketsServerPort
-  );
-});
+// var server = http.createServer(function (req, res) {
+//   res.end();
+// });
+// server.listen(webSocketsServerPort, function () {
+//   console.log(
+//     new Date() + " Server is listening on port " + webSocketsServerPort
+//   );
+// });
 
-wsServer = new WebSocketServer({
-  httpServer: server,
-  autoAcceptConnections: false,
-});
+const wsServer = new WebSocket.Server({ port: 8000 });
+
+// wsServer = new WebSocketServer({
+//   httpServer: server,
+//   autoAcceptConnections: false,
+// });
 
 /** This function generates unique userId for every user
  *  return: The uniqe userId
@@ -264,15 +266,15 @@ const delete_game_instance = (gameKey) => {
   log_activeGames();
 };
 
-wsServer.on("request", function (request) {
+wsServer.on("connection", (request) => {
   log_print_structure_head("Server: Connection Request");
   const userID = getUniqueID();
-  const connection = request.accept(null, request.origin);
+  const connection = request;
   var gameKey;
   var userName;
 
   connection.on("message", function (message) {
-    const userlog = JSON.parse(message.utf8Data);
+    const userlog = JSON.parse(message);
 
     // first message
     if (undefined === (userName || gameKey)) {
