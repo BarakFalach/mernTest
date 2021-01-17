@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log("Server Started at: " + PORT));
 
@@ -68,8 +68,8 @@ phaseList = [];
 for (key in gameDefenition) {
   phaseList.push(key);
 }
-const ws_PORT = process.env.PORT || 8000;
-const INDEX = "/index.html";
+const ws_PORT = 8000;
+const INDEX = "./client/build/index.html";
 
 const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
