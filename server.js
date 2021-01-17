@@ -19,9 +19,9 @@ if (process.env.NODE_ENV === "production") {
   // Set static folder
   app.use(express.static("client/build"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.hmtl"));
-  });
+  // app.get("*", (req, res) => {
+  //   res.sendFile(path.resolve(__dirname, "client", "build", "index.hmtl"));
+  // });
 }
 
 const PORT = process.env.PORT || 5000;
@@ -69,7 +69,7 @@ for (key in gameDefenition) {
   phaseList.push(key);
 }
 const ws_PORT = 8000;
-const INDEX = "./client/build/index.html";
+const INDEX = "/index.html";
 
 const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
