@@ -51,6 +51,9 @@ const Admin = require("./serverClasses/admin");
 const RuningGame = require("./serverClasses/runingGame");
 var gameDefenition = require("./serverClasses/gameDefintionDev");
 var gameDefenition = gameDefenition.gameDefenition;
+
+const https = require("https");
+const WebSocket = require("ws");
 /**
  * Data Structure explenation for dictionaries:
  *    d_admins = {key: server_given_user_id, value: gameKey: number
@@ -71,15 +74,12 @@ for (key in gameDefenition) {
 const ws_PORT = 8000;
 const INDEX = "/index.html";
 
-const server = express()
-  .use((req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.hmtl"))
-  )
-  .listen(ws_PORT, () => console.log(`Listening on ${ws_PORT}`));
+const server = https.createServer();
+const wsServer = new WebSocket.Server({ server });
 
-const { Server } = require("ws");
+// const { Server } = require("ws");
 const { connection } = require("mongoose");
-const wsServer = new Server({ server });
+// const wsServer = new Server({ server });
 
 // wsServer = new WebSocketServer({
 //   httpServer: server,
@@ -344,3 +344,5 @@ wsServer.on("connection", (request) => {
     if (userID in d_admins) handle_delete_admin(userID, d_admins[userID]);
   });
 });
+
+server.listen(ws_PORT);
