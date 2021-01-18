@@ -15,14 +15,12 @@ app.use("/api/admin", require("./routes/api/admin"));
 
 //Server static assets in production
 
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static("client/build"));
+// Set static folder
+app.use(express.static("client/build"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.hmtl"));
-  });
-}
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.hmtl"));
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -52,7 +50,7 @@ const RuningGame = require("./serverClasses/runingGame");
 var gameDefenition = require("./serverClasses/gameDefintionDev");
 var gameDefenition = gameDefenition.gameDefenition;
 
-const https = require("https");
+const https = require("http");
 const WebSocket = require("ws");
 /**
  * Data Structure explenation for dictionaries:
