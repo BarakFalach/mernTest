@@ -3,45 +3,71 @@ import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { UserAnswer } from "../../actions/user";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import Typography from "@material-ui/core/Typography";
+import KeyboardEventHandler from "react-keyboard-event-handler";
 import "../layouts/css/Question.css";
-const Question = ({ question, answers, UserAnswer }) => {
-  const [buttonDisable, setDisable] = useState(false);
-
-  const ques1 = question;
-  if (ques1 == null) {
-    console.log("ques 1 is null");
-    return <Fragment></Fragment>;
+const Question = ({ question, answers, time, UserAnswer }) => {
+  var t0 = performance.now();
+  const indexes = [];
+  let tmp = 0;
+  for (let index = 0; index < answers.length; index++) {
+    tmp = index + 1;
+    indexes[index] = tmp + "";
   }
+  const [isDisabled, setDisable] = useState(false);
+  const onAnswerClick = (e) => {
+    var t1 = performance.now();
+    setDisable(true);
+    UserAnswer(e.target.key, Math.round(t1 - t0));
+  };
 
-  const onAnswerClick = (e) => UserAnswer(e.target.name, 6);
+  const handleKeyDown = React.useCallback((key) => {
+    var t1 = performance.now();
+    setDisable(true);
+    UserAnswer(parseInt(key), Math.round(t1 - t0));
+  });
+
   return (
-    <div className='Questio_Comp'>
+    <React.Fragment>
       <div className='col-centered'>
-        <Button
-          color='secondary'
-          fullWidth='true'
-          size='large'
-          href='#text-buttons'
+        <CountdownCircleTimer
+          size={300}
+          isPlaying
+          duration={time}
+          colors={[
+            ["#004777", 0.33],
+            ["#F7B801", 0.33],
+            ["#A30000", 0.33],
+          ]}
         >
-          {question}
-        </Button>
+          {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
       </div>
-      <span className='answers'>
+      <div className='col-centered'>
+        <Typography variant='h2'>{question}</Typography>
+      </div>
+      <div className='answers'>
         {answers.map((ans, index) => (
-          <button
-            fullWidth='true'
+          <Button
+            className={index % 2 == 0 ? "left-side" : "right-side"}
+            key={index + 1}
             variant='contained'
             color='primary'
             style={{ margin: 5 }}
-            // disabled={buttonDisable}
-            name={index}
+            disabled={isDisabled}
             onClick={(e) => onAnswerClick(e)}
+            classes
           >
             {ans}
-          </button>
+          </Button>
         ))}
-      </span>
-    </div>
+        <KeyboardEventHandler
+          handleKeys={indexes}
+          onKeyEvent={(key, e) => handleKeyDown(key)}
+        />
+      </div>
+    </React.Fragment>
   );
 
   //   return (
@@ -111,6 +137,7 @@ const Question = ({ question, answers, UserAnswer }) => {
   //     </Fragment>
   //   );
 };
+
 Question.propTypes = {
   question: PropTypes.string.isRequired,
   answers: PropTypes.array,

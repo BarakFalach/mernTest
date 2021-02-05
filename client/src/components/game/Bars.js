@@ -1,9 +1,15 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import React, { Fragment, useState } from "react";
-// import { Doughnut, Bar } from "react-chartjs-2";
+import React from "react";
+import Typography from "@material-ui/core/Typography";
 import { Doughnut } from "@reactchartjs/react-chart.js";
 const Bars = ({ distribution, correct }) => {
+  let sentence = "";
+  if (correct) {
+    sentence = "Well Done! Your answer is correct!";
+  } else {
+    sentence = "Unfortunately, Your answer is not the right answer..";
+  }
   const data = {
     labels: Object.keys(distribution),
     datasets: [
@@ -32,11 +38,9 @@ const Bars = ({ distribution, correct }) => {
       },
     ],
   };
-
-  const [buttonDisable, setDisable] = useState(false);
   return (
     <div>
-      <h2>Bar Example (custom size)</h2>
+      <Typography variant='h5'>{sentence}</Typography>
       <Doughnut
         data={data}
         width={100}

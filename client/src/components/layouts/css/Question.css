@@ -1,9 +1,13 @@
-.col-centered {
+/* .col-centered {
   float: none;
   margin-top: 30px;
   margin-bottom: 30px;
   margin-left: 200px;
   margin-right: 200px;
+} */
+.col-centered {
+  display: flex;
+  justify-content: center;
 }
 .left-side {
   width: 20%;
