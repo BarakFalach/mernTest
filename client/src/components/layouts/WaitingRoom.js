@@ -13,8 +13,8 @@ const WaitingRoom = ({ id, login, screen, isAuthenticated }) => {
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Waiting Room</h1>
-      <h2>welocome {id} </h2>
+      <h1 className='large text-primary'>Waiting Room</h1>
+      <h2>welocome {id}</h2>
     </Fragment>
   );
 };

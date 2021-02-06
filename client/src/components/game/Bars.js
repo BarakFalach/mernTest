@@ -39,7 +39,7 @@ const Bars = ({ distribution, correct }) => {
     ],
   };
   return (
-    <div>
+    <div width={500} height={500}>
       <Typography variant='h5'>{sentence}</Typography>
       <Doughnut
         data={data}
@@ -47,7 +47,7 @@ const Bars = ({ distribution, correct }) => {
         height={50}
         options={{
           animation: {
-            duration: 2,
+            duration: 3,
             animateRotate: true,
             animateScale: true,
           },

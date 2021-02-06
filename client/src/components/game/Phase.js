@@ -25,6 +25,7 @@ const Phase = ({ phase }) => {
       return <Bars />;
     default:
       return <h1>Defult Screen</h1>;
+    // return <Top3 />;
   }
   return <div></div>;
 };

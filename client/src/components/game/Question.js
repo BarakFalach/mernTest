@@ -50,7 +50,7 @@ const Question = ({ question, answers, time, UserAnswer }) => {
       <div className='answers'>
         {answers.map((ans, index) => (
           <Button
-            className={index % 2 == 0 ? "left-side" : "right-side"}
+            className={index % 2 == 0 ? "left-sideBut" : "right-sideBut"}
             key={index + 1}
             variant='contained'
             color='primary'
