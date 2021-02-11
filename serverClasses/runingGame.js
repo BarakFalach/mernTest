@@ -169,9 +169,11 @@ class RuningGame {
 
   reset_question_dict() {
     const cur_answers_dict = {};
-    for (var index in this.curr_phase.phaseProp.answers) {
-      cur_answers_dict[index] = 0;
+    const len = this.curr_phase.phaseProp.answers.length;
+    for (var i = 0; i < len; i++) {
+      cur_answers_dict[i + 1] = 0;
     }
+    console.log(cur_answers_dict);
     this.knowledge_question_answers = cur_answers_dict;
     this.knowledge_question_dist = cur_answers_dict;
   }
@@ -218,6 +220,7 @@ class RuningGame {
       answer: answer,
       time: time,
     };
+    this.d_users[userID].last_answer = answer;
     this.d_users_answers[userID] = answerProp;
     this.user_semaphore++;
 
@@ -236,7 +239,9 @@ class RuningGame {
             phase: "bars",
             phaseProp: {
               distribution: this.knowledge_question_dist,
-              correct: this.d_users[key].last_answer_correctness,
+              correctAnswer: this.curr_phase.correct_answer,
+              answers: this.curr_phase.phaseProp.answers,
+              userAnswer: this.d_users[key].last_answer,
             },
             score: this.d_users[key].curr_score,
           })

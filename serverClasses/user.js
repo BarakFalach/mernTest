@@ -5,6 +5,7 @@ class User {
     this.group = group;
     this.curr_score = 0;
     this.last_answer_correctness = false;
+    this.last_answer;
     this.connection;
   }
   setConnection(connection) {

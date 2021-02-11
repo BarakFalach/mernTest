@@ -15,7 +15,7 @@ gameDefenition["question1"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
-  correct_answer: 0,
+  correct_answer: 1,
 };
 gameDefenition["question2"] = {
   key: "question2",
@@ -25,7 +25,7 @@ gameDefenition["question2"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
-  correct_answer: 0,
+  correct_answer: 1,
 };
 gameDefenition["video2"] = {
   key: "video2",
@@ -42,6 +42,6 @@ gameDefenition["question3"] = {
     answers: ["good", "great", "OK", "comsi comsa"],
     time: 8,
   },
-  correct_answer: 0,
+  correct_answer: 1,
 };
 exports.gameDefenition = gameDefenition;
