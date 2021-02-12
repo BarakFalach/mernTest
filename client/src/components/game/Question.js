@@ -16,10 +16,10 @@ const Question = ({ question, answers, time, UserAnswer }) => {
     indexes[index] = tmp + "";
   }
   const [isDisabled, setDisable] = useState(false);
-  const onAnswerClick = (e) => {
+  const onAnswerClick = (num) => {
     var t1 = performance.now();
     setDisable(true);
-    UserAnswer(e.target.key, Math.round(t1 - t0));
+    UserAnswer(num, Math.round(t1 - t0));
   };
 
   const handleKeyDown = React.useCallback((key) => {
@@ -56,7 +56,7 @@ const Question = ({ question, answers, time, UserAnswer }) => {
             color='primary'
             style={{ margin: 5 }}
             disabled={isDisabled}
-            onClick={(e) => onAnswerClick(e)}
+            onClick={(e) => onAnswerClick(index + 1)}
             classes
           >
             {ans}
