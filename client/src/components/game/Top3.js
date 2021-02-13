@@ -44,7 +44,7 @@ export const Top3 = () => {
           width={700}
           height={500}
         ></Confetti>
-        <img alt='mangerIcon' src={podium} />
+        <img alt='podium' src={podium} />
       </div>
     </div>
   );

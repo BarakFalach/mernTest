@@ -57,7 +57,6 @@ const Question = ({ question, answers, time, UserAnswer }) => {
             style={{ margin: 5 }}
             disabled={isDisabled}
             onClick={(e) => onAnswerClick(index + 1)}
-            classes
           >
             {ans}
           </Button>

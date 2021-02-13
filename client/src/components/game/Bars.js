@@ -3,13 +3,23 @@ import PropTypes from "prop-types";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { Bar } from "react-chartjs-2";
+import correctSvg from "../../assets/success-green-check-mark.svg";
+import incorrectSvg from "../../assets/wrong.svg";
+import "../layouts/css/Question.css";
+import "chartjs-plugin-datalabels";
+import "chartjs-plugin-labels";
 const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
-  let sentence = "";
+  let sentence;
+  let icon;
   if (correctAnswer == userAnswer) {
-    sentence = "Well Done! Your answer is correct!";
+    sentence = "Well Done! Your answer is correct! ";
+    icon = CorrectnessIcon(true);
   } else {
-    sentence = "Unfortunately, Your answer is not the right answer..";
+    sentence = "Unfortunately, Your answer is not the right answer.. ";
+    icon = CorrectnessIcon(false);
   }
+  let distributionPercent = castToPercent(distribution);
+  let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
   let colorSet = [
     "#0ead69",
     "#fdbd27",
@@ -24,23 +34,74 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
       {
         backgroundColor: colorSet,
         borderColor: colorSet,
-        borderWidth: 4,
+        borderWidth: 1,
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: Object.values(distribution),
+        data: Object.values(distributionPercent),
+        datalabels: {
+          anchor: "end",
+          align: "start",
+          offset: 20,
+          paddingTop: 100,
+          backgroundColor: function (ctx) {
+            // var value = ctx.dataset.data[ctx.dataIndex];
+            // return value > 50 ? "white" : null;
+            return null;
+          },
+          borderColor: function (ctx) {
+            var value = ctx.dataset.data[ctx.dataIndex];
+            return value > 0 ? "white" : null;
+            // return "white";
+          },
+          borderWidth: 2,
+          borderRadius: 4,
+          font: {
+            weight: "bold",
+            size: 30,
+          },
+          color: function (ctx) {
+            var value = ctx.dataset.data[ctx.dataIndex];
+            return value > 0 ? "white" : null;
+            // return "white";
+          },
+          formatter: function (value, ctx) {
+            if (!ctx.active) {
+              return value + "%";
+            } else if (ctx.dataIndex == correctAnswer - 1) {
+              return "Correct";
+            } else if (ctx.dataIndex == userAnswer - 1) {
+              return "Yours";
+            } else {
+              return value + "%";
+            }
+          },
+        },
       },
     ],
   };
   return (
     <div>
-      <Typography variant='h5'>{sentence}</Typography>
-      <div style={{ position: "relative", margin: "auto", width: "80vw" }}>
+      <Typography variant='h5' className='col-centered'>
+        {sentence}
+        {icon}
+      </Typography>
+      <div
+        style={{
+          height: 500,
+          position: "relative",
+          margin: "auto",
+          width: "80vw",
+        }}
+      >
         <Bar
-          class
           data={data}
-          height={450}
           options={{
+            layout: {
+              padding: {
+                top: 40,
+              },
+            },
             animation: {
-              duration: 3000,
+              duration: 2300,
             },
             legend: {
               display: false,
@@ -48,6 +109,29 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
             maintainAspectRatio: false,
             tooltips: {
               displayColors: false,
+            },
+            plugins: {
+              labels: {
+                render: "image",
+                textMargin: 10,
+                images: imagesByResult,
+              },
+              datalabels: {
+                labels: {
+                  color: "blue",
+                  labels: {
+                    title: {
+                      font: {
+                        weight: "bold",
+                        size: 100,
+                      },
+                    },
+                    value: {
+                      color: "green",
+                    },
+                  },
+                },
+              },
             },
             scales: {
               xAxes: [
@@ -78,12 +162,60 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
   );
 };
 
+function CorrectnessIcon(result) {
+  if (result) {
+    return <img width={30} height={30} src={correctSvg} />;
+  } else {
+    return <img width={30} height={30} src={incorrectSvg} />;
+  }
+}
+function imagesSetter(answers, correctAnswer, userAnswer) {
+  let imagesByResult = [];
+  for (let index = 0; index < answers.length; index++) {
+    if (index + 1 == userAnswer || index + 1 == correctAnswer) {
+      if (userAnswer == index + 1) {
+        imagesByResult[index] = {
+          //Wrong Answer
+          src: incorrectSvg,
+          width: 30,
+          height: 30,
+        };
+      }
+      if (correctAnswer == index + 1) {
+        imagesByResult[index] = {
+          //Correct Answer
+          src: correctSvg,
+          width: 30,
+          height: 30,
+        };
+      }
+    } else {
+      imagesByResult[index] = null;
+    }
+  }
+  return imagesByResult;
+}
 Bars.propTypes = {
   distribution: PropTypes.object.isRequired,
   correctAnswer: PropTypes.number.isRequired,
   userAnswer: PropTypes.number.isRequired,
   answers: PropTypes.array.isRequired,
 };
+function castToPercent(distribution) {
+  let total = 0;
+  Object.values(distribution).forEach((element) => {
+    console.log(element);
+    total += element;
+  });
+  console.log("total is " + total);
+  let distributionPercent = {};
+  Object.keys(distribution).forEach((element) => {
+    distributionPercent[element] = Math.round(
+      (100 * distribution[element]) / total
+    );
+  });
+  return distributionPercent;
+}
 
 const mapStateToProps = (state) => ({
   distribution: state.user.userState.phaseProp.distribution,

@@ -65,3 +65,42 @@ class EdenTesting extends Component {
   }
 }
 export default EdenTesting;
+// -- GAME CLASS --
+// import React, { Fragment } from "react";
+// import { connect } from "react-redux";
+// import PropTypes from "prop-types";
+// import Phase from "./Phase";
+// import "../layouts/css/NavbarBottom.css";
+
+// const Game = ({ score, name, group }) => {
+//   return (
+//     <Fragment>
+//       <h1>
+//         {" "}
+//         welcome {name} you current score is: {score} groupNumer : {group}
+//       </h1>
+//       <div>
+//         <Phase />
+//       </div>
+//       <div class='navbar'>
+//         <a href='#home' class='active'>
+//           Home
+//         </a>
+//         <a href='#news'>News</a>
+//         <a href='#contact'>Contact</a>
+//       </div>
+//     </Fragment>
+//   );
+// };
+// Game.propTypes = {
+//   score: PropTypes.number,
+//   name: PropTypes.string,
+//   group: PropTypes.string,
+// };
+// const mapStateToProps = (state) => ({
+//   score: state.user.userState.score,
+//   name: state.user.name,
+//   group: state.user.group,
+// });
+
+// export default connect(mapStateToProps, {})(Game);

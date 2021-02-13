@@ -13,6 +13,8 @@
     "antd": "^4.9.3",
     "axios": "^0.21.0",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^0.7.0",
+    "chartjs-plugin-labels": "^1.1.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.29.1",
     "react": "^17.0.1",

@@ -3,3 +3,5 @@ config/default.json
 client/setupProxy.js
 client/node_modules
 client/build
+client/src/components/game/EdenTesting.js
+client/.eslintcache

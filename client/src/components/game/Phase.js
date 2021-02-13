@@ -25,8 +25,8 @@ const Phase = ({ phase }) => {
     case "bars":
       return <Bars />;
     default:
-      // return <h1>Defult Screen</h1>;
-      return <EdenTesting />;
+      return <h1>Defult Screen</h1>;
+    // return <EdenTesting />;
   }
   return <div></div>;
 };
