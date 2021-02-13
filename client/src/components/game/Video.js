@@ -17,7 +17,7 @@ const Video = ({ videoUrl, videoEnd }) => {
       <Vimeo
         video={videoUrl}
         controls={false}
-        height={height - 100}
+        height={height - 80}
         width={width}
         autoplay
         onEnd={onVideoEnd}
