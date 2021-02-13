@@ -8,6 +8,7 @@ import { Answer } from "./Answer";
 import Video from "./Video";
 import { Top3 } from "./Top3";
 import { Poll } from "./Poll";
+//import EdenTesting from "./EdenTesting";
 
 const Phase = ({ phase }) => {
   switch (phase) {
@@ -25,6 +26,7 @@ const Phase = ({ phase }) => {
       return <Bars />;
     default:
       return <h1>Defult Screen</h1>;
+    // return <EdenTesting />;
   }
   return <div></div>;
 };

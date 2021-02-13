@@ -16,10 +16,10 @@ const Question = ({ question, answers, time, UserAnswer }) => {
     indexes[index] = tmp + "";
   }
   const [isDisabled, setDisable] = useState(false);
-  const onAnswerClick = (e) => {
+  const onAnswerClick = (num) => {
     var t1 = performance.now();
     setDisable(true);
-    UserAnswer(e.target.key, Math.round(t1 - t0));
+    UserAnswer(num, Math.round(t1 - t0));
   };
 
   const handleKeyDown = React.useCallback((key) => {
@@ -50,14 +50,13 @@ const Question = ({ question, answers, time, UserAnswer }) => {
       <div className='answers'>
         {answers.map((ans, index) => (
           <Button
-            className={index % 2 == 0 ? "left-side" : "right-side"}
+            className={index % 2 == 0 ? "left-sideBut" : "right-sideBut"}
             key={index + 1}
             variant='contained'
             color='primary'
             style={{ margin: 5 }}
             disabled={isDisabled}
-            onClick={(e) => onAnswerClick(e)}
-            classes
+            onClick={(e) => onAnswerClick(index + 1)}
           >
             {ans}
           </Button>

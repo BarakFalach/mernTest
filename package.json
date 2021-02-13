@@ -16,9 +16,11 @@
   "author": "Barak",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/icons": "^4.11.2",
     "bcryptjs": "^2.4.3",
     "bufferutil": "^4.0.3",
     "config": "^3.3.3",
+    "create-react-app": "^4.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.7.0",
     "gravatar": "^1.8.1",

@@ -1,0 +1,26 @@
+.animatedDiv {
+  background-color: transparent;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  animation: sampleanimation 2s forwards 1;
+}
+
+@keyframes sampleanimation {
+  0% {
+    left: 0px;
+    top: 0px;
+  }
+  25% {
+    left: 300px;
+    top: 0px;
+  }
+  50% {
+    left: 300px;
+    top: 150px;
+  }
+  75% {
+    left: 0px;
+    top: 150px;
+  }
+}

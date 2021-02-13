@@ -2,108 +2,226 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { Doughnut } from "@reactchartjs/react-chart.js";
-const Bars = ({ distribution, correct }) => {
-  let sentence = "";
-  if (correct) {
-    sentence = "Well Done! Your answer is correct!";
+import { Bar } from "react-chartjs-2";
+import correctSvg from "../../assets/success-green-check-mark.svg";
+import incorrectSvg from "../../assets/wrong.svg";
+import "../layouts/css/Question.css";
+import "chartjs-plugin-datalabels";
+import "chartjs-plugin-labels";
+const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
+  let sentence;
+  let icon;
+  if (correctAnswer == userAnswer) {
+    sentence = "Well Done! Your answer is correct! ";
+    icon = CorrectnessIcon(true);
   } else {
-    sentence = "Unfortunately, Your answer is not the right answer..";
+    sentence = "Unfortunately, Your answer is not the right answer.. ";
+    icon = CorrectnessIcon(false);
   }
+  let distributionPercent = castToPercent(distribution);
+  let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
+  let colorSet = [
+    "#0ead69",
+    "#fdbd27",
+    "#ea3546",
+    "#2599e7",
+    "#d4d5fd",
+    "#f86624",
+  ];
   const data = {
-    labels: Object.keys(distribution),
+    labels: answers,
     datasets: [
       {
-        label: "Answers Distribution",
-        backgroundColor: [
-          "rgba(0,255,0,0.3)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(0,255,0,0.3)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 2,
-        hoverBackgroundColor: "rgba(255,99,132,0.8)",
+        backgroundColor: colorSet,
+        borderColor: colorSet,
+        borderWidth: 1,
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: Object.values(distribution),
+        data: Object.values(distributionPercent),
+        datalabels: {
+          anchor: "end",
+          align: "start",
+          offset: 20,
+          paddingTop: 100,
+          backgroundColor: function (ctx) {
+            // var value = ctx.dataset.data[ctx.dataIndex];
+            // return value > 50 ? "white" : null;
+            return null;
+          },
+          borderColor: function (ctx) {
+            var value = ctx.dataset.data[ctx.dataIndex];
+            return value > 0 ? "white" : null;
+            // return "white";
+          },
+          borderWidth: 2,
+          borderRadius: 4,
+          font: {
+            weight: "bold",
+            size: 30,
+          },
+          color: function (ctx) {
+            var value = ctx.dataset.data[ctx.dataIndex];
+            return value > 0 ? "white" : null;
+            // return "white";
+          },
+          formatter: function (value, ctx) {
+            if (!ctx.active) {
+              return value + "%";
+            } else if (ctx.dataIndex == correctAnswer - 1) {
+              return "Correct";
+            } else if (ctx.dataIndex == userAnswer - 1) {
+              return "Yours";
+            } else {
+              return value + "%";
+            }
+          },
+        },
       },
     ],
   };
   return (
     <div>
-      <Typography variant='h5'>{sentence}</Typography>
-      <Doughnut
-        data={data}
-        width={100}
-        height={50}
-        options={{
-          animation: {
-            duration: 2,
-            animateRotate: true,
-            animateScale: true,
-          },
+      <Typography variant='h5' className='col-centered'>
+        {sentence}
+        {icon}
+      </Typography>
+      <div
+        style={{
+          height: 500,
+          position: "relative",
+          margin: "auto",
+          width: "80vw",
         }}
-      />
+      >
+        <Bar
+          data={data}
+          options={{
+            layout: {
+              padding: {
+                top: 40,
+              },
+            },
+            animation: {
+              duration: 2300,
+            },
+            legend: {
+              display: false,
+            },
+            maintainAspectRatio: false,
+            tooltips: {
+              displayColors: false,
+            },
+            plugins: {
+              labels: {
+                render: "image",
+                textMargin: 10,
+                images: imagesByResult,
+              },
+              datalabels: {
+                labels: {
+                  color: "blue",
+                  labels: {
+                    title: {
+                      font: {
+                        weight: "bold",
+                        size: 100,
+                      },
+                    },
+                    value: {
+                      color: "green",
+                    },
+                  },
+                },
+              },
+            },
+            scales: {
+              xAxes: [
+                {
+                  ticks: {
+                    fontSize: 30,
+                  },
+                  gridLines: {
+                    display: false,
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  gridLines: {
+                    display: false,
+                  },
+                  ticks: {
+                    display: false,
+                  },
+                },
+              ],
+            },
+          }}
+        />
+      </div>
     </div>
   );
 };
+
+function CorrectnessIcon(result) {
+  if (result) {
+    return <img width={30} height={30} src={correctSvg} />;
+  } else {
+    return <img width={30} height={30} src={incorrectSvg} />;
+  }
+}
+function imagesSetter(answers, correctAnswer, userAnswer) {
+  let imagesByResult = [];
+  for (let index = 0; index < answers.length; index++) {
+    if (index + 1 == userAnswer || index + 1 == correctAnswer) {
+      if (userAnswer == index + 1) {
+        imagesByResult[index] = {
+          //Wrong Answer
+          src: incorrectSvg,
+          width: 30,
+          height: 30,
+        };
+      }
+      if (correctAnswer == index + 1) {
+        imagesByResult[index] = {
+          //Correct Answer
+          src: correctSvg,
+          width: 30,
+          height: 30,
+        };
+      }
+    } else {
+      imagesByResult[index] = null;
+    }
+  }
+  return imagesByResult;
+}
 Bars.propTypes = {
   distribution: PropTypes.object.isRequired,
-  correct: PropTypes.bool.isRequired,
+  correctAnswer: PropTypes.number.isRequired,
+  userAnswer: PropTypes.number.isRequired,
+  answers: PropTypes.array.isRequired,
 };
+function castToPercent(distribution) {
+  let total = 0;
+  Object.values(distribution).forEach((element) => {
+    console.log(element);
+    total += element;
+  });
+  console.log("total is " + total);
+  let distributionPercent = {};
+  Object.keys(distribution).forEach((element) => {
+    distributionPercent[element] = Math.round(
+      (100 * distribution[element]) / total
+    );
+  });
+  return distributionPercent;
+}
 
 const mapStateToProps = (state) => ({
   distribution: state.user.userState.phaseProp.distribution,
-  correct: state.user.userState.phaseProp.correct,
+  correctAnswer: state.user.userState.phaseProp.correctAnswer,
+  userAnswer: state.user.userState.phaseProp.userAnswer,
+  answers: state.user.userState.phaseProp.answers,
 });
 
 export default connect(mapStateToProps, {})(Bars);
-
-// Generic Code without any libraries.
-// import { connect } from "react-redux";
-// import PropTypes from "prop-types";
-// import React, { Fragment, useState } from "react";
-
-// const Bars = ({ distribution, correct }) => {
-//   const [buttonDisable, setDisable] = useState(false);
-//   return (
-//     <div className='Bars_Comp'>
-//       <div className='col-centered'>This is bars</div>
-//       <span className='bars'>
-//         {Object.entries(distribution).map(([key, value]) => (
-//           <button
-//             fullWidth='true'
-//             variant='contained'
-//             color='primary'
-//             style={{ margin: 5 }}
-//             // disabled={buttonDisable}
-//             name={key}
-//           >
-//             <li>{key}</li>
-//             <li>{value}</li>
-//           </button>
-//         ))}
-//       </span>
-//     </div>
-//   );
-// };
-// Bars.propTypes = {
-//   distribution: PropTypes.object.isRequired,
-//   correct: PropTypes.bool.isRequired,
-// };
-
-// const mapStateToProps = (state) => ({
-//   distribution: state.user.userState.phaseProp.distribution,
-//   correct: state.user.userState.phaseProp.correct,
-// });
-
-// export default connect(mapStateToProps, {})(Bars);
