@@ -53,6 +53,7 @@ class RuningGame {
     for (var item in this.d_users) {
       this.d_users[item].last_answer_correctness = false;
     }
+    this.d_users_answers = {};
   }
 
   /** this function sum the values of a given dict */
@@ -153,12 +154,7 @@ class RuningGame {
     this.groups[curUser.group].participants++;
 
     // update the admin on the number of users that get in
-    this.admin.connection.send(
-      JSON.stringify({
-        type: USER,
-        usersData: this.usersToJson(),
-      })
-    );
+    this.sendUserTable();
 
     // TODO: remove these prints
     // if (printLogs) {
@@ -247,12 +243,7 @@ class RuningGame {
           })
         );
       }
-      this.admin.connection.send(
-        JSON.stringify({
-          type: USER,
-          usersData: this.usersToJson(),
-        })
-      );
+      this.sendUserTable();
       this.cleanUsersLastAnswer();
       var that = this;
       setTimeout(function () {
@@ -275,16 +266,17 @@ class RuningGame {
    */
   handle_delete_user(userID, gameKey) {
     try {
-      const groupNumber = this.d_users[userID].group_num;
+      const groupNumber = this.d_users[userID].group;
       delete this.groups[groupNumber].participants--;
       // delete d_connections[userID];
       delete this.d_users[userID];
       delete this.curr_connected_users--;
+      this.sendUserTable();
       console.log("SERVER : Player conenction closed (userID: " + userID + ")");
 
       // TODO: Redirect the user to another page (like loginUser/home)
 
-      log_game_status(gameKey);
+      // log_game_status(gameKey);
     } catch (err) {
       console.log("problem in handle_delete_user failed");
     }
@@ -328,6 +320,14 @@ class RuningGame {
   }
   setResume() {
     this.pause = false;
+  }
+  sendUserTable() {
+    this.admin.connection.send(
+      JSON.stringify({
+        type: USER,
+        usersData: this.usersToJson(),
+      })
+    );
   }
 }
 module.exports = RuningGame;
