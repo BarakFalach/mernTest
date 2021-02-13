@@ -5,6 +5,7 @@ import Player from "@vimeo/player";
 import Vimeo from "@u-wave/react-vimeo";
 import useWindowDimensions from "./windeoResize";
 import { videoEnd } from "../../actions/user";
+import "../layouts/css/Video.css";
 
 const Video = ({ videoUrl, videoEnd }) => {
   const { height, width } = useWindowDimensions();
@@ -12,7 +13,7 @@ const Video = ({ videoUrl, videoEnd }) => {
   const onVideoEnd = () => videoEnd();
 
   return (
-    <div>
+    <div className="video">
       <Vimeo
         video={videoUrl}
         controls={false}
