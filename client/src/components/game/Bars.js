@@ -5,18 +5,24 @@ import Typography from "@material-ui/core/Typography";
 import { Bar } from "react-chartjs-2";
 import correctSvg from "../../assets/success-green-check-mark.svg";
 import incorrectSvg from "../../assets/wrong.svg";
-import "../layouts/css/Question.css";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
-const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
+import "../layouts/css/BarsAnimation.css";
+const Bars = ({
+  distribution,
+  correctAnswer,
+  answers,
+  userAnswer,
+  audioUrl,
+}) => {
   let sentence;
-  let icon;
+  // let icon;
   if (correctAnswer == userAnswer) {
     sentence = "Well Done! Your answer is correct! ";
-    icon = CorrectnessIcon(true);
+    // icon = CorrectnessIcon(true);
   } else {
     sentence = "Unfortunately, Your answer is not the right answer.. ";
-    icon = CorrectnessIcon(false);
+    // icon = CorrectnessIcon(false);
   }
   let distributionPercent = castToPercent(distribution);
   let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
@@ -34,29 +40,28 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
       {
         backgroundColor: colorSet,
         borderColor: colorSet,
-        borderWidth: 1,
         hoverBorderColor: "rgba(255,99,132,1)",
         data: Object.values(distributionPercent),
         datalabels: {
           anchor: "end",
           align: "start",
           offset: 20,
-          paddingTop: 100,
           backgroundColor: function (ctx) {
             // var value = ctx.dataset.data[ctx.dataIndex];
             // return value > 50 ? "white" : null;
             return null;
           },
           borderColor: function (ctx) {
-            var value = ctx.dataset.data[ctx.dataIndex];
-            return value > 0 ? "white" : null;
+            // var value = ctx.dataset.data[ctx.dataIndex];
+            // return value > 0 ? "white" : null;
             // return "white";
+            return null;
           },
-          borderWidth: 2,
-          borderRadius: 4,
+          // borderWidth: 2,
+          // borderRadius: 4,
           font: {
             weight: "bold",
-            size: 30,
+            size: 40,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -79,25 +84,24 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
     ],
   };
   return (
-    <div>
-      <Typography variant='h5' className='col-centered'>
+    <div className='flex-container'>
+      <Typography variant='h5' font='Montserrat'>
         {sentence}
-        {icon}
+        {/* {icon} */}
       </Typography>
-      <div
-        style={{
-          height: 500,
-          position: "relative",
-          margin: "auto",
-          width: "80vw",
-        }}
-      >
+      <audio autoPlay>
+        <source src={audioUrl} />
+      </audio>
+      <div className='bottom-bars'>
         <Bar
           data={data}
           options={{
             layout: {
               padding: {
                 top: 40,
+              },
+              margin: {
+                bottom: 20,
               },
             },
             animation: {
@@ -107,9 +111,6 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
               display: false,
             },
             maintainAspectRatio: false,
-            tooltips: {
-              displayColors: false,
-            },
             plugins: {
               labels: {
                 render: "image",
@@ -136,11 +137,16 @@ const Bars = ({ distribution, correctAnswer, answers, userAnswer }) => {
             scales: {
               xAxes: [
                 {
+                  display: true,
                   ticks: {
                     fontSize: 30,
                   },
                   gridLines: {
-                    display: false,
+                    paddingTop: 10,
+                    drawBorder: true,
+                    color: "black",
+                    drawOnChartArea: false,
+                    drawTicks: false,
                   },
                 },
               ],
@@ -172,8 +178,8 @@ function CorrectnessIcon(result) {
 function imagesSetter(answers, correctAnswer, userAnswer) {
   let imagesByResult = [];
   for (let index = 0; index < answers.length; index++) {
-    if (index + 1 == userAnswer || index + 1 == correctAnswer) {
-      if (userAnswer == index + 1) {
+    if (index + 1 === userAnswer || index + 1 === correctAnswer) {
+      if (userAnswer === index + 1) {
         imagesByResult[index] = {
           //Wrong Answer
           src: incorrectSvg,
@@ -181,7 +187,7 @@ function imagesSetter(answers, correctAnswer, userAnswer) {
           height: 30,
         };
       }
-      if (correctAnswer == index + 1) {
+      if (correctAnswer === index + 1) {
         imagesByResult[index] = {
           //Correct Answer
           src: correctSvg,
@@ -200,14 +206,14 @@ Bars.propTypes = {
   correctAnswer: PropTypes.number.isRequired,
   userAnswer: PropTypes.number.isRequired,
   answers: PropTypes.array.isRequired,
+  audioUrl: PropTypes.string.isRequired,
 };
 function castToPercent(distribution) {
   let total = 0;
   Object.values(distribution).forEach((element) => {
-    console.log(element);
     total += element;
   });
-  console.log("total is " + total);
+
   let distributionPercent = {};
   Object.keys(distribution).forEach((element) => {
     distributionPercent[element] = Math.round(

@@ -24,3 +24,14 @@
     top: 150px;
   }
 }
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+}
+.bottom-bars {
+  height: 80%;
+  padding-top: 50px;
+  width: 80%;
+}
