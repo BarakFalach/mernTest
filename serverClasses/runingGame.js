@@ -22,6 +22,7 @@ class RuningGame {
       },
     };
     this.d_users = {};
+    this.d_diconnected_users = {};
     this.d_users_answers = [];
     this.knowledge_question_answers = {};
     this.knowledge_question_dist = {};
@@ -133,8 +134,13 @@ class RuningGame {
    * @param {*} connection - the webScoket connection of this user
    * @param {*} gameKey
    */
-  handle_req_user_login(userID, userName, connection, gameKey) {
+  handle_req_user_login(userID, userName, connection, gameKey, ip) {
+    var curUser = {};
+    console.log("IP is: " + ip);
+    // if (userID in this.d_diconnected_users) {
+    // } else {
     var curUser = new User(userName, gameKey, this.getGroupNum());
+    // }
 
     curUser.setConnection(connection);
 
