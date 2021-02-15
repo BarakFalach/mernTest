@@ -33,6 +33,7 @@ class RuningGame {
     this.curr_phase = {};
     this.pause = false;
     this.gameResult = [];
+    this.barsMutex = false;
   }
 
   /** This function change the next group num
@@ -156,6 +157,10 @@ class RuningGame {
 
     // update the admin on the number of users that get in
     this.sendUserTable();
+    if (this.curr_phase.type == "Question") {
+      this.user_semaphore++;
+      this.send_bars();
+    }
 
     // TODO: remove these prints
     // if (printLogs) {
@@ -164,13 +169,18 @@ class RuningGame {
     // }
   }
 
-  reset_question_dict() {
+  /**
+   * reset arguments before question phase load
+   * bars lock, knowloedge_question_answers, knowloedge_question_dist
+   */
+  clean_arguments_for_question() {
     const cur_answers_dict = {};
     const len = this.curr_phase.phaseProp.answers.length;
     for (var i = 0; i < len; i++) {
       cur_answers_dict[i + 1] = 0;
     }
     console.log(cur_answers_dict);
+    this.barsMutex = true;
     this.knowledge_question_answers = cur_answers_dict;
     this.knowledge_question_dist = cur_answers_dict;
   }
@@ -189,7 +199,7 @@ class RuningGame {
       this.curr_phase = this.gameDefenition[phaseName];
     }
     if (this.curr_phase.type == "Question") {
-      this.reset_question_dict();
+      this.clean_arguments_for_question();
     }
     for (key in this.d_users) {
       this.d_users[key].connection.send(
@@ -221,15 +231,18 @@ class RuningGame {
     this.d_users[userID].last_answer = answer;
     this.d_users_answers.push(answerProp);
     this.user_semaphore++;
+    this.send_bars();
+  }
 
+  send_bars() {
     // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
-    if (this.user_semaphore == Object.keys(this.d_users).length) {
+    if (
+      this.user_semaphore == Object.keys(this.d_users).length &&
+      this.barsMutex
+    ) {
+      this.barsMutex = false;
       this.user_semaphore = 0;
       this.updateScoreForUsers();
-      console.log({
-        distribution: this.knowledge_question_dist,
-        correct: this.d_users[userID].last_answer_correctness,
-      });
       for (key in this.d_users) {
         this.d_users[key].connection.send(
           JSON.stringify({
@@ -240,6 +253,7 @@ class RuningGame {
               correctAnswer: this.curr_phase.correct_answer,
               answers: this.curr_phase.phaseProp.answers,
               userAnswer: this.d_users[key].last_answer,
+              audioUrl: this.curr_phase.answerAudio,
             },
             score: this.d_users[key].curr_score,
           })
@@ -263,17 +277,20 @@ class RuningGame {
   }
 
   /** This function delete the user from server (and his connections)
-   * updated dict: d_users, d_connections, d_activatedGames
-   *  return: null
+   * @updated dict: d_users, this.curr_connected_users
+   * @call send_bars for handle exit inside a question Phase
+   * @return: null
    */
   handle_delete_user(userID, gameKey) {
     try {
       const groupNumber = this.d_users[userID].group;
       delete this.groups[groupNumber].participants--;
-      // delete d_connections[userID];
       delete this.d_users[userID];
       delete this.curr_connected_users--;
       this.sendUserTable();
+      if (this.curr_phase.type == "Qustion") {
+        this.send_bars();
+      }
       console.log("SERVER : Player conenction closed (userID: " + userID + ")");
 
       // TODO: Redirect the user to another page (like loginUser/home)
