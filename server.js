@@ -281,6 +281,7 @@ wsServer.on("connection", (request) => {
   const connection = request;
   var gameKey;
   var userName;
+  var ip = request._socket.remoteAddress;
 
   connection.on("message", function (message) {
     const userlog = JSON.parse(message);
@@ -299,10 +300,11 @@ wsServer.on("connection", (request) => {
       case REQ_USER_LOGIN:
         if (gameKey in d_activeGames)
           d_activeGames[gameKey].handle_req_user_login(
-            userID,
+            userID, //TODO:: no need for ID
             userName,
             connection,
-            gameKey
+            gameKey,
+            ip
           );
         else handle_bad_req_user_login(connection, gameKey);
         break;
