@@ -31,7 +31,7 @@ gameDefenition["video2"] = {
   key: "video2",
   type: "video",
   phaseProp: {
-    videoUrl: "https://player.vimeo.com/video/494218419",
+    videoUrl: "https://vimeo.com/494218419/fc3e5c2cf6",
   },
 };
 gameDefenition["question3"] = {

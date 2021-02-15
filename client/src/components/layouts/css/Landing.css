@@ -1,6 +1,7 @@
 body {
   background-image: url("../../../assets/giftly.png");
   border: none;
-
+  overflow-y: hidden;
+  overflow-x: hidden;
   background-color: #dfd5fd;
 }
