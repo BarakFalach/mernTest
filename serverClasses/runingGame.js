@@ -86,15 +86,18 @@ class RuningGame {
    */
   updateScoreForUsers() {
     var user = {};
+    const timeInMs = this.curr_phase.phaseProp.time * 1000;
     for (var index in this.d_users_answers) {
       user = this.d_users_answers[index];
       this.knowledge_question_answers[user.answer] += 1;
       if (user.answer == this.curr_phase.correct_answer) {
-        this.d_users[user.userID].curr_score += Math.round(user.time / 10);
+        this.d_users[user.userID].curr_score += Math.round(
+          (timeInMs - user.time) / 10
+        );
         this.d_users[user.userID].last_answer_correctness = true;
         this.updateScoreForGroup(
           this.d_users[user.userID].group,
-          Math.round(user.time / 10)
+          Math.round((timeInMs - user.time) / 10)
         );
       } else {
         this.d_users[user.userID].last_answer_correctness = false;

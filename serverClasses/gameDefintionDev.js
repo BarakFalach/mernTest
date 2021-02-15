@@ -1,4 +1,6 @@
 const gameDefenition = {};
+const audioUrl =
+  "https://www.dropbox.com/s/rkly14ns3hnpq3i/zapsplat_animals_birds_spotted_dove_call_australia_56396.mp3?dl=0";
 
 gameDefenition["video1"] = {
   key: "video1",
@@ -13,9 +15,11 @@ gameDefenition["question1"] = {
   phaseProp: {
     question: "how are you today",
     answers: ["good", "great", "OK", "comsi comsa"],
-    time: 8,
+    time: 6,
+    audioUrl: audioUrl,
   },
   correct_answer: 1,
+  answerAudio: audioUrl,
 };
 gameDefenition["question2"] = {
   key: "question2",
@@ -23,9 +27,11 @@ gameDefenition["question2"] = {
   phaseProp: {
     question: "how are you Tommorow",
     answers: ["good", "great", "OK", "comsi comsa"],
-    time: 8,
+    time: 6,
+    audioUrl: audioUrl,
   },
   correct_answer: 1,
+  answerAudio: audioUrl,
 };
 gameDefenition["video2"] = {
   key: "video2",
@@ -40,8 +46,10 @@ gameDefenition["question3"] = {
   phaseProp: {
     question: "how are you in the day after Tommorow",
     answers: ["good", "great", "OK", "comsi comsa"],
-    time: 8,
+    time: 6,
+    audioUrl: audioUrl,
   },
   correct_answer: 1,
+  answerAudio: audioUrl,
 };
 exports.gameDefenition = gameDefenition;
