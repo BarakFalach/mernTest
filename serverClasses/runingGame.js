@@ -22,7 +22,7 @@ class RuningGame {
       },
     };
     this.d_users = {};
-    this.d_users_answers = {};
+    this.d_users_answers = [];
     this.knowledge_question_answers = {};
     this.knowledge_question_dist = {};
     this.general_questions_answers = {};
@@ -32,6 +32,7 @@ class RuningGame {
     this.user_semaphore = 0;
     this.curr_phase = {};
     this.pause = false;
+    this.gameResult = [];
   }
 
   /** This function change the next group num
@@ -45,15 +46,20 @@ class RuningGame {
     return key;
   }
 
-  /** This function update the users and group score after timeOut / all users answered
-   *  Structure: d_users_answers = {key: userID, value: [answer, time]}
-   *  return: null
+  /**
+   *  change last_answer_corecntess to false
+   *  add current distrebution to gameResult
    */
   cleanUsersLastAnswer() {
     for (var item in this.d_users) {
       this.d_users[item].last_answer_correctness = false;
     }
-    this.d_users_answers = {};
+    this.d_users_answers = [];
+    const curQuestionDist = {
+      questionName: this.curr_phase.key,
+      distrebution: this.knowledge_question_dist,
+    };
+    this.gameResult.push(curQuestionDist);
   }
 
   /** this function sum the values of a given dict */
@@ -79,27 +85,19 @@ class RuningGame {
    *  return: null
    */
   updateScoreForUsers() {
-    const users_answers = this.d_users_answers;
-    var items = Object.keys(users_answers).map(function (key) {
-      return [key, users_answers[key]];
-    });
-
-    items.sort(function (first, second) {
-      return first[1].time - second[1].time;
-    });
-
-    var scoreCounter = 1;
-    for (var index in items) {
-      var item = items[index];
-
-      this.knowledge_question_answers[item[1].answer] += 1;
-      if (item[1].answer == this.curr_phase.correct_answer) {
-        this.d_users[item[0]].curr_score += scoreCounter;
-        this.d_users[item[0]].last_answer_correctness = true;
-        this.updateScoreForGroup(this.d_users[item[0]].group, scoreCounter);
-        scoreCounter++;
+    var user = {};
+    for (var index in this.d_users_answers) {
+      user = this.d_users_answers[index];
+      this.knowledge_question_answers[user.answer] += 1;
+      if (user.answer == this.curr_phase.correct_answer) {
+        this.d_users[user.userID].curr_score += Math.round(user.time / 10);
+        this.d_users[user.userID].last_answer_correctness = true;
+        this.updateScoreForGroup(
+          this.d_users[user.userID].group,
+          Math.round(user.time / 10)
+        );
       } else {
-        this.d_users[item[0]].last_answer_correctness = false;
+        this.d_users[user.userID].last_answer_correctness = false;
       }
     }
     this.calculateKnowledgeDist();
@@ -213,11 +211,12 @@ class RuningGame {
    */
   handle_user_answer(gameKey, userID, answer, time) {
     const answerProp = {
+      userID: userID,
       answer: answer,
       time: time,
     };
     this.d_users[userID].last_answer = answer;
-    this.d_users_answers[userID] = answerProp;
+    this.d_users_answers.push(answerProp);
     this.user_semaphore++;
 
     // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
