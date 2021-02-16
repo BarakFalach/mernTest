@@ -2,6 +2,7 @@
 // export const EdenTesting = () => {
 //   return <div className='animatedDiv'>eden</div>;
 // };
+
 import React, { Component } from "react";
 import Chart from "./assets/Chart.js";
 
@@ -65,6 +66,7 @@ class EdenTesting extends Component {
   }
 }
 export default EdenTesting;
+
 // -- GAME CLASS --
 // import React, { Fragment } from "react";
 // import { connect } from "react-redux";
@@ -104,3 +106,39 @@ export default EdenTesting;
 // });
 
 // export default connect(mapStateToProps, {})(Game);
+
+// import "../layouts/css/EdenQuestions.css";
+// import React, { Component } from "react";
+// import { connect } from "react-redux";
+// import PropTypes from "prop-types";
+// import { UserAnswer } from "../../actions/user";
+
+// class EdenTesting extends Component {
+//   constructor() {
+//     super();
+//     this.state = {};
+//   }
+
+//   render() {
+//     return (
+//       <div className='flex-container'>
+//         hello
+//         <div className='border'></div>
+//         <div>question</div>
+//       </div>
+//     );
+//   }
+// }
+// EdenTesting.propTypes = {
+//   question: PropTypes.string.isRequired,
+//   answers: PropTypes.array,
+//   time: PropTypes.number,
+//   UserAnswer: PropTypes.func.isRequired,
+// };
+
+// const mapStateToProps = (state) => ({
+//   question: state.user.userState.phaseProp.question,
+//   // answers: state.user.userState.phaseProp.answers,
+//   // time: state.user.userState.phaseProp.time,
+// });
+// export default connect(mapStateToProps, { UserAnswer })(EdenTesting);

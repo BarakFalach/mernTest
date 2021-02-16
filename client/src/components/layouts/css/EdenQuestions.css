@@ -1,0 +1,261 @@
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100vh - (100px));
+  border: 1px solid black;
+}
+.border {
+  border: 1px solid black;
+  height: 20%;
+}
+.empty {
+  height: 40%;
+}
+
+.question {
+  font-size: 48px;
+  height: 96px;
+  overflow-wrap: break-word;
+  width: 800px;
+  text-align: center;
+}
+
+.questAnimation {
+  animation-delay: 5s;
+  animation-iteration-count: 1;
+  /* animation: upslowtrans 10s linear forwards; */
+  animation: questease 0.8s ease-in-out forwards;
+}
+
+@keyframes questease {
+  from {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    margin-top: -24px;
+    margin-left: -400px;
+    font-size: 48px;
+  }
+  to {
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    margin-top: 40px;
+    margin-left: -400px;
+    transform: scale(0.6);
+  }
+}
+
+.circleAnimation {
+  animation-delay: 5s;
+  animation-iteration-count: 1;
+  /* animation: upslowtrans 10s linear forwards; */
+  animation: circlease 0.8s ease-in forwards;
+}
+
+@keyframes circlease {
+  from {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    margin-top: 48px;
+    margin-left: -50px;
+  }
+  to {
+    position: fixed;
+    top: 100%;
+    left: 50%;
+    margin-top: 100px;
+    margin-left: -50px;
+    transform: scale(0.1);
+  }
+}
+
+.quest-container {
+  display: table;
+  flex-direction: column;
+  height: 200px;
+  width: 800px;
+  margin-top: 250px;
+  margin-left: 25vw;
+  border: solid black;
+  -webkit-animation: fadeInFromNone 1.5s ease-out;
+  -moz-animation: fadeInFromNone 1.5s ease-out;
+  -o-animation: fadeInFromNone 1.5s ease-out;
+  animation: fadeInFromNone 1.5s ease-out;
+}
+
+.lineAnswer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100px;
+  align-items: center;
+}
+.singleAnswer {
+  display: flex;
+  width: 47%;
+  height: 80px;
+  border: 3px solid #b7940e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  text-align: center;
+}
+@-webkit-keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+/* 
+@keyframes upslowtrans {
+  0% {
+    transform: translateY(0%-18px);
+  }
+  5% {
+    transform: translateY(-0.5%);
+  }
+  10% {
+    transform: translateY(-1%);
+  }
+  15% {
+    transform: translateY(-1.5%);
+  }
+  20% {
+    transform: translateY(-2.5%);
+  }
+  25% {
+    transform: translateY(-3.7%);
+  }
+  30% {
+    transform: translateY(-5%);
+  }
+  35% {
+    transform: translateY(-6.1%);
+  }
+  40% {
+    transform: translateY(-7.3%);
+  }
+  45% {
+    transform: translateY(-8.6%);
+  }
+  50% {
+    transform: translateY(-9%);
+  }
+  55% {
+    transform: translateY(-11.2%);
+  }
+
+  60% {
+    transform: translateY(-13.5%);
+  }
+  65% {
+    transform: translateY(-15%);
+  }
+  70% {
+    transform: translateY(-16.5%);
+  }
+  75% {
+    transform: translateY(-18%);
+  }
+  80% {
+    transform: translateY(-19%);
+  }
+  85% {
+    transform: translateY(-19.5%);
+  }
+  90% {
+    transform: translateY(-19.7%);
+  }
+  95% {
+    transform: translateY(-20%+12px);
+  }
+  100% {
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    margin-top: 10px;
+    margin-left: -300px;
+  }
+}
+
+@keyframes upslow {
+  0% {
+    top: 100px;
+    left: calc(50% -200px);
+  }
+  25% {
+    top: 60px;
+    left: calc(50% -200px);
+  }
+  50% {
+    top: 35px;
+    left: calc(50% -200px);
+  }
+  75% {
+    top: 20px;
+    left: calc(50% -200px);
+  }
+} */

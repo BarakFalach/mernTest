@@ -8,6 +8,7 @@ import incorrectSvg from "../../assets/wrong.svg";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
 import "../layouts/css/BarsAnimation.css";
+// import  aud from "../../assets/beep.mp3"
 const Bars = ({
   distribution,
   correctAnswer,
@@ -90,7 +91,11 @@ const Bars = ({
         {/* {icon} */}
       </Typography>
       <audio autoPlay>
-        <source src={audioUrl} />
+        <source
+          src={
+            "https://www.dropbox.com/s/rkly14ns3hnpq3i/zapsplat_animals_birds_spotted_dove_call_australia_56396.mp3?raw=1"
+          }
+        />
       </audio>
       <div className='bottom-bars'>
         <Bar
