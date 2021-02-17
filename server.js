@@ -31,39 +31,35 @@ app.listen(PORT, () => console.log("Server Started at: " + PORT));
 // Const enums
 const printLogs = false;
 const MAKAF = 40;
-const UPDATE_SCORE = "UPDATE_SCORE";
 const USER_ANSWER = "USER_ANSWER";
 const PHASE = "PHASE";
 const REQ_USER_LOGIN = "REQ_USER_LOGIN";
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const GAME_KEY_FAIL = "GAME_KEY_FAIL";
 const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
-const NUMBER_OF_CONNECTED_USERS = "NUMBER_OF_CONNECTED_USERS";
 const VIDEO_END = "VIDEO_END";
 const PAUSE = "PAUSE";
 const RESUME = "RESUME";
-
-const webSocketsServerPort = require("./ServerUtils").WebSocketServerPort;
 const User = require("./serverClasses/user");
 const Admin = require("./serverClasses/admin");
 const RuningGame = require("./serverClasses/runingGame");
 var gameDefenition = require("./serverClasses/gameDefintionDev");
 var gameDefenition = gameDefenition.gameDefenition;
-
 const https = require("http");
 const WebSocket = require("ws");
+const production = process.env.NODE_ENV === "production";
+console.log(process.env.NODE_ENV);
 /**
  * Data Structure explenation for dictionaries:
- *    d_admins = {key: server_given_user_id, value: gameKey: number
- *    d_connections = {key: server_given_user_id, value: connection}
- *    d_activeGame = {key: gameKey, value: gameProperties - see function: "setGameProperties" }
+ *   @var d_admins = {key: server_given_user_id, value: gameKey: number
+ *   @var d_connections = {key: server_given_user_id, value: connection}
+ *   @var d_activeGame = {key: gameKey, value: gameProperties - see function: "setGameProperties" }
  *        d_group = {key: server_given_group_id, value: group_score}
  *        d_users = {key: server_given_user_id, value: user_name: string, gameKey: number ,group_num: number, curr_score: number,
  *                  last_answer_currectnes: boolean, general_question_list}
  *        d_users_answers = {key: user_id, value: [answer (number), time (number)]}
  */
 const d_admins = {};
-const d_connections = {};
 const d_activeGames = {};
 phaseList = [];
 for (key in gameDefenition) {
@@ -75,17 +71,7 @@ const INDEX = "/index.html";
 const server = https.createServer();
 const wsServer = new WebSocket.Server({ server });
 
-// const { Server } = require("ws");
 const { connection } = require("mongoose");
-// const wsServer = new Server({ server });
-
-// wsServer = new WebSocketServer({
-//   httpServer: server,
-// wsServer = new WebSocketServer({
-//   httpServer: server,
-
-//   autoAcceptConnections: false,
-// });
 
 /** This function generates unique userId for every user
  *  return: The uniqe userId
@@ -277,10 +263,10 @@ const delete_game_instance = (gameKey) => {
 
 wsServer.on("connection", (request) => {
   log_print_structure_head("Server: Connection Request");
-  const userID = getUniqueID();
   const connection = request;
   var gameKey;
   var userName;
+  const userID = production ? request._socket.remoteAddress : getUniqueID();
 
   connection.on("message", function (message) {
     const userlog = JSON.parse(message);
@@ -297,14 +283,14 @@ wsServer.on("connection", (request) => {
         break;
 
       case REQ_USER_LOGIN:
-        if (gameKey in d_activeGames)
+        if (gameKey in d_activeGames) {
           d_activeGames[gameKey].handle_req_user_login(
             userID,
             userName,
             connection,
             gameKey
           );
-        else handle_bad_req_user_login(connection, gameKey);
+        } else handle_bad_req_user_login(connection, gameKey);
         break;
 
       case PHASE:

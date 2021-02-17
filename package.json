@@ -25,6 +25,7 @@
     "express-validator": "^6.7.0",
     "gravatar": "^1.8.1",
     "http": "0.0.1-security",
+    "json-2-csv": "^3.10.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.2",
     "react-spotlight": "^1.1.0",
