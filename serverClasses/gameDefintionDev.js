@@ -31,13 +31,20 @@ gameDefenition["top3_1"] = {
   key: "top3_1",
   type: "Top3",
   duration: 5,
+  phaseProp: {
+    audioArr: [
+      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
+      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
+      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
+    ],
+  },
 };
 gameDefenition["question2"] = {
   key: "question2",
   type: "Question",
   phaseProp: {
     question: "how are you Tommorow",
-    answers: ["good", "great", "OK", "comsi comsa"],
+    answers: ["good", "great", "OK"],
     time: 6,
     audioUrl: audioUrl,
   },

@@ -322,14 +322,17 @@ class RuningGame {
    *  @return: array of 3 top users by score
    */
   top3Users() {
-    const users = this.sortByScore("users");
-    const topUsers = users.slice(0, 3);
+    const usersByScore = this.sortByScore("users");
+    const topUsers = usersByScore.slice(0, 3);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
           type: PHASE,
           phase: "Top3",
-          phaseProp: topUsers,
+          phaseProp: {
+            users: topUsers,
+            audio: this.curr_phase.phaseProp.audioArr,
+          },
           score: this.d_users[key].curr_score,
         })
       );
