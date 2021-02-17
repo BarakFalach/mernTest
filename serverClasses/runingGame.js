@@ -3,10 +3,13 @@ const Admin = require("./admin");
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const PHASE = "PHASE";
 const USER = "USER";
+const converter = require("json-2-csv");
+fs = require("fs");
 
 class RuningGame {
   constructor(admin, gameType, numOfParticipates, phaseList, gameDefenition) {
     this.admin = admin;
+    this.gameStarted = false;
     this.game_type = gameType; //TODO:: what is gameType
     this.phaseList = phaseList;
     this.gameDefenition = gameDefenition;
@@ -22,7 +25,7 @@ class RuningGame {
       },
     };
     this.d_users = {};
-    this.d_diconnected_users = {};
+    this.archive_user_dict = {};
     this.d_users_answers = [];
     this.knowledge_question_answers = {};
     this.knowledge_question_dist = {};
@@ -34,7 +37,11 @@ class RuningGame {
     this.curr_phase = {};
     this.pause = false;
     this.gameResult = [];
-    this.barsMutex = false;
+    this.numberStack = [];
+    this.timer;
+    for (var i = 30; i > 0; i--) {
+      this.numberStack.push(i);
+    }
   }
 
   /** This function change the next group num
@@ -52,13 +59,15 @@ class RuningGame {
    *  change last_answer_corecntess to false
    *  add current distrebution to gameResult
    */
-  cleanUsersLastAnswer() {
+  cleanUsersLastAnswer(questionPhase) {
     for (var item in this.d_users) {
       this.d_users[item].last_answer_correctness = false;
     }
     this.d_users_answers = [];
+    this.knowledge_question_dist[0] =
+      this.curr_connected_users - this.sumValues(this.knowledge_question_dist);
     const curQuestionDist = {
-      questionName: this.curr_phase.key,
+      questionName: questionPhase.key,
       distrebution: this.knowledge_question_dist,
     };
     this.gameResult.push(curQuestionDist);
@@ -66,33 +75,20 @@ class RuningGame {
 
   /** this function sum the values of a given dict */
   sumValues(obj) {
-    Object.values(obj).reduce((a, b) => a + b);
-  }
-
-  /** This function calculate knowledge distribution of the answers
-   *  update dicts: d_activatedGames
-   *  return: null
-   */
-  calculateKnowledgeDist() {
-    const sum = this.sumValues(this.knowledge_question_answers);
-    if (sum > 0) {
-      for (key in this.knowledge_question_answers)
-        this.knowledge_question_dist[key] =
-          this.knowledge_question_answers[key] / sum;
-    }
+    return Object.values(obj).reduce((a, b) => a + b);
   }
 
   /** This function clean the last_answer_correctness to all game's users to false
    *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
    *  return: null
    */
-  updateScoreForUsers() {
+  updateScoreForUsers(questionPhase) {
     var user = {};
-    const timeInMs = this.curr_phase.phaseProp.time * 1000;
+    const timeInMs = questionPhase.phaseProp.time * 1000;
     for (var index in this.d_users_answers) {
       user = this.d_users_answers[index];
       this.knowledge_question_answers[user.answer] += 1;
-      if (user.answer == this.curr_phase.correct_answer) {
+      if (user.answer == questionPhase.correct_answer) {
         this.d_users[user.userID].curr_score += Math.round(
           (timeInMs - user.time) / 10
         );
@@ -105,7 +101,6 @@ class RuningGame {
         this.d_users[user.userID].last_answer_correctness = false;
       }
     }
-    this.calculateKnowledgeDist();
   }
 
   /** This function update the group total score with the given score
@@ -134,13 +129,11 @@ class RuningGame {
    * @param {*} connection - the webScoket connection of this user
    * @param {*} gameKey
    */
-  handle_req_user_login(userID, userName, connection, gameKey, ip) {
-    var curUser = {};
-    console.log("IP is: " + ip);
-    // if (userID in this.d_diconnected_users) {
-    // } else {
-    var curUser = new User(userName, gameKey, this.getGroupNum());
-    // }
+  handle_req_user_login(userID, userName, connection, gameKey) {
+    var curUser = this.checkIfDisconnected(userID, userName);
+    if (curUser == undefined) {
+      curUser = new User(userName, gameKey, this.getGroupNum());
+    }
 
     curUser.setConnection(connection);
 
@@ -163,10 +156,6 @@ class RuningGame {
 
     // update the admin on the number of users that get in
     this.sendUserTable();
-    if (this.curr_phase.type == "Question") {
-      this.user_semaphore++;
-      this.send_bars();
-    }
 
     // TODO: remove these prints
     // if (printLogs) {
@@ -191,42 +180,57 @@ class RuningGame {
     this.knowledge_question_dist = cur_answers_dict;
   }
 
-  /** This function change the users screen
-   *  return: send to all users the new screen to show
-   */
+  /** time the next phase to be loaded to the uswers */
   handle_change_screen(phaseName = null) {
     if (this.pause) {
+      clearTimeout(this.timer);
       return;
     }
+    this.gameStarted = true;
     if (phaseName == null) {
       this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
       phaseName = this.curr_phase.key;
     } else {
       this.curr_phase = this.gameDefenition[phaseName];
+      clearTimeout(this.timer);
     }
     if (this.curr_phase.type == "Question") {
       this.clean_arguments_for_question();
     }
-    for (key in this.d_users) {
-      this.d_users[key].connection.send(
-        JSON.stringify({
-          type: PHASE,
-          phase: this.curr_phase.type,
-          phaseProp: this.curr_phase.phaseProp,
-          score: this.d_users[key].curr_score,
-        })
-      );
+    if (this.curr_phase.type == "Bars") {
+      const questionPhase = this.gameDefenition[
+        this.phaseList[this.phaseList.indexOf(phaseName) - 1]
+      ];
+      this.send_bars(questionPhase);
+    } else if (this.curr_phase.type == "Top3") {
+      this.top3Users();
+    } else {
+      for (key in this.d_users) {
+        this.d_users[key].connection.send(
+          JSON.stringify({
+            type: PHASE,
+            phase: this.curr_phase.type,
+            phaseProp: this.curr_phase.phaseProp,
+            score: this.d_users[key].curr_score,
+          })
+        );
+      }
     }
+    var that = this;
+    this.timer = setTimeout(function () {
+      that.handle_change_screen();
+    }, this.curr_phase.duration * 1000);
     //TODO:: only for devoloping , after last phase the game Restart.
     if (this.phaseList.indexOf(phaseName) == this.phaseList.length - 1) {
+      this.writeResultCsv();
       this.nextPhase = 0;
       return;
     }
     this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
   }
   /** This function update the user answer and score
-   *  updated dicts: d_users_answers, d_activeGames
-   *  return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
+   *  @updated dicts: d_users_answers, d_activeGames
+   *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
    */
   handle_user_answer(gameKey, userID, answer, time) {
     const answerProp = {
@@ -236,42 +240,27 @@ class RuningGame {
     };
     this.d_users[userID].last_answer = answer;
     this.d_users_answers.push(answerProp);
-    this.user_semaphore++;
-    this.send_bars();
   }
 
-  send_bars() {
-    // TODO: add self timer (even if not all users reply the answer) for deadline time to answer
-    if (
-      this.user_semaphore == Object.keys(this.d_users).length &&
-      this.barsMutex
-    ) {
-      this.barsMutex = false;
-      this.user_semaphore = 0;
-      this.updateScoreForUsers();
-      for (key in this.d_users) {
-        this.d_users[key].connection.send(
-          JSON.stringify({
-            type: PHASE,
-            phase: "bars",
-            phaseProp: {
-              distribution: this.knowledge_question_dist,
-              correctAnswer: this.curr_phase.correct_answer,
-              answers: this.curr_phase.phaseProp.answers,
-              userAnswer: this.d_users[key].last_answer,
-              audioUrl: this.curr_phase.answerAudio,
-            },
-            score: this.d_users[key].curr_score,
-          })
-        );
-      }
-      this.sendUserTable();
-      this.cleanUsersLastAnswer();
-      var that = this;
-      setTimeout(function () {
-        that.handle_change_screen();
-      }, 4000);
+  send_bars(questionPhase) {
+    this.updateScoreForUsers(questionPhase);
+    for (key in this.d_users) {
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: PHASE,
+          phase: "bars",
+          phaseProp: {
+            distribution: this.knowledge_question_dist,
+            correctAnswer: questionPhase.correct_answer,
+            answers: questionPhase.phaseProp.answers,
+            userAnswer: this.d_users[key].last_answer,
+          },
+          score: this.d_users[key].curr_score,
+        })
+      );
     }
+    this.sendUserTable();
+    this.cleanUsersLastAnswer(questionPhase);
   }
 
   handler_user_video_end() {
@@ -282,8 +271,8 @@ class RuningGame {
     }
   }
 
-  /** This function delete the user from server (and his connections)
-   * @updated dict: d_users, this.curr_connected_users
+  /** This function delete the user from server (and his connections) and remove it to the archive dict
+   * @updated dict: d_users, curr_connected_users, diconnected user
    * @call send_bars for handle exit inside a question Phase
    * @return: null
    */
@@ -291,12 +280,10 @@ class RuningGame {
     try {
       const groupNumber = this.d_users[userID].group;
       delete this.groups[groupNumber].participants--;
+      this.archive_user_dict[userID] = this.d_users[userID];
       delete this.d_users[userID];
-      delete this.curr_connected_users--;
+      this.curr_connected_users--;
       this.sendUserTable();
-      if (this.curr_phase.type == "Qustion") {
-        this.send_bars();
-      }
       console.log("SERVER : Player conenction closed (userID: " + userID + ")");
 
       // TODO: Redirect the user to another page (like loginUser/home)
@@ -335,9 +322,21 @@ class RuningGame {
    *  @return: array of 3 top users by score
    */
   top3Users() {
-    const users = sortByScore("users");
-    const topUsers = users.slice(0, 3);
-    return topUsers;
+    const usersByScore = this.sortByScore("users");
+    const topUsers = usersByScore.slice(0, 3);
+    for (key in this.d_users) {
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: PHASE,
+          phase: "Top3",
+          phaseProp: {
+            users: topUsers,
+            audio: this.curr_phase.phaseProp.audioArr,
+          },
+          score: this.d_users[key].curr_score,
+        })
+      );
+    }
   }
 
   setPause() {
@@ -353,6 +352,54 @@ class RuningGame {
         usersData: this.usersToJson(),
       })
     );
+  }
+
+  /**
+   * @param {Json} user_dic - Json data structure to find user by name in it.
+   * @param {string} name - user name to search
+   * @returns {string} return the user id object or undifined if false
+   */
+  findUserByName(user_dic, _name) {
+    var curUser;
+    for (var user in user_dic) {
+      if (user_dic[user] != undefined) {
+        if (user_dic[user].name == _name) {
+          curUser = user;
+          break;
+        }
+      }
+    }
+    return curUser;
+  }
+  /**
+   * find if the user appears in the arcive, in production find by id (ip) in develop find by name
+   * @param {*} userID - the user id
+   * @param {*} userName - the user name
+   * @retrn curUser - if exist ? userObject : undifiend
+   */
+  checkIfDisconnected(userID, userName) {
+    userID =
+      process.env.NODE_ENV === "production"
+        ? userID
+        : this.findUserByName(this.archive_user_dict, userName);
+    const curUser = this.archive_user_dict[userID];
+    if (curUser != undefined) {
+      delete this.archive_user_dict[userID];
+    }
+    return curUser;
+  }
+  writeResultCsv() {
+    converter.json2csv(this.gameResult, (err, csv) => {
+      if (err) {
+        throw err;
+      }
+
+      // print CSV string
+      console.log(csv);
+
+      // write CSV to a file
+      fs.writeFileSync("todos.csv", csv);
+    });
   }
 }
 module.exports = RuningGame;
