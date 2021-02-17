@@ -70,6 +70,7 @@ const Bars = ({
             // return "white";
           },
           formatter: function (value, ctx) {
+            console.log("user answer is " + userAnswer);
             if (!ctx.active) {
               return value + "%";
             } else if (ctx.dataIndex == correctAnswer - 1) {

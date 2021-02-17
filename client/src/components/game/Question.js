@@ -89,14 +89,11 @@
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import React, { Fragment, setState } from "react";
-import Button from "@material-ui/core/Button";
+import React from "react";
 import { UserAnswer } from "../../actions/user";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import Typography from "@material-ui/core/Typography";
 import KeyboardEventHandler from "react-keyboard-event-handler";
-// import "../layouts/css/Question.css";
-import "../layouts/css/EdenQuestions.css";
+import { Textfit } from "react-textfit";
+import "../layouts/css/Questions.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 class Question extends React.Component {
   constructor() {
@@ -122,56 +119,131 @@ class Question extends React.Component {
       }
     }
   }
+
   render() {
+    if (this.state.part == "listening") {
+      var t0 = performance.now();
+    }
     var part = this.state.part;
     var questDiv;
     var allQuestDivs = [];
-    for (let index = 0; index < this.props.answers.length; index = index + 2) {
-      if (index < this.props.answers.length - 1) {
+    var classNames = [];
+    const indexes = [];
+    let tmp = 0;
+    for (let index = 0; index < this.props.answers.length; index++) {
+      tmp = index + 1;
+      indexes[index] = tmp + "";
+    }
+    if (part === "animation") {
+      classNames = [
+        "singleAnswer s1",
+        "singleAnswer s2",
+        "singleAnswer s3",
+        "singleAnswer s4",
+      ];
+      for (
+        let index = 0;
+        index < this.props.answers.length;
+        index = index + 1
+      ) {
         questDiv = (
-          <div className='lineAnswer'>
-            <div className='singleAnswer'>{this.props.answers[index]}</div>
-            <div className='singleAnswer'>{this.props.answers[index + 1]}</div>
-          </div>
+          <button
+            onClick={(e) => onAnswerClick(index)}
+            className={classNames[index]}
+          >
+            <div className={"numberCircle"}>{index + 1}</div>
+            <Textfit max={40} min={26} mode='multi'>
+              {this.props.answers[index]}
+            </Textfit>
+          </button>
         );
-
         allQuestDivs.push(questDiv);
-      } else {
+      }
+    } else if (part === "answered") {
+      /*
+      build the part of waiting for moving to next phase.
+    */
+      classNames = [
+        "singleAnswer e1",
+        "singleAnswer e2",
+        "singleAnswer e3",
+        "singleAnswer e4",
+      ];
+      classNames[this.state.selected] =
+        "singleAnswer s" + (this.state.selected + 1);
+      for (
+        let index = 0;
+        index < this.props.answers.length;
+        index = index + 1
+      ) {
         questDiv = (
-          <div className='lineAnswer'>
-            <div className='singleAnswer'>{this.props.answers[index]}</div>
-          </div>
+          <button disabled={true} className={classNames[index]}>
+            <Textfit max={40} min={26} mode='multi'>
+              {this.props.answers[index]}
+            </Textfit>
+          </button>
         );
         allQuestDivs.push(questDiv);
       }
     }
+
+    /*
+    Func Declarations :
+    
+    */
+    const onAnswerClick = (ind) => {
+      var t1 = performance.now();
+      this.setState({ part: "answered", selected: ind });
+      console.log("now user answer");
+      this.props.UserAnswer(ind, Math.round(t1 - t0));
+    };
+
+    const handleKeyDown = (key) => {
+      this.setState({ part: "answered", selected: parseInt(key) - 1 });
+      var t1 = performance.now();
+      console.log("now user answer");
+      this.props.UserAnswer(parseInt(key), Math.round(t1 - t0));
+    };
+
+    /*
+    Components Declareations :
+    */
+
     const listeningQuestion = (
       <div className='flex-container'>
-        <div className='empty'></div>
         <div className='question'>{this.props.question}</div>
-        <div height='10%'></div>
         <CircularProgress size={100} />
         <audio id='myAudio' autoPlay>
           <source src={this.props.audioUrl} />
         </audio>
       </div>
     );
+
     const animation = (
-      <div>
-        <div className='empty'></div>
+      <React.Fragment>
         <div className='question questAnimation'>{this.props.question}</div>
         <div className='circleAnimation'>
           <CircularProgress size={100} />
         </div>
-        <div className='quest-container'>
-          <div>{allQuestDivs}</div>
-        </div>
-      </div>
+        <div className='quest-container'>{allQuestDivs}</div>
+        <KeyboardEventHandler
+          handleKeys={indexes}
+          onKeyEvent={(key, e) => handleKeyDown(key)}
+        />
+      </React.Fragment>
+    );
+
+    const answeredAndWait = (
+      <React.Fragment>
+        <div className='quest-container-answered'>{allQuestDivs}</div>
+      </React.Fragment>
     );
     if (part === "listening") {
-      return <div>{listeningQuestion}</div>;
+      return listeningQuestion;
     } else if (part === "animation") {
-      return <div>{animation}</div>;
+      return animation;
+    } else if (part === "answered") {
+      return answeredAndWait;
     }
   }
 }
@@ -191,5 +263,4 @@ const mapStateToProps = (state) => ({
   audioUrl: state.user.userState.phaseProp.audioUrl,
 });
 
-const AppContainer = connect(mapStateToProps, { UserAnswer })(Question);
-export default AppContainer;
+export default connect(mapStateToProps, { UserAnswer })(Question);
