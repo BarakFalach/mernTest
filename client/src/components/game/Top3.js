@@ -1,105 +1,116 @@
-import React from "react";
-import podium from "../../assets/winner_podium.png";
+import React, { Fragment } from "react";
+import WinnerShapeSVG from "../../assets/winner_Shape.svg";
+import IconPerson from "../../assets/person.jpg";
+import Crown from "../../assets/crown.svg";
+import Spotlight from 'react-spotlight';
+
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import FaceIcon from "@material-ui/icons/Face";
-
 import Confetti from "react-confetti";
+import "../layouts/css/Top3.css";
 
-export const Top3 = () => {
-  const fruits = [
-    { key: 1, name: "Eden" },
-    { key: 2, name: "Barak" },
-    { key: 3, name: "Asaf" },
-  ];
+
+const users = {
+  first: {id: 13, place: 1, score: 754},
+  second: {id: 6, place: 2, score: 654},
+  third: {id: 23, place: 3, score: 651}
+};
+
+
+export const Top3 = ({ users2, audio }) => {
+  
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <List component='nav'>
-          {fruits.map((f) => (
-            <ListItem key={f.key}>
-              <ListItemIcon>
-                <FaceIcon />
-              </ListItemIcon>
-              <ListItemText primary={f.name} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          maxWidth: "500",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <Confetti
+
+    <Fragment>
+      
+      {/* Beautiful things */}
+      <Confetti
           run={true}
-          friction={0.98}
-          numberOfPieces={145}
-          width={700}
-          height={500}
+          friction={1}
+          numberOfPieces={400}
+          width={5000}
+          height={1000}
         ></Confetti>
-        <img alt='podium' src={podium} />
-      </div>
+      
+      <Spotlight
+        x={70}
+        y={55}
+        color= 'rgb(0,0,0, 0.60)'
+        radius={180}
+        responsive
+        usePercentage
+        animSpeed={200}
+        borderColor="#ddd"
+        borderWidth={10}>
+        <div style={{
+          position: 'absolute',
+          left: '50%',
+          top: '-50px',
+          transform: 'translate(-50%, -100%)',
+          whiteSpace: 'nowrap'
+        }}>
+        </div>
+      </Spotlight>
+
+
+    {/* Users */}
+    <div className="flex-container-main">
+        
+        {/* Third Place */}
+        <div className="flex-container-col">
+          <div className="empty-rec"/>
+          <div className="item-not-flex">
+            <div class="ellipse">{users.third.id}</div>
+            <img alt="playerIcon" src={IconPerson} width="145px"/>
+          </div>
+
+          <div className="score-text inline-block">{users.third.score}</div> 
+          <img className="item" alt="icon place 3" src={WinnerShapeSVG} width="130px"/>
+        </div> 
+
+        {/* First Place */}
+        <div className="flex-container-col">
+          <div className="empty-rec"/>
+          <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
+          <div className="item-not-flex">
+            <div class="ellipse">{users.first.id}</div>
+            <img alt="playerIcon" src={IconPerson} width="145px"/>
+          </div>
+          <div className="score-text">{users.first.score}</div> 
+          <img className="item big-item" alt="icon place 1" src={WinnerShapeSVG} width="180px"/>     
+          <div className="empty-rec"/>
+        </div> 
+
+        {/* Second Place */}
+        <div className="flex-container-col">
+          <div className="empty-rec"/>
+          <div className="item-not-flex">
+            <div class="ellipse">{users.second.id}</div>
+            <img alt="playerIcon" src={IconPerson} width="145px"/>
+          </div>
+          <div className="score-text">{users.second.score}</div> 
+          <img className="item" alt="icon place 2" src={WinnerShapeSVG} width="130px"/>
+        </div> 
+
     </div>
+    </Fragment>
   );
 };
-// export class Top3 extends React.Component {
-//   onClickDefault() {
-//     this.refConfetti();
-//   }
 
-//   onClickCustom() {
-//     this.refConfetti({ particleCount: 500 });
-//   }
+Top3.prototype = {
+  users: PropTypes.array,
+  audio: PropTypes.array,
+};
 
-//   onClickCallback() {
-//     this.refConfetti().then(() => {
-//       console.log("do something after animation");
-//     });
-//   }
+const mapStateToProps = (state) => ({
+  users: state.user.userState.phaseProp.users,
+  audio: state.user.userState.phaseProp.audio,
+});
 
-//   onClickReset() {
-//     this.refConfetti.reset();
-//   }
-
-//   render() {
-//     const style = {
-//       position: "fixed",
-//       width: "100%",
-//       height: "100%",
-//       zIndex: -1,
-//     };
-
-//     return (
-//       <>
-//         <Confetti
-//           style={style}
-//           refConfetti={(ref) => (this.refConfetti = ref)}
-//         />
-//         <img
-//           alt='mangerIcon'
-//           src={podium}
-//           width='350px'
-//           height='400px'
-//           className='avatar'
-//         />
-
-//         <button onClick={this.onClickDefault.bind(this)}>
-//           Fire with default
-//         </button>
-//         <button onClick={this.onClickCustom.bind(this)}>
-//           Fire with custom
-//         </button>
-//         <button onClick={this.onClickCallback.bind(this)}>
-//           Fire with callback
-//         </button>
-//         <button onClick={this.onClickReset.bind(this)}>Reset</button>
-//       </>
-//     );
-//   }}
+export default connect(mapStateToProps, {})(Top3);

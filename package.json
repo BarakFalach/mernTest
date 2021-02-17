@@ -27,6 +27,7 @@
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.2",
+    "react-spotlight": "^1.1.0",
     "request": "^2.88.2",
     "utf-8-validate": "^5.0.4",
     "vimeo": "^2.1.1",
