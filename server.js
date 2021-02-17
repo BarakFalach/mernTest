@@ -48,6 +48,7 @@ var gameDefenition = gameDefenition.gameDefenition;
 const https = require("http");
 const WebSocket = require("ws");
 const production = process.env.NODE_ENV === "production";
+console.log(process.env.NODE_ENV);
 /**
  * Data Structure explenation for dictionaries:
  *   @var d_admins = {key: server_given_user_id, value: gameKey: number
