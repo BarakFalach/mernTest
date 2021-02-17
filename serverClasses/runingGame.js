@@ -4,6 +4,7 @@ const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const PHASE = "PHASE";
 const USER = "USER";
 const converter = require("json-2-csv");
+const { json } = require("express");
 fs = require("fs");
 
 class RuningGame {
@@ -298,16 +299,16 @@ class RuningGame {
    *  @param {which to sort, users or group} usersOrGroups
    *  @return: Array of the sorted users
    */
-  sortByScore(usersOrGroups) {
-    let refDict = usersOrGroups === "users" ? this.d_users : this.groups;
-    var items = Object.keys(refDict).map(function (key) {
-      return [key, refDict[key]];
-    });
+  sortByScore() {
+    var usersAsArr = [];
+    for (var user in this.d_users) {
+      usersAsArr.push(this.d_users[user]);
+    }
 
-    items.sort(function (first, second) {
-      return second[1].curr_score - first[1].curr_score;
+    usersAsArr.sort(function (first, second) {
+      return second.curr_score - first.curr_score;
     });
-    return items;
+    return usersAsArr;
   }
 
   /** This function check who is the winning group at this point
@@ -322,13 +323,13 @@ class RuningGame {
    *  @return: array of 3 top users by score
    */
   top3Users() {
-    const usersByScore = this.sortByScore("users");
+    const usersByScore = this.sortByScore();
     const topUsers = usersByScore.slice(0, 3);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
           type: PHASE,
-          phase: "Top3",
+          phase: "top3",
           phaseProp: {
             users: topUsers,
             audio: this.curr_phase.phaseProp.audioArr,
