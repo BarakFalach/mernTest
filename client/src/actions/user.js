@@ -57,3 +57,7 @@ export const videoEnd = () => async () => {
     })
   );
 };
+
+export const sendPicutre = (imgSrc) => async () => {
+  client.send(imgSrc);
+};

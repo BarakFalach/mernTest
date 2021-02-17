@@ -29,7 +29,7 @@ const Game = ({ score, name, group }) => {
 };
 Game.propTypes = {
   score: PropTypes.number,
-  name: PropTypes.string,
+  name: PropTypes.number,
   group: PropTypes.string,
 };
 const mapStateToProps = (state) => ({
