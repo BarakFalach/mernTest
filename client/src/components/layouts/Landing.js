@@ -12,21 +12,24 @@ const Landing = () => (
         Welcome to LCE
       </Typography>
     </div>
-    <Link className="left-side" to="/loginAdmin">
-      <img
-        alt="mangerIcon"
-        src={managerIcon}
-        width="350px"
-        height="400px"
-        className="avatar"
-      />
-    </Link>
-    <Link className="right-side" to="/loginUser">
-      {/* <Typography className='right-side' variant='h5'>
-        User
-      </Typography> */}
-      <img alt="playerIcon" src={playerIcon} width="350px" height="400px" />
-    </Link>
+
+    <div className="flex-container-main">
+      <Link className="left-side" to="/loginAdmin">
+        <img
+          alt="mangerIcon"
+          src={managerIcon}
+          width="350px"
+          height="400px"
+          className="avatar"
+        />
+      </Link>
+      <Link className="right-side" to="/loginUser">
+        {/* <Typography className='right-side' variant='h5'>
+          User
+        </Typography> */}
+        <img alt="playerIcon" src={playerIcon} width="350px" height="400px" />
+      </Link>
+    </div>
   </div>
 );
 

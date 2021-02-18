@@ -14,8 +14,9 @@ const Game = ({ score, name, group }) => {
   return (
     <Fragment>
       <div>
-        <Phase />
+        <Phase/>
       </div>
+
       <div className="bottomBar">
         <h1 className="text">{group}</h1>
         <img className="group" src={groupLogo} />
@@ -24,7 +25,9 @@ const Game = ({ score, name, group }) => {
         <h1 className="text">{score}</h1>
         <img className="icon" src={scoreLogo} alt="scoreLogo" />
       </div>
+
     </Fragment>
+    
   );
 };
 Game.propTypes = {
