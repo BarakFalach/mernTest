@@ -27,6 +27,7 @@ export default function PlayersTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell align="right">Number</TableCell>
             <TableCell align="right">Name</TableCell>
             <TableCell align="right">game_key</TableCell>
             <TableCell align="right">Group</TableCell>
@@ -36,6 +37,7 @@ export default function PlayersTable(props) {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.user_name}>
+              <TableCell align="right">{row.userNumber}</TableCell>
               <TableCell align="right">{row.user_name}</TableCell>
               <TableCell align="right">{row.game_key}</TableCell>
               <TableCell align="right">{row.group_num}</TableCell>

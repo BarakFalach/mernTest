@@ -8,7 +8,7 @@ import { Answer } from "./Answer";
 import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
-//import EdenTesting from "./EdenTesting";
+import EdenTesting from "./EdenTesting";
 
 const Phase = ({ phase }) => {
   switch (phase) {
