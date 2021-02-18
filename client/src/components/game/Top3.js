@@ -1,14 +1,13 @@
-import React, { Fragment } from "react";
-import WinnerShapeSVG from "../../assets/winner_Shape.svg";
+import React, { Fragment, useState, useEffect } from "react";
+import StarShape from "../../assets/winner_Shape.svg";
 import IconPerson from "../../assets/person.jpg";
+import PlayerReal from "../../assets/player1.jpg";
+import Applause from "../../assets/Applause.mp3";
 import Crown from "../../assets/crown.svg";
-import audio_example from "../../assets/audio_example.mp3"
-import Spotlight from 'react-spotlight';
+import SpotlightCheck from "./SpotlightCheck";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import ReactAudioPlayer from 'react-audio-player';
-
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -17,99 +16,129 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import FaceIcon from "@material-ui/icons/Face";
 import Confetti from "react-confetti";
 import "../layouts/css/Top3.css";
+import { BottomNavigation } from "@material-ui/core";
 
 
-// const users = {
-//   first: {id: 13, place: 1, score: 754},
-//   second: {id: 6, place: 2, score: 654},
-//   third: {id: 23, place: 3, score: 651}
-// };
-
-
-export const Top3 = ({ users, audio }) => {
-
-  console.log(users);
+class Top3 extends React.Component {
   
-  return (
+  constructor() {
+    super();
+    this.state = {
+      place: 4,
+      third: false,
+      second: false,
+      first: false,
+      winner: false,
+      audio3: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+      audio2: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+      audio1: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+      audioWinner: new Audio("../../assets/Applause.mp3"),
+    };
+  }  
 
-    <Fragment>
-      
-      {/* Beautiful things */}
-      <Confetti
-          run={true}
-          friction={1}
-          numberOfPieces={400}
-          width={5000}
-          height={1000}
-        ></Confetti>
-      
-      <Spotlight
-        x={70}
-        y={55}
-        color= 'rgb(0,0,0, 0.60)'
-        radius={180}
-        responsive
-        usePercentage
-        animSpeed={200}
-        borderColor="#ddd"
-        borderWidth={10}>
-        <div style={{
-          position: 'absolute',
-          left: '50%',
-          top: '-50px',
-          transform: 'translate(-50%, -100%)',
-          whiteSpace: 'nowrap'
-        }}>
+  componentDidMount() {
+   this.start();
+  }
+
+  start() {
+    this.setStatePromise({third: false})
+      .then(() => this.sleep(2000))
+      .then(() => this.setStatePromise({third: true, place: 3 }))
+      .then(() => this.sleep(4500)) 
+      .then(() => this.setStatePromise({third: false, second: true, place: 2}))
+      .then(() => this.sleep(4000))
+      .then(() => this.setStatePromise({ second: false, first: true, place: 1}))
+      .then(() => this.sleep(2100))
+      .then(() => this.setStatePromise({ first: true, winner: true}))
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  setStatePromise(state) {
+    this.setState(state);
+    return Promise.resolve();
+  }
+
+  userExists = (place) => {
+    if(this.props.users.length<place)
+      return false;
+    return true;
+  }
+  
+  userName = (place) => {
+    if(this.props.users.length<place)
+      return ".";
+    return this.props.users[place-1].user_name;
+  };
+
+  userScore = (place) => {
+    if(this.props.users.length<place)
+      return ".";
+    return this.props.users[place-1].curr_score;
+  };
+
+  userPic = (place) => {
+    if(this.props.users.length<place || this.state.place>place) 
+      return IconPerson;
+    return PlayerReal;
+  }
+  
+  render() {
+    return(
+      <Fragment> 
+        <div>
+          <SpotlightCheck /> 
+          {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
+          {this.state.second && (<audio autoPlay><source src={this.state.audio2}/></audio>)}
+          {this.state.first && (<audio autoPlay><source src={this.state.audio1}/></audio>)}
+          {this.state.winner && (<audio autoPlay><source type="audio/mp3" src={Applause} /></audio>)}
+
         </div>
-      </Spotlight>
+        {/* Users */}
+        <div className="flex-container-main">
+            
+            {/* Third (3) Place */}
+            <div className="flex-container-col playr-third">
+              <div className="empty-rec"/>
+              <div className="item-not-flex">
+                <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
+                <img alt="playerIcon" src={this.userPic(3)} width="145px"/>
+              </div>
 
-    {/* Users */}
-    <div className="flex-container-main">
-        
-        {/* Third Place */}
-        <div className="flex-container-col">
-          <div className="empty-rec"/>
-          <div className="item-not-flex">
-            <div class="ellipse">{users[0].user_name}</div>
-            <img alt="playerIcon" src={IconPerson} width="145px"/>
-          </div>
+              <div className="score-text inline-block">{this.state.place<=3? this.userScore(3): "#"}</div> 
+              <img className="item" alt="icon place 3" src={StarShape} width="130px"/>
+            </div> 
 
-          <div className="score-text inline-block">{users[0].curr_score}</div> 
-          <img className="item" alt="icon place 3" src={WinnerShapeSVG} width="130px"/>
-        </div> 
+            {/* First (1) Place */}
+            <div className="flex-container-col playr-first">
+              <div className="empty-rec1"/>
+              <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
+              <div className="item-not.-flex">
+                <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
+                <img alt="playerIcon" src={this.userPic(1)} width="145px"/>
+              </div>
+              <div className="score-text">{this.state.place<=1? this.userScore(1): "#"}</div> 
+              <img className="item big-item" alt="icon place 1" src={StarShape} width="180px"/>     
+              <div className="empty-rec"/>
+            </div> 
 
-        {/* First Place */}
-        <div className="flex-container-col">
-          <div className="empty-rec"/>
-          <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
-          <div className="item-not-flex">
-            <div class="ellipse">{users[0].user_name}</div>
-            <img alt="playerIcon" src={IconPerson} width="145px"/>
-          </div>
-          <div className="score-text">{users[0].curr_score}</div> 
-          <img className="item big-item" alt="icon place 1" src={WinnerShapeSVG} width="180px"/>     
-          <div className="empty-rec"/>
-        </div> 
+            {/* Second Place */}
+            <div className="flex-container-col playr-second">
+              <div className="empty-rec"/>
+              <div className="item-not-flex">
+                <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
+                <img alt="playerIcon" src={this.userPic(2)} width="145px"/>
+              </div>
+              <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
+              <img className="item" alt="icon place 2" src={StarShape} width="130px"/>
+            </div> 
 
-        {/* Second Place */}
-        <div className="flex-container-col">
-          <div className="empty-rec"/>
-          <div className="item-not-flex">
-            <div class="ellipse">{users[0].user_name}</div>
-            <img alt="playerIcon" src={IconPerson} width="145px"/>
-          </div>
-          <div className="score-text">{users[0].curr_score}</div> 
-          <img className="item" alt="icon place 2" src={WinnerShapeSVG} width="130px"/>
-        </div> 
-
-    </div>
-    </Fragment>
-  );
-};
-
-Top3.prototype = {
-  users: PropTypes.array,
-  audio: PropTypes.array,
+        </div>
+      </Fragment>
+    )
+  };
 };
 
 const mapStateToProps = (state) => ({
