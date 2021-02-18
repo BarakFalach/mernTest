@@ -41,6 +41,7 @@ export const login = ({ name, keygame }) => async (dispatch) => {
 
 //TODO MIGHT NEED =>async dispatch
 export const UserAnswer = (answerNum, time) => async () => {
+  console.log("ua " + answerNum + " t " + time);
   client.send(
     JSON.stringify({
       type: "USER_ANSWER",
@@ -56,8 +57,4 @@ export const videoEnd = () => async () => {
       type: "VIDEO_END",
     })
   );
-};
-
-export const sendPicutre = (imgSrc) => async () => {
-  client.send(imgSrc);
 };

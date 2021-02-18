@@ -269,58 +269,54 @@ wsServer.on("connection", (request) => {
   const userID = production ? request._socket.remoteAddress : getUniqueID();
 
   connection.on("message", function (message) {
-    if (typeof message === "string") {
-      const userlog = JSON.parse(message);
+    const userlog = JSON.parse(message);
 
-      // first message
-      if (undefined === (userName || gameKey)) {
-        userName = userlog.name;
-        gameKey = userlog.keygame;
-      }
+    // first message
+    if (undefined === (userName || gameKey)) {
+      userName = userlog.name;
+      gameKey = userlog.keygame;
+    }
 
-      switch (userlog.type) {
-        case CREATE_NEW_GAME_INSTANCE:
-          gameKey = handle_new_game_instance(userID, connection);
-          break;
+    switch (userlog.type) {
+      case CREATE_NEW_GAME_INSTANCE:
+        gameKey = handle_new_game_instance(userID, connection);
+        break;
 
-        case REQ_USER_LOGIN:
-          if (gameKey in d_activeGames) {
-            d_activeGames[gameKey].handle_req_user_login(
-              userID,
-              userName,
-              connection,
-              gameKey
-            );
-          } else handle_bad_req_user_login(connection, gameKey);
-          break;
-
-        case PHASE:
-          d_activeGames[gameKey].handle_change_screen(userlog.phaseName);
-          break;
-
-        case USER_ANSWER:
-          console.log(userlog.answer);
-          d_activeGames[gameKey].handle_user_answer(
-            gameKey,
+      case REQ_USER_LOGIN:
+        if (gameKey in d_activeGames) {
+          d_activeGames[gameKey].handle_req_user_login(
             userID,
-            userlog.answer,
-            userlog.time
+            userName,
+            connection,
+            gameKey
           );
-          break;
-        case VIDEO_END:
-          d_activeGames[gameKey].handler_user_video_end();
-          // handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
-          break;
-        case PAUSE:
-          d_activeGames[gameKey].setPause();
-          break;
-        case RESUME:
-          d_activeGames[gameKey].setResume();
-          d_activeGames[gameKey].handle_change_screen();
-          break;
-      }
-    } else {
-      base64_decode(message.data);
+        } else handle_bad_req_user_login(connection, gameKey);
+        break;
+
+      case PHASE:
+        d_activeGames[gameKey].handle_change_screen(userlog.phaseName);
+        break;
+
+      case USER_ANSWER:
+        console.log(userlog.answer);
+        d_activeGames[gameKey].handle_user_answer(
+          gameKey,
+          userID,
+          userlog.answer,
+          userlog.time
+        );
+        break;
+      case VIDEO_END:
+        d_activeGames[gameKey].handler_user_video_end();
+        // handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
+        break;
+      case PAUSE:
+        d_activeGames[gameKey].setPause();
+        break;
+      case RESUME:
+        d_activeGames[gameKey].setResume();
+        d_activeGames[gameKey].handle_change_screen();
+        break;
     }
   });
 
@@ -332,10 +328,5 @@ wsServer.on("connection", (request) => {
     if (userID in d_admins) handle_delete_admin(userID, d_admins[userID]);
   });
 });
-
-function base64_decode(base64Image) {
-  fs.writeFileSync("copy.jpg", base64Image);
-  console.log("******** File created from base64 encoded string ********");
-}
 
 server.listen(ws_PORT);
