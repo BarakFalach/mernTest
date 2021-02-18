@@ -1,5 +1,5 @@
 class User {
-  constructor(name, gameKey, group) {
+  constructor(name, gameKey, group, userNumber) {
     this.name = name;
     this.gameKey = gameKey;
     this.group = group;
@@ -7,12 +7,14 @@ class User {
     this.last_answer_correctness = false;
     this.last_answer;
     this.connection;
+    this.userNumber = userNumber;
   }
   setConnection(connection) {
     this.connection = connection;
   }
   toJSON() {
     return {
+      userNumber: this.userNumber,
       user_name: this.name,
       game_key: this.gameKey,
       group_num: this.group,

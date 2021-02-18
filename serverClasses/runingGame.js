@@ -63,6 +63,7 @@ class RuningGame {
   cleanUsersLastAnswer(questionPhase) {
     for (var item in this.d_users) {
       this.d_users[item].last_answer_correctness = false;
+      this.d_users[item].last_answer = 0;
     }
     this.d_users_answers = [];
     this.knowledge_question_dist[0] =
@@ -133,7 +134,12 @@ class RuningGame {
   handle_req_user_login(userID, userName, connection, gameKey) {
     var curUser = this.checkIfDisconnected(userID, userName);
     if (curUser == undefined) {
-      curUser = new User(userName, gameKey, this.getGroupNum());
+      curUser = new User(
+        userName,
+        gameKey,
+        this.getGroupNum(),
+        this.numberStack.pop()
+      );
     }
 
     curUser.setConnection(connection);
@@ -144,10 +150,10 @@ class RuningGame {
       JSON.stringify({
         type: GAME_KEY_SUCCESS,
         id: userID,
-        name: userName,
-        score: this.d_users[userID].curr_score,
+        name: curUser.userNumber,
+        score: curUser.curr_score,
         keygame: gameKey, //TODO:::  change this veriable in client
-        group: this.d_users[userID].group,
+        group: curUser.group,
       })
     );
 
@@ -157,12 +163,6 @@ class RuningGame {
 
     // update the admin on the number of users that get in
     this.sendUserTable();
-
-    // TODO: remove these prints
-    // if (printLogs) {
-    //   log_activated_new_user_instance(gameKey, userID);
-    //   log_game_status(gameKey);
-    // }
   }
 
   /**
