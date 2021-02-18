@@ -243,6 +243,17 @@ class RuningGame {
     this.d_users_answers.push(answerProp);
   }
 
+  handle_user_img(userID, img) {
+    for (key in this.d_users) {
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: "IMG",
+          img: img,
+        })
+      );
+    }
+  }
+
   send_bars(questionPhase) {
     this.updateScoreForUsers(questionPhase);
     for (key in this.d_users) {

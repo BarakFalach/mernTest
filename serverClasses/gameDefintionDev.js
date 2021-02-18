@@ -13,14 +13,14 @@ gameDefenition["question1"] = {
   key: "question1",
   type: "Question",
   phaseProp: {
-    question: "מה גילכם?",
+    question: "?מה גילכם",
     answers: ["חטיבת ביניים", "חטיבה עליונה", "אחר"],
     time: 6,
     audioUrl: audioUrl,
   },
   correct_answer: 1,
   answerAudio: audioUrl,
-  duration: 8,
+  duration: 15,
 };
 gameDefenition["bars1"] = {
   key: "bars1",
@@ -30,7 +30,7 @@ gameDefenition["bars1"] = {
 gameDefenition["top3_1"] = {
   key: "top3_1",
   type: "Top3",
-  duration: 5,
+  duration: 15,
   phaseProp: {
     audioArr: [
       "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
@@ -41,16 +41,17 @@ gameDefenition["top3_1"] = {
 };
 gameDefenition["question2"] = {
   key: "question2",
+
   type: "Question",
   phaseProp: {
-    question: "האם אי פעם השתמשתם במריחואנה או גראס?",
+    question: "?האם אי פעם השתמשתם במריחואנה או גראס",
     answers: ["מעולם לא", "פעם בודדת", "פעמים בודדות (3-5)"],
     time: 6,
     audioUrl: audioUrl,
   },
   correct_answer: 1,
   answerAudio: audioUrl,
-  duration: 8,
+  duration: 15,
 };
 gameDefenition["bars2"] = {
   key: "bars2",
@@ -81,7 +82,7 @@ gameDefenition["question3"] = {
   },
   correct_answer: 1,
   answerAudio: audioUrl,
-  duration: 8,
+  duration: 15,
 };
 gameDefenition["bars3"] = {
   key: "bars3",
@@ -99,7 +100,7 @@ gameDefenition["question4"] = {
   },
   correct_answer: 1,
   answerAudio: audioUrl,
-  duration: 8,
+  duration: 15,
 };
 gameDefenition["bars4"] = {
   key: "bars3",

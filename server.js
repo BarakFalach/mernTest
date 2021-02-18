@@ -40,6 +40,7 @@ const CREATE_NEW_GAME_INSTANCE = "CREATE_NEW_GAME_INSTANCE";
 const VIDEO_END = "VIDEO_END";
 const PAUSE = "PAUSE";
 const RESUME = "RESUME";
+const IMG = "IMG";
 const User = require("./serverClasses/user");
 const Admin = require("./serverClasses/admin");
 const RuningGame = require("./serverClasses/runingGame");
@@ -317,6 +318,8 @@ wsServer.on("connection", (request) => {
         d_activeGames[gameKey].setResume();
         d_activeGames[gameKey].handle_change_screen();
         break;
+      case IMG:
+        d_activeGames[gameKey].handle_user_img(userID, userlog.img);
     }
   });
 
