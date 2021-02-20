@@ -101,7 +101,7 @@ class WebcamCapture extends React.Component {
               {this.state.ImgExist && (
                 <button
                   className="myButton"
-                  onClick={() => sendPicture(this.state.webcamRef)}
+                  onClick={() => sendPicture(this.state.CaptureImage)}
                 >
                   אשר/י תמונה
                 </button>
