@@ -5,18 +5,11 @@ import PlayerReal from "../../assets/player1.jpg";
 import Applause from "../../assets/Applause.mp3";
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
-
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
-
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import FaceIcon from "@material-ui/icons/Face";
+import ReactRoundedImage from "react-rounded-image";
 import Confetti from "react-confetti";
+
 import "../layouts/css/Top3.css";
-import { BottomNavigation } from "@material-ui/core";
 
 
 class Top3 extends React.Component {
@@ -32,7 +25,6 @@ class Top3 extends React.Component {
       audio3: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
       audio2: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
       audio1: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
-      audioWinner: new Audio("../../assets/Applause.mp3"),
     };
   }  
 
@@ -82,6 +74,7 @@ class Top3 extends React.Component {
   userPic = (place) => {
     if(this.props.users.length<place || this.state.place>place) 
       return IconPerson;
+    // return this.props.users[place-1].curr_pic
     return PlayerReal;
   }
   
@@ -98,29 +91,31 @@ class Top3 extends React.Component {
         </div>
         {/* Users */}
         <div className="flex-container-main">
-            
             {/* Third (3) Place */}
             <div className="flex-container-col playr-third">
               <div className="empty-rec"/>
               <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
-                <img alt="playerIcon" src={this.userPic(3)} width="145px"/>
+                {/* <img alt="playerIcon" src={this.userPic(3)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(3)} roundedSize="0" imageWidth="140" imageHeight="140" />
               </div>
 
               <div className="score-text inline-block">{this.state.place<=3? this.userScore(3): "#"}</div> 
-              <img className="item" alt="icon place 3" src={StarShape} width="130px"/>
+              <img alt="icon place 3" src={StarShape} width="130px"/>
             </div> 
 
             {/* First (1) Place */}
             <div className="flex-container-col playr-first">
               <div className="empty-rec1"/>
               <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
-              <div className="item-not.-flex">
+              <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
-                <img alt="playerIcon" src={this.userPic(1)} width="145px"/>
+                {/* <img alt="playerIcon" src={this.userPic(1)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(1)} roundedSize="0" imageWidth="140" imageHeight="140" />
+
               </div>
               <div className="score-text">{this.state.place<=1? this.userScore(1): "#"}</div> 
-              <img className="item big-item" alt="icon place 1" src={StarShape} width="180px"/>     
+              <img alt="icon place 1" src={StarShape} width="180px"/>     
               <div className="empty-rec"/>
             </div> 
 
@@ -129,12 +124,12 @@ class Top3 extends React.Component {
               <div className="empty-rec"/>
               <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
-                <img alt="playerIcon" src={this.userPic(2)} width="145px"/>
+                {/* <img alt="playerIcon" src={this.userPic(2)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(2)} roundedSize="0" imageWidth="140" imageHeight="140" />
               </div>
               <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
-              <img className="item" alt="icon place 2" src={StarShape} width="130px"/>
+              <img alt="icon place 2" src={StarShape} width="130px"/>
             </div> 
-
         </div>
       </Fragment>
     )

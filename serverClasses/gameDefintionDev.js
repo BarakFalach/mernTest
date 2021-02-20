@@ -30,7 +30,7 @@ gameDefenition["bars1"] = {
 gameDefenition["top3_1"] = {
   key: "top3_1",
   type: "Top3",
-  duration: 5,
+  duration: 20,
   phaseProp: {
     audioArr: [
       "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
