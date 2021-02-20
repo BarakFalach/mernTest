@@ -10,7 +10,6 @@ import Top3 from "./Top3";
 import { Poll } from "./Poll";
 import WebcamCapture from "./WebcamCapture";
 
-
 const Phase = ({ phase }) => {
   switch (phase) {
     case "Question":
@@ -25,12 +24,11 @@ const Phase = ({ phase }) => {
       return <Top3 />;
     case "bars":
       return <Bars />;
+    case "webCam":
+      return <WebcamCapture />;
     default:
-      return <WebcamCapture/>
-    // return <h1>Defult Screen</h1>;
-    // return <EdenTesting />;
+      return <h1>Defult Screen</h1>;
   }
-  return <div></div>;
 };
 
 Phase.propTypes = {

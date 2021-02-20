@@ -8,6 +8,7 @@ class User {
     this.last_answer;
     this.connection;
     this.userNumber = userNumber;
+    this.img;
   }
   setConnection(connection) {
     this.connection = connection;

@@ -132,6 +132,7 @@ class RuningGame {
    * @param {*} gameKey
    */
   handle_req_user_login(userID, userName, connection, gameKey) {
+    var phase = "defult";
     var curUser = this.checkIfDisconnected(userID, userName);
     if (curUser == undefined) {
       curUser = new User(
@@ -140,6 +141,7 @@ class RuningGame {
         this.getGroupNum(),
         this.numberStack.pop()
       );
+      phase = "webCam";
     }
 
     curUser.setConnection(connection);
@@ -154,6 +156,7 @@ class RuningGame {
         score: curUser.curr_score,
         keygame: gameKey, //TODO:::  change this veriable in client
         group: curUser.group,
+        phase: phase,
       })
     );
 
@@ -244,14 +247,13 @@ class RuningGame {
   }
 
   handle_user_img(userID, img) {
-    for (key in this.d_users) {
-      this.d_users[key].connection.send(
-        JSON.stringify({
-          type: "IMG",
-          img: img,
-        })
-      );
-    }
+    this.d_users[userID].img = img;
+    this.d_users[userID].connection.send(
+      JSON.stringify({
+        type: PHASE,
+        phase: "defult",
+      })
+    );
   }
 
   send_bars(questionPhase) {
