@@ -8,6 +8,7 @@ import { Answer } from "./Answer";
 import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
+import WebcamCapture from "./WebcamCapture";
 //import EdenTesting from "./EdenTesting";
 
 const Phase = ({ phase }) => {
@@ -25,7 +26,8 @@ const Phase = ({ phase }) => {
     case "bars":
       return <Bars />;
     default:
-    return <h1>Defult Screen</h1>;
+      return <WebcamCapture/>
+    // return <h1>Defult Screen</h1>;
     // return <EdenTesting />;
   }
   return <div></div>;
