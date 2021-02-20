@@ -40,14 +40,12 @@ export default class SpotlightCheck extends React.Component {
 
   start() {
     this.setStatePromise({ confetti_now:false, playing: true, ...this.getCoordinates('.playr-third') })
-
-    // this.setStatePromise({ playing: true, ...this.getCoordinates('.playr-third') })
       .then(() => this.sleep(3000))
       .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-third'), text:'במקום השלישי', radius: 200, color: 'rgb(216, 49, 25)'}))
       .then(() => this.sleep(4000))
       .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-second'), text:'במקום השני', color: 'rgb(192, 192, 192)' }))
       .then(() => this.sleep(4000))
-      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-first'), text:'במקום הראשון', color: 'rgb(249, 194, 35)', radius: 250}))
+      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-first'), text:'במקום הראשון', color: 'rgb(249, 194, 35)', radius: 220}))
       .then(() => this.sleep(4000))
       .then(() => this.setStatePromise({ confetti_now:true, color: 'rgb(255,255,255)', radius: 1000 ,text: ''}))
       .then(() => this.sleep(4000))
