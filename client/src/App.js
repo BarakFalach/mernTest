@@ -29,19 +29,19 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Route exact path="/" component={Landing} />
-          <section className="container">
+          <Route exact path='/' component={Landing} />
+          <section className='container'>
             <Alert />
             <Switch>
-              <Route exact path="/loginUser" component={LoginUser} />
-              <Route exact path="/loginAdmin" component={LoginAdmin} />
-              <Route exact path="/Register" component={Register} />
+              <Route exact path='/loginUser' component={LoginUser} />
+              <Route exact path='/loginAdmin' component={LoginAdmin} />
+              <Route exact path='/Register' component={Register} />
               <PrivateRoute
                 exact
-                path="/ControlPanel"
+                path='/ControlPanel'
                 component={ControlPanel}
               />
-              <Route exact path="/game" component={Game} />
+              <Route exact path='/game' component={Game} />
             </Switch>
           </section>
         </Fragment>

@@ -9,7 +9,7 @@ import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
 import WebcamCapture from "./WebcamCapture";
-//import EdenTesting from "./EdenTesting";
+
 
 const Phase = ({ phase }) => {
   switch (phase) {
