@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import StarShape from "../../assets/winner_Shape.svg";
 import IconPerson from "../../assets/person.jpg";
 import PlayerReal from "../../assets/player1.jpg";
-import Applause from "../../assets/Applause.mp3";
+import Applause from '../../assets/Applause.mp3';
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
 import { connect } from "react-redux";
@@ -35,7 +35,7 @@ class Top3 extends React.Component {
   start() {
     this.setStatePromise({third: false})
       .then(() => this.sleep(2000))
-      .then(() => this.setStatePromise({third: true, place: 3 }))
+      .then(() => this.setStatePromise({third: true, place: 3}))
       .then(() => this.sleep(4500)) 
       .then(() => this.setStatePromise({third: false, second: true, place: 2}))
       .then(() => this.sleep(4000))
@@ -62,7 +62,7 @@ class Top3 extends React.Component {
   userName = (place) => {
     if(this.props.users.length<place)
       return ".";
-    return this.props.users[place-1].user_name;
+    return this.props.users[place-1].userNumber;
   };
 
   userScore = (place) => {
@@ -74,8 +74,7 @@ class Top3 extends React.Component {
   userPic = (place) => {
     if(this.props.users.length<place || this.state.place>place) 
       return IconPerson;
-    // return this.props.users[place-1].curr_pic
-    return PlayerReal;
+    return this.props.users[place-1].img;
   }
   
   render() {

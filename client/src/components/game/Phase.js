@@ -8,6 +8,7 @@ import { Answer } from "./Answer";
 import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
+import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 
 const Phase = ({ phase }) => {
@@ -22,11 +23,14 @@ const Phase = ({ phase }) => {
       return <Poll />;
     case "top3":
       return <Top3 />;
+    case "Group":
+      return <Groups />;
     case "bars":
       return <Bars />;
     case "webCam":
       return <WebcamCapture />;
     default:
+      // return <Groups/>;
       return <h1>Defult Screen</h1>;
   }
 };

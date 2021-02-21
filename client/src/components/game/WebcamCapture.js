@@ -1,5 +1,5 @@
 import Webcam from "react-webcam";
-import { sendPicture } from "../../actions/user";
+import { sendPicture, CameraNotAllowed } from "../../actions/user";
 import PropTypes from "prop-types";
 import React, { Component, useState, useEffect } from "react";
 import { Typography } from "@material-ui/core";
@@ -17,15 +17,25 @@ class WebcamCapture extends React.Component {
       Seconds: 1,
       ImgExist: false,
       CaptureImage: null,
-      audio: false,
+	  audio: false,
+    disabledPictue: true,
+    notAllowed: false,
     };
-    this.start = this.start.bind(this);
+	this.start = this.start.bind(this);
+  this.allow = this.allow.bind(this);
+  // this.checkPermissions = this.checkPermissions.bind(this);
   }
+  
+  //  componentDidMount(){
+  //   setTimeout(() => {
+  //     this.checkPermissions();
+  //   }, 3000);
+  // }
 
   start() {
     this.setStatePromise({
       ImgExist: false,
-      ShowText: true,
+      ShowText: true,	
       Seconds: 3,
       audio: false,
     })
@@ -54,10 +64,52 @@ class WebcamCapture extends React.Component {
   }
 
   setRef = (webcam) => {
-    this.webcamRef = webcam;
+	this.webcamRef = webcam;
   };
 
-  render() {
+  // checkPermissions() {
+  //   navigator.permissions.query({name:'camera'}).then(this.hi(result));//function(result){
+  //   //     if (result.state == 'granted') {
+  //   //       // showLocalNewsWithGeolocation();
+  //   //     } else if (result.state == 'prompt') {
+  //   //       // showButtonToEnableLocalNews();
+  //   //     }
+  //   //     else if (result.state == 'denied') {
+  //   //       this.setStatePromise({notAllowed: true});
+  //   //       alert("Fuck");
+  //   //     }
+  //   // });
+  // };
+
+  notAllowed() {
+    this.props.CameraNotAllowed();
+  };
+
+  allow(){
+    if (this.state.disabledPictue){
+      this.setStatePromise(({disabledPictue: false}))
+    }
+  };
+
+  notAllowed() {
+    this.props.CameraNotAllowed();
+  };
+
+  render() {    
+    
+    function updateAllow(state) {
+      if(state === 'denied'){
+        document.getElementById('passPage').click();
+      }
+    }
+    
+    navigator.permissions.query({ name: 'camera' }).then((result) => {
+      updateAllow(result.state);
+      result.addEventListener('change', () => {
+        updateAllow(result.state);
+      });
+    });
+
     return (
       <div>
         {this.state.audio && (
@@ -85,23 +137,27 @@ class WebcamCapture extends React.Component {
               ) : (
                 <Webcam
                   ref={this.setRef}
+                  audio={false}
                   height="350"
+                  onUserMedia={this.allow}
                   screenshotFormat="image/jpeg"
                 />
               )}
             </div>
             <div className="item">
-              <button
+              {!this.state.disabledPictue &&
+			  <button
                 className="myButton"
-                disabled={this.state.ShowText}
+                // disabled={this.state.ShowText}
                 onClick={this.start}
+                disabled={this.state.disabledPictue}
               >
-                {this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
-              </button>
+            	{this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
+              </button>}
               {this.state.ImgExist && (
                 <button
                   className="myButton"
-                  onClick={sendPicture(this.state.CaptureImage)}
+				  onClick={sendPicture(this.state.CaptureImage)}
                 >
                   אשר/י תמונה
                 </button>
@@ -112,14 +168,18 @@ class WebcamCapture extends React.Component {
         {this.state.ShowText && (
           <div className="counter-text">{this.state.Seconds}</div>
         )}
+      <button id="passPage" style={{visibility: "hidden"}} onClick={CameraNotAllowed()}></button>
       </div>
     );
   }
 }
+
+
 WebcamCapture.propTypes = {
   sendPicture: PropTypes.func.isRequired,
+  CameraNotAllowed: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, { sendPicture })(WebcamCapture);
+export default connect(mapStateToProps, { sendPicture, CameraNotAllowed })(WebcamCapture);
