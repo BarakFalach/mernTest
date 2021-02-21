@@ -57,6 +57,7 @@ class Question extends React.Component {
     let tmp = 0;
     const audioPathQuestion =
       "assets/question/" + this.props.quesNum + "_1.m4a";
+    // const clickSound = "assets/sample/mouseclick.m4a";
     for (let index = 0; index < this.props.answers.length; index++) {
       tmp = index + 1;
       indexes[index] = tmp + "";
@@ -100,13 +101,10 @@ class Question extends React.Component {
       clocktimer = (
         <div className='clockCenter'>
           <CountdownCircleTimer
-            style={{
-              fontSize: "30px",
-            }}
             key={this.state.key}
             initialRemainingTime={remainTime / 1000}
             isPlaying={true}
-            size={120}
+            size={80}
             // duration={() => getRemainTime()}
             duration={this.props.time}
             colors={[
@@ -161,7 +159,7 @@ class Question extends React.Component {
 
       const renderTime = ({ remainingTime }) => {
         if (remainingTime === 0) {
-          return <div dir='ltr'>!הזמן אזל</div>;
+          return <div dir='ltr'>!</div>;
         }
 
         return <div>{remainingTime}</div>;
@@ -170,7 +168,7 @@ class Question extends React.Component {
       clocktimer = (
         <div className='clockCenter'>
           <CountdownCircleTimer
-            size={120}
+            size={80}
             isPlaying
             duration={this.props.time} // should be Time Left !
             initialRemainingTime={remainTime / 1000}
@@ -195,7 +193,6 @@ class Question extends React.Component {
         this.state.audioDuration * 1000 +
         this.props.time * 1000 -
         new Date().getTime();
-      console.log("time is " + DeltaTime);
       this.setState({ part: "answered", selected: ind - 1 });
       this.props.UserAnswer(ind, Math.round(DeltaTime));
     };
@@ -206,7 +203,6 @@ class Question extends React.Component {
         this.state.audioDuration * 1000 +
         this.props.time * 1000 -
         new Date().getTime();
-      console.log("time is " + DeltaTime);
       this.setState({
         part: "answered",
         selected: parseInt(key) - 1,
@@ -235,10 +231,10 @@ class Question extends React.Component {
 
     const animation = (
       <div className='wholescreen-col'>
-        <div className='quest-and-watch'>
-          <div>{clocktimer}</div>
-          <div className='questAnimation'>{this.props.question}</div>
+        <div dir='rtl' className='questAnimation'>
+          {this.props.question}
         </div>
+        <div className='clock-animation clockCenter'>{clocktimer}</div>
         <div className='quest-container'>{allQuestDivs}</div>
         <KeyboardEventHandler
           handleKeys={indexes}
@@ -249,12 +245,18 @@ class Question extends React.Component {
 
     const answeredAndWait = (
       <div className='wholescreen-col'>
-        <div style={{ position: "absolute", top: "20px", fontSize: "36px" }}>
+        <div
+          dir='rtl'
+          style={{ position: "absolute", top: "10%", fontSize: "48px" }}
+        >
           {this.props.question}
         </div>
+        <div className='clockCenter'>{clocktimer}</div>
         <div className='quest-container-answered'>{allQuestDivs}</div>
         <div className='waitUsers'>wait for your last friends...</div>
-        <div className='clockAnimation'>{clocktimer}</div>
+        {/* <audio id='click' autoPlay>
+          <source src={clickSound} />
+        </audio> */}
       </div>
     );
 

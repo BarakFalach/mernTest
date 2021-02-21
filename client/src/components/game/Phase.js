@@ -9,6 +9,8 @@ import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
 import WebcamCapture from "./WebcamCapture";
+import Welcome from "./Welcome";
+import Goodbye from "./GoodBye";
 
 const Phase = ({ phase }) => {
   switch (phase) {
@@ -27,7 +29,8 @@ const Phase = ({ phase }) => {
     case "webCam":
       return <WebcamCapture />;
     default:
-      return <h1>Defult Screen</h1>;
+      // return <Welcome />;
+      return <Goodbye />;
   }
 };
 
