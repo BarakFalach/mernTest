@@ -7,7 +7,6 @@ import { Textfit } from "react-textfit";
 import "../layouts/css/Questions.css";
 import { ScaleLoader } from "react-spinners";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import mySound from "../game/assets/audioYona.wav";
 // Didnt finished Timing !!! not heard is correct
 class Question extends React.Component {
   constructor() {
@@ -56,7 +55,8 @@ class Question extends React.Component {
     const indexes = [];
     var clocktimer;
     let tmp = 0;
-    var audioQuestion;
+    const audioPathQuestion =
+      "assets/question/" + this.props.quesNum + "_1.m4a";
     for (let index = 0; index < this.props.answers.length; index++) {
       tmp = index + 1;
       indexes[index] = tmp + "";
@@ -114,9 +114,9 @@ class Question extends React.Component {
               ["#F7B801", 0.33],
               ["#A30000", 0.33],
             ]}
-            onComplete={() => {
-              this.setState({ part: "answered" });
-            }}
+            // onComplete={() => {
+            //   this.setState({ part: "answered" });
+            // }}
           >
             {({ remainingTime }) => remainingTime}
           </CountdownCircleTimer>
@@ -224,7 +224,7 @@ class Question extends React.Component {
             {this.props.question}
           </div>
           <audio id='myAudio' autoPlay>
-            <source src={mySound} />
+            <source src={audioPathQuestion} />
           </audio>
           <div style={{ marginTop: "20px" }}>
             <ScaleLoader />
@@ -235,9 +235,11 @@ class Question extends React.Component {
 
     const animation = (
       <div className='wholescreen-col'>
-        <div className='questAnimation'>{this.props.question}</div>
+        <div className='quest-and-watch'>
+          <div>{clocktimer}</div>
+          <div className='questAnimation'>{this.props.question}</div>
+        </div>
         <div className='quest-container'>{allQuestDivs}</div>
-        <div>{clocktimer}</div>
         <KeyboardEventHandler
           handleKeys={indexes}
           onKeyEvent={(key, e) => handleKeyDown(key)}
