@@ -23,10 +23,10 @@ const Gamedashboard = ({
   };
 
   return (
-    <div className="out">
+    <div className='out'>
       <h1> Welcome to Game </h1>
       <h1> Game key: {GameKey} </h1>
-      <span className="container">
+      <span className='container'>
         {phaseList.map((Phase) => (
           <button key={Phase} name={Phase} onClick={(e) => ScreenButton(e)}>
             {Phase}
@@ -35,14 +35,14 @@ const Gamedashboard = ({
       </span>
       <span>
         <button
-          name="RESUME"
+          name='RESUME'
           disabled={!pause}
           onClick={(e) => resumePauseButton(e)}
         >
           Resume
         </button>
         <button
-          name="PAUSE"
+          name='PAUSE'
           disabled={pause}
           onClick={(e) => resumePauseButton(e)}
         >
