@@ -1,92 +1,3 @@
-// Worked 15 -2 -21
-
-// import { connect } from "react-redux";
-// import PropTypes from "prop-types";
-// import React, { Fragment, useState } from "react";
-// import Button from "@material-ui/core/Button";
-// import { UserAnswer } from "../../actions/user";
-// import { CountdownCircleTimer } from "react-countdown-circle-timer";
-// import Typography from "@material-ui/core/Typography";
-// import KeyboardEventHandler from "react-keyboard-event-handler";
-// import "../layouts/css/Question.css";
-// const Question = ({ question, answers, time, UserAnswer }) => {
-//   var t0 = performance.now();
-//   const indexes = [];
-//   let tmp = 0;
-//   for (let index = 0; index < answers.length; index++) {
-//     tmp = index + 1;
-//     indexes[index] = tmp + "";
-//   }
-//   const [isDisabled, setDisable] = useState(false);
-//   const onAnswerClick = (num) => {
-//     var t1 = performance.now();
-//     setDisable(true);
-//     UserAnswer(num, Math.round(t1 - t0));
-//   };
-
-//   const handleKeyDown = React.useCallback((key) => {
-//     var t1 = performance.now();
-//     setDisable(true);
-//     UserAnswer(parseInt(key), Math.round(t1 - t0));
-//   });
-
-//   return (
-//     <React.Fragment>
-//       <div className='col-centered'>
-//         <CountdownCircleTimer
-//           size={300}
-//           isPlaying
-//           duration={time}
-//           colors={[
-//             ["#004777", 0.33],
-//             ["#F7B801", 0.33],
-//             ["#A30000", 0.33],
-//           ]}
-//         >
-//           {({ remainingTime }) => remainingTime}
-//         </CountdownCircleTimer>
-//       </div>
-//       <div className='col-centered'>
-//         <Typography variant='h2'>{question}</Typography>
-//       </div>
-//       <div className='answers'>
-//         {answers.map((ans, index) => (
-//           <Button
-//             className={index % 2 == 0 ? "left-sideBut" : "right-sideBut"}
-//             key={index + 1}
-//             variant='contained'
-//             color='primary'
-//             style={{ margin: 5 }}
-//             disabled={isDisabled}
-//             onClick={(e) => onAnswerClick(index + 1)}
-
-//           >
-//             {ans}
-//           </Button>
-//         ))}
-//         <KeyboardEventHandler
-//           handleKeys={indexes}
-//           onKeyEvent={(key, e) => handleKeyDown(key)}
-//         />
-//       </div>
-//     </React.Fragment>
-//   );
-// };
-
-// Question.propTypes = {
-//   question: PropTypes.string.isRequired,
-//   answers: PropTypes.array,
-//   time: PropTypes.number,
-//   UserAnswer: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = (state) => ({
-//   question: state.user.userState.phaseProp.question,
-//   answers: state.user.userState.phaseProp.answers,
-//   time: state.user.userState.phaseProp.time,
-// });
-// export default connect(mapStateToProps, { UserAnswer })(Question);
-
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
@@ -94,41 +5,56 @@ import { UserAnswer } from "../../actions/user";
 import KeyboardEventHandler from "react-keyboard-event-handler";
 import { Textfit } from "react-textfit";
 import "../layouts/css/Questions.css";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { ScaleLoader } from "react-spinners";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import mySound from "../game/assets/audioYona.wav";
+// Didnt finished Timing !!! not heard is correct
 class Question extends React.Component {
   constructor() {
     super();
     this.state = {
       part: "listening",
+      calledTime: new Date(),
+      audioDuration: 0,
+      selected: -1, // start from 0 . for present the currect answer
+      key: 0,
     };
   }
 
   componentDidMount() {
+    const self = this;
     if (this.state.part === "listening") {
       var audioElement = document.getElementById("myAudio");
       if (audioElement != null) {
-        console.log(this.props.audioUrl);
-        const self = this;
         audioElement.addEventListener(
           "ended",
           function () {
-            self.setState({ part: "animation" });
+            self.setState({
+              part: "animation",
+            });
           },
           false
         );
       }
+      audioElement.addEventListener("loadedmetadata", (e) => {
+        self.state.audioDuration = e.target.duration;
+      });
     }
+    window.addEventListener("focus", () => {
+      if (self.state.part === "animation") {
+        self.setState({ key: self.state.key + 1 });
+      }
+    });
   }
 
   render() {
-    if (this.state.part == "listening") {
-      var t0 = performance.now();
-    }
+    console.log("render");
     var part = this.state.part;
     var questDiv;
     var allQuestDivs = [];
     var classNames = [];
     const indexes = [];
+    var clocktimer;
     let tmp = 0;
     for (let index = 0; index < this.props.answers.length; index++) {
       tmp = index + 1;
@@ -136,10 +62,10 @@ class Question extends React.Component {
     }
     if (part === "animation") {
       classNames = [
-        "singleAnswer s1",
-        "singleAnswer s2",
-        "singleAnswer s3",
-        "singleAnswer s4",
+        "hovering singleAnswer s1",
+        "hovering singleAnswer s2",
+        "hovering singleAnswer s3",
+        "hovering singleAnswer s4",
       ];
       for (
         let index = 0;
@@ -147,18 +73,54 @@ class Question extends React.Component {
         index = index + 1
       ) {
         questDiv = (
-          <button
-            onClick={(e) => onAnswerClick(index)}
-            className={classNames[index]}
-          >
-            <div className={"numberCircle"}>{index + 1}</div>
-            <Textfit max={40} min={26} mode='multi'>
-              {this.props.answers[index]}
-            </Textfit>
-          </button>
+          <div>
+            <button
+              onClick={(e) => onAnswerClick(index)}
+              className={classNames[index]}
+            >
+              <div className={"numberCircle"}>{index + 1}</div>
+              <Textfit max={40} min={26} mode='multi'>
+                {this.props.answers[index]}
+              </Textfit>
+            </button>
+          </div>
         );
         allQuestDivs.push(questDiv);
       }
+      var remainTime =
+        this.state.calledTime.getTime() +
+        this.state.audioDuration * 1000 +
+        this.props.time * 1000 -
+        new Date().getTime();
+      if (remainTime < 500) {
+        this.setState({ part: "answered" });
+        remainTime = 0;
+      }
+      clocktimer = (
+        <div className='clockCenter'>
+          <CountdownCircleTimer
+            style={{
+              fontSize: "30px",
+            }}
+            key={this.state.key}
+            initialRemainingTime={remainTime / 1000}
+            isPlaying={true}
+            size={120}
+            // duration={() => getRemainTime()}
+            duration={this.props.time}
+            colors={[
+              ["#004777", 0.33],
+              ["#F7B801", 0.33],
+              ["#A30000", 0.33],
+            ]}
+            onComplete={() => {
+              this.setState({ part: "answered" });
+            }}
+          >
+            {({ remainingTime }) => remainingTime}
+          </CountdownCircleTimer>
+        </div>
+      );
     } else if (part === "answered") {
       /*
       build the part of waiting for moving to next phase.
@@ -169,8 +131,10 @@ class Question extends React.Component {
         "singleAnswer e3",
         "singleAnswer e4",
       ];
-      classNames[this.state.selected] =
-        "singleAnswer s" + (this.state.selected + 1);
+      if (this.state.selected >= 0) {
+        classNames[this.state.selected] =
+          "singleAnswer s" + (this.state.selected + 1);
+      }
       for (
         let index = 0;
         index < this.props.answers.length;
@@ -185,24 +149,61 @@ class Question extends React.Component {
         );
         allQuestDivs.push(questDiv);
       }
+      var remainTime =
+        this.state.calledTime.getTime() +
+        this.state.audioDuration * 1000 +
+        this.props.time * 1000 -
+        new Date().getTime();
+      if (remainTime < 500) {
+        remainTime = 0;
+      }
+
+      const renderTime = ({ remainingTime }) => {
+        if (remainingTime === 0) {
+          return <div dir='ltr'>!הזמן אזל</div>;
+        }
+
+        return <div>{remainingTime}</div>;
+      };
+
+      clocktimer = (
+        <div className='clockCenter'>
+          <CountdownCircleTimer
+            size={120}
+            isPlaying
+            duration={this.props.time} // should be Time Left !
+            initialRemainingTime={remainTime / 1000}
+            colors={[
+              ["#004777", 0.33],
+              ["#F7B801", 0.33],
+              ["#A30000", 0.33],
+            ]}
+          >
+            {renderTime}
+          </CountdownCircleTimer>
+        </div>
+      );
     }
 
     /*
     Func Declarations :
-    
     */
     const onAnswerClick = (ind) => {
-      var t1 = performance.now();
+      var t1 = new Date().getTime();
       this.setState({ part: "answered", selected: ind });
-      console.log("now user answer");
-      this.props.UserAnswer(ind, Math.round(t1 - t0));
+      this.props.UserAnswer(ind, Math.round(t1 - this.state.calledTime));
     };
 
     const handleKeyDown = (key) => {
-      this.setState({ part: "answered", selected: parseInt(key) - 1 });
-      var t1 = performance.now();
-      console.log("now user answer");
-      this.props.UserAnswer(parseInt(key), Math.round(t1 - t0));
+      var t1 = new Date().getTime();
+      this.setState({
+        part: "answered",
+        selected: parseInt(key) - 1,
+      });
+      this.props.UserAnswer(
+        parseInt(key),
+        Math.round(t1 - this.state.calledTime)
+      );
     };
 
     /*
@@ -210,40 +211,55 @@ class Question extends React.Component {
     */
 
     const listeningQuestion = (
-      <div className='flex-container'>
-        <div className='question'>{this.props.question}</div>
-        <CircularProgress size={100} />
-        <audio id='myAudio' autoPlay>
-          <source src={this.props.audioUrl} />
-        </audio>
+      <div className='wholescreen'>
+        <div className='flex-container'>
+          <div dir='rtl' className='question'>
+            {this.props.question}
+          </div>
+          <audio id='myAudio' autoPlay>
+            {/* <source src={this.props.audioUrl} /> */}
+            <source src={mySound} />
+          </audio>
+          <div style={{ marginTop: "20px" }}>
+            <ScaleLoader />
+          </div>
+        </div>
       </div>
     );
 
     const animation = (
-      <React.Fragment>
-        <div className='question questAnimation'>{this.props.question}</div>
-        <div className='circleAnimation'>
-          <CircularProgress size={100} />
-        </div>
+      <div className='wholescreen-col'>
+        <div className='questAnimation'>{this.props.question}</div>
         <div className='quest-container'>{allQuestDivs}</div>
+        <div>{clocktimer}</div>
         <KeyboardEventHandler
           handleKeys={indexes}
           onKeyEvent={(key, e) => handleKeyDown(key)}
         />
-      </React.Fragment>
+      </div>
     );
 
     const answeredAndWait = (
-      <React.Fragment>
+      <div className='wholescreen-col'>
+        <div style={{ position: "absolute", top: "20px", fontSize: "36px" }}>
+          {this.props.question}
+        </div>
         <div className='quest-container-answered'>{allQuestDivs}</div>
-      </React.Fragment>
+        <div className='waitUsers'>wait for your last friends...</div>
+        <div className='clockAnimation'>{clocktimer}</div>
+      </div>
     );
+
+    const timeOut = <div>TIMEOUT !!!</div>;
     if (part === "listening") {
+      this.state.startHearing = new Date().getTime();
       return listeningQuestion;
     } else if (part === "animation") {
       return animation;
     } else if (part === "answered") {
       return answeredAndWait;
+    } else if (part === "timeout") {
+      return timeOut;
     }
   }
 }
