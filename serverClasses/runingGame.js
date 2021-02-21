@@ -214,6 +214,7 @@ class RuningGame {
 					JSON.stringify({
 						type: PHASE,
 						phase: this.curr_phase.type,
+						key: this.curr_phase.key,
 						phaseProp: this.curr_phase.phaseProp,
 						score: this.d_users[key].curr_score,
 					})
