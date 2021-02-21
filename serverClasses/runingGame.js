@@ -246,7 +246,7 @@ class RuningGame {
 	}
 
 	handle_user_img(userID, img) {
-		this.d_users[userID].img = img;
+		if (img != '') this.d_users[userID].img = img;
 		this.d_users[userID].connection.send(
 			JSON.stringify({
 				type: PHASE,
