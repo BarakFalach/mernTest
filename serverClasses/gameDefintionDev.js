@@ -16,6 +16,7 @@ gameDefenition['question1'] = {
 		question: 'מה גילכם?',
 		answers: ['חטיבת ביניים', 'חטיבה עליונה', 'אחר'],
 		time: 6,
+		key: 'question1',
 	},
 	correct_answer: 1,
 	duration: 17,
@@ -45,6 +46,7 @@ gameDefenition['question2'] = {
 		question: 'האם אי פעם השתמשתם במריחואנה או גראס?',
 		answers: ['מעולם לא', 'פעם בודדת', 'פעמים בודדות (3-5)'],
 		time: 6,
+		key: 'question2',
 	},
 	correct_answer: 1,
 	duration: 15,
@@ -74,6 +76,7 @@ gameDefenition['question3'] = {
 			'כל התשובות נכונות',
 		],
 		time: 6,
+		key: 'question3',
 	},
 	correct_answer: 1,
 	duration: 15,
@@ -84,12 +87,13 @@ gameDefenition['bars3'] = {
 	duration: 5,
 };
 gameDefenition['question4'] = {
-	key: 'question3',
+	key: 'question4',
 	type: 'Question',
 	phaseProp: {
 		question: 'במעבדות הסמים הלא חוקיות',
 		answers: ['נכון', 'לא נכון'],
 		time: 6,
+		key: 'question4',
 	},
 	correct_answer: 1,
 	duration: 15,

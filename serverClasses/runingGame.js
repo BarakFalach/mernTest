@@ -186,10 +186,7 @@ class RuningGame {
 
 	/** time the next phase to be loaded to the uswers */
 	handle_change_screen(phaseName = null) {
-		if (this.pause) {
-			clearTimeout(this.timer);
-			return;
-		}
+		if (this.pause) return;
 		this.gameStarted = true;
 		if (phaseName == null) {
 			this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
@@ -214,7 +211,6 @@ class RuningGame {
 					JSON.stringify({
 						type: PHASE,
 						phase: this.curr_phase.type,
-						key: this.curr_phase.key,
 						phaseProp: this.curr_phase.phaseProp,
 						score: this.d_users[key].curr_score,
 					})
@@ -237,7 +233,9 @@ class RuningGame {
 	 *  @updated dicts: d_users_answers, d_activeGames
 	 *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
 	 */
-	handle_user_answer(gameKey, userID, answer, time) {
+	handle_user_answer(userID, answer, time, key) {
+		if (key != this.curr_phase.key) return;
+		if (time <= 0) time = 0;
 		const answerProp = {
 			userID: userID,
 			answer: answer,
@@ -356,6 +354,7 @@ class RuningGame {
 
 	setPause() {
 		this.pause = true;
+		clearTimeout(this.timer);
 	}
 	setResume() {
 		this.pause = false;
