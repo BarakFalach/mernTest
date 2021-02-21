@@ -6,3 +6,5 @@ client/build
 client/src/components/game/EdenTesting.js
 client/.eslintcache
 client/src/components/layouts/css/EdenTesting.css
+client/src/components/game/AudioController.js
+client/public/question1_1.m4a
