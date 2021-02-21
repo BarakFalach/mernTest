@@ -201,7 +201,8 @@ class RuningGame {
 			this.send_bars(questionPhase);
 		} else if (this.curr_phase.type == 'Top3') {
 			this.top3Users();
-		} else {
+		} else if (this.curr_phase.type == 'Groups') this.topGroups();
+		else {
 			for (key in this.d_users) {
 				this.d_users[key].connection.send(
 					JSON.stringify({
@@ -343,6 +344,18 @@ class RuningGame {
 						users: topUsers,
 						audio: this.curr_phase.phaseProp.audioArr,
 					},
+					score: this.d_users[key].curr_score,
+				})
+			);
+		}
+	}
+	topGroups() {
+		for (key in this.d_users) {
+			this.d_users[key].connection.send(
+				JSON.stringify({
+					type: PHASE,
+					phase: 'Group',
+					phaseProp: this.groups,
 					score: this.d_users[key].curr_score,
 				})
 			);
