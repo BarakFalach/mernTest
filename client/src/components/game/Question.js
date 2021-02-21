@@ -48,7 +48,6 @@ class Question extends React.Component {
   }
 
   render() {
-    console.log("render");
     var part = this.state.part;
     var questDiv;
     var allQuestDivs = [];
@@ -75,7 +74,7 @@ class Question extends React.Component {
         questDiv = (
           <div>
             <button
-              onClick={(e) => onAnswerClick(index)}
+              onClick={() => onAnswerClick(index + 1)}
               className={classNames[index]}
             >
               <div className={"numberCircle"}>{index + 1}</div>
@@ -189,23 +188,29 @@ class Question extends React.Component {
     Func Declarations :
     */
     const onAnswerClick = (ind) => {
-      var t1 = new Date().getTime();
-      this.setState({ part: "answered", selected: ind });
-      this.props.UserAnswer(ind, Math.round(t1 - this.state.calledTime));
+      const DeltaTime =
+        this.state.calledTime.getTime() +
+        this.state.audioDuration * 1000 +
+        this.props.time * 1000 -
+        new Date().getTime();
+      console.log("time is " + DeltaTime);
+      this.setState({ part: "answered", selected: ind - 1 });
+      this.props.UserAnswer(ind, Math.round(DeltaTime));
     };
 
     const handleKeyDown = (key) => {
-      var t1 = new Date().getTime();
+      const DeltaTime =
+        this.state.calledTime.getTime() +
+        this.state.audioDuration * 1000 +
+        this.props.time * 1000 -
+        new Date().getTime();
+      console.log("time is " + DeltaTime);
       this.setState({
         part: "answered",
         selected: parseInt(key) - 1,
       });
-      this.props.UserAnswer(
-        parseInt(key),
-        Math.round(t1 - this.state.calledTime)
-      );
+      this.props.UserAnswer(parseInt(key), Math.round(DeltaTime));
     };
-
     /*
     Components Declareations :
     */
