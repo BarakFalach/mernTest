@@ -302,12 +302,11 @@ wsServer.on('connection', (request) => {
 						break;
 
 					case USER_ANSWER:
-						console.log(userlog.answer);
 						d_activeGames[gameKey].handle_user_answer(
-							gameKey,
 							userID,
 							userlog.answer,
-							userlog.time
+							userlog.time,
+							userlog.key
 						);
 						break;
 					case VIDEO_END:

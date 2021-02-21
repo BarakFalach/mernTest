@@ -52,7 +52,6 @@ class RuningGame {
 		let key = Object.keys(this.groups).reduce((key, v) =>
 			this.groups[v].participants < this.groups[key].participants ? v : key
 		);
-		console.log(key);
 		return key;
 	}
 
@@ -109,7 +108,6 @@ class RuningGame {
 	 *  return: null
 	 */
 	updateScoreForGroup(group, score) {
-		console.log(group);
 		this.groups[group].curr_score += score;
 	}
 
@@ -120,7 +118,6 @@ class RuningGame {
 		var json_builder = {};
 		for (key in this.d_users) {
 			json_builder[key] = this.d_users[key].toJSON();
-			console.log(json_builder);
 		}
 		return json_builder;
 	}
@@ -178,7 +175,6 @@ class RuningGame {
 		for (var i = 0; i < len; i++) {
 			cur_answers_dict[i + 1] = 0;
 		}
-		console.log(cur_answers_dict);
 		this.barsMutex = true;
 		this.knowledge_question_answers = cur_answers_dict;
 		this.knowledge_question_dist = cur_answers_dict;
@@ -234,7 +230,8 @@ class RuningGame {
 	 *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
 	 */
 	handle_user_answer(userID, answer, time, key) {
-		if (key != this.curr_phase.key) return;
+		console.log(key);
+		if (key != this.curr_phase.key) return; //TODO: change to cur_phase.key
 		if (time <= 0) time = 0;
 		const answerProp = {
 			userID: userID,
@@ -407,9 +404,6 @@ class RuningGame {
 			if (err) {
 				throw err;
 			}
-
-			// print CSV string
-			console.log(csv);
 
 			// write CSV to a file
 			fs.writeFileSync('todos.csv', csv);
