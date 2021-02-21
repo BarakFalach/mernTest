@@ -12,6 +12,7 @@ import mySound from "../game/assets/audioYona.wav";
 class Question extends React.Component {
   constructor() {
     super();
+
     this.state = {
       part: "listening",
       calledTime: new Date(),
@@ -55,6 +56,14 @@ class Question extends React.Component {
     const indexes = [];
     var clocktimer;
     let tmp = 0;
+    var audioQuestion;
+    var audioAnswers;
+    var promise;
+    if (part === "listening") {
+      const audios = readAudios(this.props.key);
+      audioQuestion = audios[0];
+      audioAnswers = audios[1];
+    }
     for (let index = 0; index < this.props.answers.length; index++) {
       tmp = index + 1;
       indexes[index] = tmp + "";
@@ -223,7 +232,7 @@ class Question extends React.Component {
           </div>
           <audio id='myAudio' autoPlay>
             {/* <source src={this.props.audioUrl} /> */}
-            <source src={mySound} />
+            <source src={audioQuestion} />
           </audio>
           <div style={{ marginTop: "20px" }}>
             <ScaleLoader />
@@ -257,7 +266,6 @@ class Question extends React.Component {
 
     const timeOut = <div>TIMEOUT !!!</div>;
     if (part === "listening") {
-      this.state.startHearing = new Date().getTime();
       return listeningQuestion;
     } else if (part === "animation") {
       return animation;
@@ -274,14 +282,26 @@ Question.propTypes = {
   answers: PropTypes.array,
   time: PropTypes.number,
   UserAnswer: PropTypes.func.isRequired,
-  audioUrl: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   question: state.user.userState.phaseProp.question,
   answers: state.user.userState.phaseProp.answers,
   time: state.user.userState.phaseProp.time,
-  audioUrl: state.user.userState.phaseProp.audioUrl,
+  key: state.user.userState.key,
 });
+
+async function readAudios(path) {
+  console.log("here");
+  const audioArray = [];
+  const audioQuestionPath = "client/src/assets/recordings/" + path + "_1";
+  const audioAnswersPath = "client/src/assets/recordings/" + path + "_2";
+  const audioQuestion = await import(audioQuestionPath);
+  const audioAnswers = await import(audioAnswersPath);
+  audioArray.push(audioQuestion);
+  audioAnswers.push(audioAnswers);
+  return audioArray;
+}
 
 export default connect(mapStateToProps, { UserAnswer })(Question);
