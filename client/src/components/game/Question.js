@@ -57,13 +57,6 @@ class Question extends React.Component {
     var clocktimer;
     let tmp = 0;
     var audioQuestion;
-    var audioAnswers;
-    var promise;
-    if (part === "listening") {
-      const audios = readAudios(this.props.key);
-      audioQuestion = audios[0];
-      audioAnswers = audios[1];
-    }
     for (let index = 0; index < this.props.answers.length; index++) {
       tmp = index + 1;
       indexes[index] = tmp + "";
@@ -232,7 +225,7 @@ class Question extends React.Component {
           </div>
           <audio id='myAudio' autoPlay>
             {/* <source src={this.props.audioUrl} /> */}
-            <source src={audioQuestion} />
+            <source src={mySound} />
           </audio>
           <div style={{ marginTop: "20px" }}>
             <ScaleLoader />
@@ -291,17 +284,5 @@ const mapStateToProps = (state) => ({
   time: state.user.userState.phaseProp.time,
   key: state.user.userState.key,
 });
-
-async function readAudios(path) {
-  console.log("here");
-  const audioArray = [];
-  const audioQuestionPath = "client/src/assets/recordings/" + path + "_1";
-  const audioAnswersPath = "client/src/assets/recordings/" + path + "_2";
-  const audioQuestion = await import(audioQuestionPath);
-  const audioAnswers = await import(audioAnswersPath);
-  audioArray.push(audioQuestion);
-  audioAnswers.push(audioAnswers);
-  return audioArray;
-}
 
 export default connect(mapStateToProps, { UserAnswer })(Question);
