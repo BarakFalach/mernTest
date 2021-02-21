@@ -38,6 +38,11 @@ gameDefenition['top3_1'] = {
 		],
 	},
 };
+gameDefenition['groups1'] = {
+	key: 'groups1',
+	type: 'Groups',
+	duration: 20,
+};
 gameDefenition['question2'] = {
 	key: 'question2',
 
