@@ -58,3 +58,12 @@ export const videoEnd = () => async () => {
     })
   );
 };
+
+export const sendPicture = (imgSrc) => async () => {
+  client.send(
+    JSON.stringify({
+      type: "IMG",
+      img: imgSrc,
+    })
+  );
+};

@@ -1,105 +1,144 @@
-import React from "react";
-import podium from "../../assets/winner_podium.png";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import FaceIcon from "@material-ui/icons/Face";
-
+import React, { Fragment, useState, useEffect } from "react";
+import StarShape from "../../assets/winner_Shape.svg";
+import IconPerson from "../../assets/person.jpg";
+import PlayerReal from "../../assets/player1.jpg";
+import Applause from "../../assets/Applause.mp3";
+import Crown from "../../assets/crown.svg";
+import SpotlightCheck from "./SpotlightCheck";
+import { connect } from "react-redux";
+import ReactRoundedImage from "react-rounded-image";
 import Confetti from "react-confetti";
 
-export const Top3 = () => {
-  const fruits = [
-    { key: 1, name: "Eden" },
-    { key: 2, name: "Barak" },
-    { key: 3, name: "Asaf" },
-  ];
-  return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <List component='nav'>
-          {fruits.map((f) => (
-            <ListItem key={f.key}>
-              <ListItemIcon>
-                <FaceIcon />
-              </ListItemIcon>
-              <ListItemText primary={f.name} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          maxWidth: "500",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <Confetti
-          run={true}
-          friction={0.98}
-          numberOfPieces={145}
-          width={700}
-          height={500}
-        ></Confetti>
-        <img alt='podium' src={podium} />
-      </div>
-    </div>
-  );
+import "../layouts/css/Top3.css";
+
+
+class Top3 extends React.Component {
+  
+  constructor() {
+    super();
+    this.state = {
+      place: 4,
+      third: false,
+      second: false,
+      first: false,
+      winner: false,
+      audio3: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+      audio2: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+      audio1: "https://assets.coderrocketfuel.com/pomodoro-times-up.mp3",
+    };
+  }  
+
+  componentDidMount() {
+   this.start();
+  }
+
+  start() {
+    this.setStatePromise({third: false})
+      .then(() => this.sleep(2000))
+      .then(() => this.setStatePromise({third: true, place: 3 }))
+      .then(() => this.sleep(4500)) 
+      .then(() => this.setStatePromise({third: false, second: true, place: 2}))
+      .then(() => this.sleep(4000))
+      .then(() => this.setStatePromise({ second: false, first: true, place: 1}))
+      .then(() => this.sleep(2100))
+      .then(() => this.setStatePromise({ first: true, winner: true}))
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  setStatePromise(state) {
+    this.setState(state);
+    return Promise.resolve();
+  }
+
+  userExists = (place) => {
+    if(this.props.users.length<place)
+      return false;
+    return true;
+  }
+  
+  userName = (place) => {
+    if(this.props.users.length<place)
+      return ".";
+    return this.props.users[place-1].user_name;
+  };
+
+  userScore = (place) => {
+    if(this.props.users.length<place)
+      return ".";
+    return this.props.users[place-1].curr_score;
+  };
+
+  userPic = (place) => {
+    if(this.props.users.length<place || this.state.place>place) 
+      return IconPerson;
+    // return this.props.users[place-1].curr_pic
+    return PlayerReal;
+  }
+  
+  render() {
+    return(
+      <Fragment> 
+        <div>
+          <SpotlightCheck /> 
+          {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
+          {this.state.second && (<audio autoPlay><source src={this.state.audio2}/></audio>)}
+          {this.state.first && (<audio autoPlay><source src={this.state.audio1}/></audio>)}
+          {this.state.winner && (<audio autoPlay><source type="audio/mp3" src={Applause} /></audio>)}
+
+        </div>
+        {/* Users */}
+        <div className="flex-container-main">
+            {/* Third (3) Place */}
+            <div className="flex-container-col playr-third">
+              <div className="empty-rec"/>
+              <div className="item-not-flex">
+                <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
+                {/* <img alt="playerIcon" src={this.userPic(3)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(3)} roundedSize="0" imageWidth="140" imageHeight="140" />
+              </div>
+
+              <div className="score-text inline-block">{this.state.place<=3? this.userScore(3): "#"}</div> 
+              <img alt="icon place 3" src={StarShape} width="130px"/>
+            </div> 
+
+            {/* First (1) Place */}
+            <div className="flex-container-col playr-first">
+              <div className="empty-rec1"/>
+              <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
+              <div className="item-not-flex">
+                <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
+                {/* <img alt="playerIcon" src={this.userPic(1)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(1)} roundedSize="0" imageWidth="140" imageHeight="140" />
+
+              </div>
+              <div className="score-text">{this.state.place<=1? this.userScore(1): "#"}</div> 
+              <img alt="icon place 1" src={StarShape} width="180px"/>     
+              <div className="empty-rec"/>
+            </div> 
+
+            {/* Second Place */}
+            <div className="flex-container-col playr-second">
+              <div className="empty-rec"/>
+              <div className="item-not-flex">
+                <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
+                {/* <img alt="playerIcon" src={this.userPic(2)} width="145px"/> */}
+                <ReactRoundedImage image={this.userPic(2)} roundedSize="0" imageWidth="140" imageHeight="140" />
+              </div>
+              <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
+              <img alt="icon place 2" src={StarShape} width="130px"/>
+            </div> 
+        </div>
+      </Fragment>
+    )
+  };
 };
-// export class Top3 extends React.Component {
-//   onClickDefault() {
-//     this.refConfetti();
-//   }
 
-//   onClickCustom() {
-//     this.refConfetti({ particleCount: 500 });
-//   }
+const mapStateToProps = (state) => ({
+  users: state.user.userState.phaseProp.users,
+  audio: state.user.userState.phaseProp.audio,
+});
 
-//   onClickCallback() {
-//     this.refConfetti().then(() => {
-//       console.log("do something after animation");
-//     });
-//   }
-
-//   onClickReset() {
-//     this.refConfetti.reset();
-//   }
-
-//   render() {
-//     const style = {
-//       position: "fixed",
-//       width: "100%",
-//       height: "100%",
-//       zIndex: -1,
-//     };
-
-//     return (
-//       <>
-//         <Confetti
-//           style={style}
-//           refConfetti={(ref) => (this.refConfetti = ref)}
-//         />
-//         <img
-//           alt='mangerIcon'
-//           src={podium}
-//           width='350px'
-//           height='400px'
-//           className='avatar'
-//         />
-
-//         <button onClick={this.onClickDefault.bind(this)}>
-//           Fire with default
-//         </button>
-//         <button onClick={this.onClickCustom.bind(this)}>
-//           Fire with custom
-//         </button>
-//         <button onClick={this.onClickCallback.bind(this)}>
-//           Fire with callback
-//         </button>
-//         <button onClick={this.onClickReset.bind(this)}>Reset</button>
-//       </>
-//     );
-//   }}
+export default connect(mapStateToProps, {})(Top3);

@@ -36,6 +36,11 @@ export default function userReducer(state = initialState, action) {
         userState: payload,
         //TODO:: change the screen state to name of the screen and not bool
       };
+    case "IMG":
+      return {
+        ...state,
+        userState: payload,
+      };
     case SERVER_FEEDBACK_TO_ANSWER:
       return {
         score: payload.score,
