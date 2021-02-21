@@ -224,7 +224,6 @@ class Question extends React.Component {
             {this.props.question}
           </div>
           <audio id='myAudio' autoPlay>
-            {/* <source src={this.props.audioUrl} /> */}
             <source src={mySound} />
           </audio>
           <div style={{ marginTop: "20px" }}>
@@ -275,14 +274,14 @@ Question.propTypes = {
   answers: PropTypes.array,
   time: PropTypes.number,
   UserAnswer: PropTypes.func.isRequired,
-  key: PropTypes.string.isRequired,
+  quesNum: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   question: state.user.userState.phaseProp.question,
   answers: state.user.userState.phaseProp.answers,
   time: state.user.userState.phaseProp.time,
-  key: state.user.userState.key,
+  quesNum: state.user.userState.phaseProp.key,
 });
 
 export default connect(mapStateToProps, { UserAnswer })(Question);
