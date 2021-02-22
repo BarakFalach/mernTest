@@ -29,8 +29,8 @@ const Phase = ({ phase }) => {
 			return <Groups />;
 		case 'bars':
 			return <Bars />;
-		// case 'webCam':
-		// 	return <WebcamCapture />;
+		case 'webCam':
+			return <WebcamCapture />;
 		default:
 			return <Welcome />;
 		// return <Goodbye />;

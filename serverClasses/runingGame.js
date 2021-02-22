@@ -136,7 +136,7 @@ class RuningGame {
 				this.getGroupNum(),
 				this.numberStack.pop()
 			);
-			phase = 'webCam';
+			// phase = 'webCam';
 		}
 
 		curUser.setConnection(connection);
