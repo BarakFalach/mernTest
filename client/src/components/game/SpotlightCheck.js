@@ -41,7 +41,7 @@ export default class SpotlightCheck extends React.Component {
   start() {
     this.setStatePromise({ confetti_now:false, playing: true, ...this.getCoordinates('.playr-third') })
       .then(() => this.sleep(3000))
-      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-third'), text:'במקום השלישי', radius: 200, color: 'rgb(216, 49, 25)'}))
+      .then(() => this.setStatePromise({ confetti_now:true, ...this.getCoordinates('.playr-third'), text:'במקום השלישי', radius: 200, color: 'rgb(216, 49, 25)'}))
       .then(() => this.sleep(4000))
       .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-second'), text:'במקום השני', color: 'rgb(192, 192, 192)' }))
       .then(() => this.sleep(4000))
@@ -69,12 +69,13 @@ export default class SpotlightCheck extends React.Component {
     const rect = document.querySelector(selector).getBoundingClientRect();
     return { x: rect.left + (rect.width / 2), y: rect.top + (rect.height / 2) };
   }
+
+  
   
   render() {
     return(
         <div>
-        <Confetti active={ this.state.confetti_now } config={this.state.config}/>
-        {/* <button onClick={this.start} className="btn btn-try">Try it out!</button> */}
+        <Confetti active={ this.state.confetti_now } config={this.state.config}/> 
         <ReactCSSTransitionGroup
           transitionName="fade"
           transitionEnterTimeout={500}

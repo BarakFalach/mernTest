@@ -68,3 +68,12 @@ export const sendPicture = (imgSrc) => async () => {
 		})
 	);
 };
+
+export const CameraNotAllowed = () => async () => {
+  console.log("Falah is wrong");
+  client.send(
+    JSON.stringify({
+      type: "CAMERA_NOT_ALLOWED",
+    })
+  );
+};

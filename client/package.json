@@ -28,6 +28,8 @@
     "react-dribble-button": "^0.2.2",
     "react-keyboard-event-handler": "^1.5.4",
     "react-moment": "^1.0.0",
+    "react-native": "^0.63.4",
+    "react-native-animated-charts": "0.0.5",
     "react-redux": "^7.2.2",
     "react-rounded-image": "^2.0.11",
     "react-router-dom": "^5.2.0",
