@@ -94,7 +94,7 @@ class RuningGame {
 				this.d_users[user.userID].last_answer_correctness = true;
 				this.updateScoreForGroup(
 					this.d_users[user.userID].group,
-					Math.round((timeInMs - user.time) / 10)
+					Math.round(user.time / 10)
 				);
 			} else {
 				this.d_users[user.userID].last_answer_correctness = false;
@@ -142,6 +142,8 @@ class RuningGame {
 		curUser.setConnection(connection);
 
 		this.d_users[userID] = curUser;
+		this.curr_connected_users++;
+		this.groups[curUser.group].participants++;
 
 		connection.send(
 			JSON.stringify({
@@ -152,14 +154,16 @@ class RuningGame {
 				keygame: gameKey, //TODO:::  change this veriable in client
 				group: curUser.group,
 				phase: phase,
+				phaseProp: {
+					ratio: this.curr_connected_users / this.num_of_participates,
+				},
 			})
 		);
 
 		// update users connecting
-		this.curr_connected_users++;
-		this.groups[curUser.group].participants++;
 
 		// update the admin on the number of users that get in
+		if (this.nextPhase == 0) this.sendProgressBar();
 		this.sendUserTable();
 	}
 
@@ -375,6 +379,20 @@ class RuningGame {
 				usersData: this.usersToJson(),
 			})
 		);
+	}
+	sendProgressBar() {
+		for (key in this.d_users) {
+			this.d_users[key].connection.send(
+				JSON.stringify({
+					type: PHASE,
+					phase: 'default',
+					phaseProp: {
+						ratio: this.curr_connected_users / this.num_of_participates,
+					},
+					score: this.d_users[key].curr_score,
+				})
+			);
+		}
 	}
 	sendPhaseStatus() {
 		this.admin.connection.send(
