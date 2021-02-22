@@ -142,6 +142,8 @@ class RuningGame {
 		curUser.setConnection(connection);
 
 		this.d_users[userID] = curUser;
+		this.curr_connected_users++;
+		this.groups[curUser.group].participants++;
 
 		connection.send(
 			JSON.stringify({
@@ -152,12 +154,13 @@ class RuningGame {
 				keygame: gameKey, //TODO:::  change this veriable in client
 				group: curUser.group,
 				phase: phase,
+				phaseProp: {
+					ratio: this.curr_connected_users / this.num_of_participates,
+				},
 			})
 		);
 
 		// update users connecting
-		this.curr_connected_users++;
-		this.groups[curUser.group].participants++;
 
 		// update the admin on the number of users that get in
 		if (this.nextPhase == 0) this.sendProgressBar();
