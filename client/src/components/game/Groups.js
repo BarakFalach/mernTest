@@ -3,28 +3,27 @@ import PropTypes from "prop-types";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { Bar } from "react-chartjs-2";
-import correctSvg from "../../assets/success-green-check-mark.svg";
-import incorrectSvg from "../../assets/wrong.svg";
+import correctSvg from "../../assets/rabbit.png";
+import incorrectSvg from "../../assets/turtle.png";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
 import "../layouts/css/BarsAnimation.css";
-// import  aud from "../../assets/beep.mp3"
 
-const GroupsBars = ({
-  my_groups
+const Groups = ({
+  my_groups, // check = {1:{curr_score: 1000}, 2:{curr_score: 100}},
+  answers = ["1", "2"],
+  winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
+  correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
 }) => {
-
   let sentence;
-  if (my_groups[1].curr_score > my_groups[2].curr_score ) {
-    sentence = "קבוצה מספר 1 היא הקבוצה המובילה";
-  } else if (my_groups[1].curr_score == my_groups[2].curr_score ){
-    sentence = "תיקו בין הקבוצות!";
+  if (winning === 0) {
+    sentence = "תיקו בין הקבוצות";
   } else {
-    sentence = "קבוצה מספר 2 היא הקבוצה המובילה";
+    sentence = "קבוצה " + winning + " היא הקבוצה המובילה";
   }
-
-//   let distributionPercent = castToPercent(distribution);
-//  let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
+  let total = getTotalScores(my_groups)
+  let groups_score = castToScores(my_groups, total);
+  let imagesByResult = imagesSetter(answers, correctAnswer);
   let colorSet = [
     "#0ead69",
     "#fdbd27",
@@ -33,26 +32,31 @@ const GroupsBars = ({
     "#d4d5fd",
     "#f86624",
   ];
-
   const data = {
-    labels: {},
+    labels: answers,
     datasets: [
       {
         backgroundColor: colorSet,
         borderColor: colorSet,
         hoverBorderColor: "rgba(255,99,132,1)",
-        //data: Object.values(distributionPercent),
+        data: Object.values(groups_score),
         datalabels: {
-          anchor: "end",
-          align: "start",
-          offset: 20,
+          anchor: "center",
+          // align: "start",
+          // offset: 20,
           backgroundColor: function (ctx) {
+            // var value = ctx.dataset.data[ctx.dataIndex];
+            // return value > 50 ? "white" : null;
             return null;
           },
           borderColor: function (ctx) {
-
+            // var value = ctx.dataset.data[ctx.dataIndex];
+            // return value > 0 ? "white" : null;
+            // return "white";
             return null;
           },
+          // borderWidth: 2,
+          // borderRadius: 4,
           font: {
             weight: "bold",
             size: 40,
@@ -60,26 +64,24 @@ const GroupsBars = ({
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
             return value > 0 ? "white" : null;
+            // return "white";
           },
-        //   formatter: function (value, ctx) {
-        //     console.log("user answer is " + userAnswer);
-        //     if (!ctx.active) {
-        //       return value + "%";
-        //     } else if (ctx.dataIndex == correctAnswer - 1) {
-        //       return "Correct";
-        //     } else if (ctx.dataIndex == userAnswer - 1) {
-        //       return "Yours";
-        //     } else {
-        //       return value + "%";
-        //     }
-        //   },
+          formatter: function (value, ctx) {
+            if (!ctx.active) {
+              return Math.round((value * total) / 100);
+            } else if (ctx.dataIndex == correctAnswer - 1) {
+              return "בהובלה";
+            } else {
+              return "מאחור";
+            }
+          },
         },
       },
     ],
   };
-
   return (
     <div className='flex-container'>
+      <Typography variant='h4' font='Montserrat'>מצב הקבוצות</Typography>
       <Typography variant='h5' font='Montserrat'>
         {sentence}
         {/* {icon} */}
@@ -114,7 +116,7 @@ const GroupsBars = ({
               labels: {
                 render: "image",
                 textMargin: 10,
-                //images: imagesByResult,
+                images: imagesByResult,
               },
               datalabels: {
                 labels: {
@@ -152,11 +154,13 @@ const GroupsBars = ({
               yAxes: [
                 {
                   gridLines: {
-                    display: false,
+                    display: true,
                   },
                   ticks: {
-                    display: false,
+                    display: true,
+                    beginAtZero: true,
                   },
+
                 },
               ],
             },
@@ -169,59 +173,58 @@ const GroupsBars = ({
 
 function CorrectnessIcon(result) {
   if (result) {
-    return <img width={30} height={30} src={correctSvg} />;
+    return <img width={200} height={200} src={correctSvg} />;
   } else {
-    return <img width={30} height={30} src={incorrectSvg} />;
+    return <img width={200} height={200} src={incorrectSvg} />;
   }
 }
-// function imagesSetter(answers, correctAnswer, userAnswer) {
-//   let imagesByResult = [];
-//   for (let index = 0; index < answers.length; index++) {
-//     if (index + 1 === userAnswer || index + 1 === correctAnswer) {
-//       if (userAnswer === index + 1) {
-//         imagesByResult[index] = {
-//           //Wrong Answer
-//           src: incorrectSvg,
-//           width: 30,
-//           height: 30,
-//         };
-//       }
-//       if (correctAnswer === index + 1) {
-//         imagesByResult[index] = {
-//           //Correct Answer
-//           src: correctSvg,
-//           width: 30,
-//           height: 30,
-//         };
-//       }
-//     } else {
-//       imagesByResult[index] = null;
-//     }
-//   }
-//   return imagesByResult;
-// }
+function imagesSetter(answers, winning){
+  let imagesByResult = [];
+  let correctA = {
+    src: correctSvg,
+    width: 30,
+    height: 30
+  }
 
-GroupsBars.propTypes = {
-  my_groups: PropTypes.array.isRequired,
+  let wrongA = {
+    src: incorrectSvg,
+    width: 50,
+    height: 30
+  }
+
+  for (let index = 0; index < answers.length; index++) {
+    if (index + 1 === winning) {
+        imagesByResult[index] = correctA;
+      }
+   else {
+        imagesByResult[index] = wrongA;
+  }
+  }
+  return imagesByResult;
+}
+
+function getTotalScores(my_groups) {
+  let total = 0;
+  Object.keys(my_groups).forEach((element) => {
+    total += my_groups[element].curr_score;
+  });
+  return total;
 };
 
-// function castToPercent(distribution) {
-//   let total = 0;
-//   Object.values(distribution).forEach((element) => {
-//     total += element;
-//   });
+function castToScores(my_groups, total) {
+  let scores = {};
+  Object.keys(my_groups).forEach((element) => {
+    scores[element] = Math.round((100 * my_groups[element].curr_score) / total);
+  });
+  return scores;
+};
 
-//   let distributionPercent = {};
-//   Object.keys(distribution).forEach((element) => {
-//     distributionPercent[element] = Math.round(
-//       (100 * distribution[element]) / total
-//     );
-//   });
-//   return distributionPercent;
-// }
+Groups.propTypes = {
+  my_groups: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => ({
-  my_groups: state.user.userState.phaseProp,
+    my_groups: state.user.userState.phaseProp,
 });
 
-export default connect(mapStateToProps, {})(GroupsBars);
+export default connect(mapStateToProps, {})(Groups);

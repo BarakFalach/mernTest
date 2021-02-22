@@ -135,13 +135,16 @@ class WebcamCapture extends React.Component {
                   imageHeight="350"
                 />
               ) : (
-                <Webcam
-                  ref={this.setRef}
-                  audio={false}
-                  height="350"
-                  onUserMedia={this.allow}
-                  screenshotFormat="image/jpeg"
-                />
+                <div>
+                  {/* <div className="mark" /> */}
+                  <Webcam
+                    ref={this.setRef}
+                    audio={false}
+                    height="350"
+                    onUserMedia={this.allow}
+                    screenshotFormat="image/jpeg"
+                  />
+                </div>
               )}
             </div>
             <div className="item">
