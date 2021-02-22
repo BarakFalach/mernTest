@@ -98,41 +98,42 @@
   color: white;
 }
 .s1 {
-  border: 3px solid #0c6740;
+  border: 6px solid #0c6740;
   background-color: #0ead69;
 }
 .s2 {
-  border: 3px solid #b7940e;
+  border: 6px solid #b7940e;
   background-color: #fdbd27;
 }
 .s3 {
-  border: 3px solid #951b26;
+  border: 6px solid #951b26;
   background-color: #ea3546;
-}
-.hovering:enabled:hover {
-  border: 0px;
 }
 
 .s4 {
-  border: 3px solid #276678;
+  border: 6px solid #276678;
   background-color: #2599e7;
 }
 
 .e1 {
-  border: 3px solid #0c6740;
+  border: 6px solid #0c6740;
   background-color: #c0c0c0;
 }
 .e2 {
-  border: 3px solid #b7940e;
+  border: 6px solid #b7940e;
   background-color: #c0c0c0;
 }
 .e3 {
-  border: 3px solid #951b26;
+  border: 6px solid #951b26;
   background-color: #c0c0c0;
 }
 .e4 {
-  border: 3px solid #276678;
+  border: 6px solid #276678;
   background-color: #c0c0c0;
+}
+
+.hovering:enabled:hover {
+  border: 0px;
 }
 
 @-webkit-keyframes fadeInFromNone {

@@ -8,7 +8,7 @@ export default class Goodbye extends React.Component {
   }
 
   render() {
-    const welcome = (
+    const goodbye = (
       <div className='wholescreen'>
         <div className='empty200' />
         <div className='goodbye-label'>Thank you for your participant,</div>
@@ -21,6 +21,6 @@ export default class Goodbye extends React.Component {
         />
       </div>
     );
-    return welcome;
+    return goodbye;
   }
 }

@@ -10,7 +10,7 @@ import Top3 from "./Top3";
 import { Poll } from "./Poll";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
-import Goodbye from "./GoodBye";
+import Goodbye from "./Goodbye";
 
 const Phase = ({ phase }) => {
   switch (phase) {
