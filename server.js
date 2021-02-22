@@ -19,7 +19,7 @@ app.use('/api/admin', require('./routes/api/admin'));
 app.use(express.static('client/build'));
 
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.hmtl'));
+	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
