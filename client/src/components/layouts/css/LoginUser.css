@@ -6,8 +6,8 @@
   margin: 40px;
   height: calc(100vh- (100px));
   width: calc(100vw- (100px));
-  fill: aliceblue;
-  /* border: 3px solid rgb(243, 8, 8); */
+  /* fill: aliceblue; */
+  border: 3px solid rgb(243, 8, 8);
 }
 
 .flex-container-user-form {
