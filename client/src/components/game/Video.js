@@ -12,11 +12,11 @@ const Video = ({ videoUrl, videoEnd }) => {
 	const onVideoEnd = () => videoEnd();
 
 	return (
-		<div className='video'>
+		<div className='video' style={{ marginBottom: '300px' }}>
 			<Vimeo
 				video={videoUrl}
-				controls={false}
-				height={height - 80}
+				controls={true}
+				height={height * 0.92}
 				width={width}
 				autoplay
 				onEnd={onVideoEnd}
