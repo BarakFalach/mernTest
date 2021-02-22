@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import React from "react";
-import { UserAnswer } from "../../actions/user";
-import KeyboardEventHandler from "react-keyboard-event-handler";
-import { Textfit } from "react-textfit";
-import "../layouts/css/Questions.css";
-import { ScaleLoader } from "react-spinners";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { UserAnswer } from '../../actions/user';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
+import { Textfit } from 'react-textfit';
+import '../layouts/css/Questions.css';
+import { ScaleLoader } from 'react-spinners';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 // Didnt finished Timing !!! not heard is correct
 class Question extends React.Component {
   constructor(props) {
@@ -326,21 +326,22 @@ class Question extends React.Component {
       return answeredAndWait;
     }
   }
+
 }
 
 Question.propTypes = {
-  question: PropTypes.string.isRequired,
-  answers: PropTypes.array,
-  time: PropTypes.number,
-  UserAnswer: PropTypes.func.isRequired,
-  quesNum: PropTypes.string.isRequired,
+	question: PropTypes.string.isRequired,
+	answers: PropTypes.array,
+	time: PropTypes.number,
+	UserAnswer: PropTypes.func.isRequired,
+	quesNum: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  question: state.user.userState.phaseProp.question,
-  answers: state.user.userState.phaseProp.answers,
-  time: state.user.userState.phaseProp.time,
-  quesNum: state.user.userState.phaseProp.key,
+	question: state.user.userState.phaseProp.question,
+	answers: state.user.userState.phaseProp.answers,
+	time: state.user.userState.phaseProp.time,
+	quesNum: state.user.userState.phaseProp.key,
 });
 
 export default connect(mapStateToProps, { UserAnswer })(Question);

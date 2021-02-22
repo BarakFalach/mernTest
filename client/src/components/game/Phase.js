@@ -8,6 +8,7 @@ import { Answer } from "./Answer";
 import Video from "./Video";
 import Top3 from "./Top3";
 import { Poll } from "./Poll";
+import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
 import Goodbye from "./Goodbye";
@@ -24,6 +25,8 @@ const Phase = ({ phase }) => {
       return <Poll />;
     case "top3":
       return <Top3 />;
+    case "Group":
+      return <Groups />;
     case "bars":
       return <Bars />;
     case "webCam":
@@ -31,6 +34,7 @@ const Phase = ({ phase }) => {
     default:
       // return <Welcome />;
       return <Goodbye />;
+
   }
 };
 

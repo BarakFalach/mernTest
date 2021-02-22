@@ -1,13 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
 import StarShape from "../../assets/winner_Shape.svg";
 import IconPerson from "../../assets/person.jpg";
-import PlayerReal from "../../assets/player1.jpg";
-import Applause from "../../assets/Applause.mp3";
+import Applause from '../../assets/Applause.mp3';
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
-import Confetti from "react-confetti";
 
 import "../layouts/css/Top3.css";
 
@@ -35,7 +33,7 @@ class Top3 extends React.Component {
   start() {
     this.setStatePromise({third: false})
       .then(() => this.sleep(2000))
-      .then(() => this.setStatePromise({third: true, place: 3 }))
+      .then(() => this.setStatePromise({third: true, place: 3}))
       .then(() => this.sleep(4500)) 
       .then(() => this.setStatePromise({third: false, second: true, place: 2}))
       .then(() => this.sleep(4000))
@@ -62,7 +60,7 @@ class Top3 extends React.Component {
   userName = (place) => {
     if(this.props.users.length<place)
       return ".";
-    return this.props.users[place-1].user_name;
+    return this.props.users[place-1].userNumber;
   };
 
   userScore = (place) => {
@@ -74,8 +72,7 @@ class Top3 extends React.Component {
   userPic = (place) => {
     if(this.props.users.length<place || this.state.place>place) 
       return IconPerson;
-    // return this.props.users[place-1].curr_pic
-    return PlayerReal;
+    return this.props.users[place-1].img;
   }
   
   render() {
@@ -96,7 +93,6 @@ class Top3 extends React.Component {
               <div className="empty-rec"/>
               <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
-                {/* <img alt="playerIcon" src={this.userPic(3)} width="145px"/> */}
                 <ReactRoundedImage image={this.userPic(3)} roundedSize="0" imageWidth="140" imageHeight="140" />
               </div>
 
@@ -110,7 +106,6 @@ class Top3 extends React.Component {
               <img alt="playerIcon" src={Crown} width="90px" style={{transform: "rotate(10deg)"}}/>
               <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
-                {/* <img alt="playerIcon" src={this.userPic(1)} width="145px"/> */}
                 <ReactRoundedImage image={this.userPic(1)} roundedSize="0" imageWidth="140" imageHeight="140" />
 
               </div>
@@ -124,7 +119,6 @@ class Top3 extends React.Component {
               <div className="empty-rec"/>
               <div className="item-not-flex">
                 <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
-                {/* <img alt="playerIcon" src={this.userPic(2)} width="145px"/> */}
                 <ReactRoundedImage image={this.userPic(2)} roundedSize="0" imageWidth="140" imageHeight="140" />
               </div>
               <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
