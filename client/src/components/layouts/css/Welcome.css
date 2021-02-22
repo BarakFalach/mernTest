@@ -1,0 +1,25 @@
+.wholescreen {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* including!!! bar height*/
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /* border: 2px solid black; */
+  margin-top: -25px;
+  text-align: center;
+}
+.welcome-label {
+  font-size: 50px;
+  margin-top: -200px;
+}
+.goodbye-label {
+  width: 70%;
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+}
+.empty200 {
+  margin-top: -10%;
+}

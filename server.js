@@ -19,7 +19,7 @@ app.use('/api/admin', require('./routes/api/admin'));
 app.use(express.static('client/build'));
 
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.hmtl'));
+	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
@@ -30,18 +30,33 @@ app.listen(PORT, () => console.log('Server Started at: ' + PORT));
 
 // Const enums
 const printLogs = false;
-const MAKAF = 40;
-const USER_ANSWER = 'USER_ANSWER';
-const PHASE = 'PHASE';
-const REQ_USER_LOGIN = 'REQ_USER_LOGIN';
-const GAME_KEY_SUCCESS = 'GAME_KEY_SUCCESS';
-const GAME_KEY_FAIL = 'GAME_KEY_FAIL';
-const CREATE_NEW_GAME_INSTANCE = 'CREATE_NEW_GAME_INSTANCE';
-const VIDEO_END = 'VIDEO_END';
-const PAUSE = 'PAUSE';
-const RESUME = 'RESUME';
-const IMG = 'IMG';
-const CAMERA_NOT_ALLOWED = 'CAMERA_NOT_ALLOWED';
+const [
+	MAKAF,
+	USER_ANSWER,
+	PHASE,
+	REQ_USER_LOGIN,
+	GAME_KEY_SUCCESS,
+	GAME_KEY_FAIL,
+	CREATE_NEW_GAME_INSTANCE,
+	VIDEO_END,
+	PAUSE,
+	RESUME,
+	IMG,
+	CAMERA_NOT_ALLOWED,
+] = [
+	40,
+	'USER_ANSWER',
+	'PHASE',
+	'REQ_USER_LOGIN',
+	'GAME_KEY_SUCCESS',
+	'GAME_KEY_FAIL',
+	'CREATE_NEW_GAME_INSTANCE',
+	'VIDEO_END',
+	'PAUSE',
+	'RESUME',
+	'IMG',
+	'CAMERA_NOT_ALLOWED',
+];
 const User = require('./serverClasses/user');
 const Admin = require('./serverClasses/admin');
 const RuningGame = require('./serverClasses/runingGame');
@@ -93,24 +108,14 @@ const getUniqueID = () => {
  * connect the admin to the Rununing Game.
  *  return: Array of the sorted users
  */
-const getUniqueGameKey = (admin_ID, gameType, numOfParticipates) => {
+const getUniqueGameKey = () => {
 	(max = 9999), (min = 1111);
 	var gameKey;
 	do {
 		gameKey = Math.floor(Math.random() * (max - min)) + min;
 	} while (gameKey.toString() in d_activeGames);
-	gameKey = 1;
+	if (!production) gameKey = 1;
 
-	new_admin = new Admin(admin_ID, gameKey);
-	d_admins[gameKey] = new_admin;
-
-	d_activeGames[gameKey] = new RuningGame(
-		d_admins[gameKey],
-		gameType,
-		numOfParticipates,
-		phaseList,
-		gameDefenition
-	);
 	// setGameProperties(gameKey, admin_ID, gameType, numOfParticipates);
 	return gameKey.toString();
 };
@@ -219,17 +224,45 @@ const handle_bad_req_user_login = (connection, gameKey) => {
  *  TODO: handle in admin - present the game key in the admin dashboard
  */
 const handle_new_game_instance = (
-	userID,
+	admin_ID,
 	connection,
-	gameType = 1,
-	numOfParticipates = 1
+	numOfParticipates = 1,
+	name,
+	gameType = 1
 ) => {
-	const gameKey = getUniqueGameKey(userID, gameType, numOfParticipates);
+	var new_admin;
+	if (name in d_admins) {
+		new_admin = d_admins[name];
+		new_admin.setConnection(connection);
+		d_activeGames[new_admin.gameKey].admin = new_admin;
+		connection.send(
+			JSON.stringify({
+				type: CREATE_NEW_GAME_INSTANCE,
+				keyGame: new_admin.gameKey,
+				phaseList: phaseList,
+				numOfPlayers: numOfParticipates,
+			})
+		);
+		d_activeGames[new_admin.gameKey].admin_re_enter();
+		return new_admin.gameKey;
+	}
+	const gameKey = getUniqueGameKey(admin_ID, gameType, numOfParticipates);
+
+	new_admin = new Admin(admin_ID, gameKey);
+	d_admins[name] = new_admin;
+
+	d_activeGames[gameKey] = new RuningGame(
+		new_admin,
+		gameType,
+		numOfParticipates,
+		phaseList,
+		gameDefenition
+	);
 	if (printLogs) {
 		log_activeGames();
 		log_game_status(gameKey);
 	}
-	d_admins[gameKey].setConnection(connection);
+	d_admins[name].setConnection(connection);
 	// d_connections[userID] = connection;
 
 	connection.send(
@@ -237,6 +270,7 @@ const handle_new_game_instance = (
 			type: CREATE_NEW_GAME_INSTANCE,
 			keyGame: gameKey,
 			phaseList: phaseList,
+			numOfPlayers: numOfParticipates,
 		})
 	);
 	return gameKey;
@@ -247,8 +281,7 @@ const handle_new_game_instance = (
  *  return: null
  */
 const handle_delete_admin = (userID, gameKey) => {
-	// TODO: decide if admin logout create finish game action
-	delete_game_instance(gameKey);
+	// delete_game_instance(gameKey);
 	// delete d_connections[userID];
 	console.log('SERVER : Admin conenction closed (userID: ' + userID + ')');
 };
@@ -283,7 +316,12 @@ wsServer.on('connection', (request) => {
 
 				switch (userlog.type) {
 					case CREATE_NEW_GAME_INSTANCE:
-						gameKey = handle_new_game_instance(userID, connection);
+						gameKey = handle_new_game_instance(
+							userID,
+							connection,
+							userlog.numOfPlayers,
+							userlog.name
+						);
 						break;
 
 					case REQ_USER_LOGIN:
