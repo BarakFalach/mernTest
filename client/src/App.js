@@ -4,17 +4,15 @@ import LoginAdmin from "./components/auth/LoginAdmin";
 import Register from "./components/auth/Register";
 import Landing from "./components/layouts/Landing";
 import PrivateRoute from "./components/routing/PrivateRoute";
-import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Alert from "./components/layouts/Alert";
 import ControlPanel from "./components/dashboard/ControlPanel";
 import Game from "./components/game/Game";
-// Redux
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadAdmin } from "./actions/auth";
-import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
+import "./App.css";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
