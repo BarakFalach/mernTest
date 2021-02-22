@@ -37,7 +37,7 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
           <div className='flex-container-user-form'>
             <div className='flex-container-user-row'>
               <div className='flex-container-user-form'> */}
-        <form className='form' onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={(e) => onSubmit(e)}>
           <div style={{ marginTop: "10%" }}>
             <TextField
               className='formField'
@@ -64,12 +64,7 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
           </div>
 
           <div style={{ marginTop: "15%" }}>
-            <Button
-              id='testbutton'
-              type='submit'
-              className='flex-container-user-col'
-              color='primary'
-            >
+            <Button id='testbutton' type='submit' color='primary'>
               היכנס/י
             </Button>
           </div>
