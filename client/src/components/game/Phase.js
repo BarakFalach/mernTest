@@ -30,7 +30,7 @@ const Phase = ({ phase }) => {
     case "webCam":
       return <WebcamCapture />;
     default:
-      // return <Groups />;
+      return <Groups />;
       // return <Groups/>;
       return <h1>Defult Screen</h1>;
   }

@@ -2,15 +2,16 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { Bar } from "react-chartjs-2";
+import { HorizontalBar } from "react-chartjs-2";
 import correctSvg from "../../assets/rabbit.png";
 import incorrectSvg from "../../assets/turtle.png";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
-import "../layouts/css/BarsAnimation.css";
+// import "../layouts/css/BarsAnimation.css";
 
 const Groups = ({
-  my_groups,
+  my_groups = {1:{curr_score: 60},
+               2:{curr_score: 120} },
   answers = ["1", "2"],
   winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
   correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
@@ -25,12 +26,8 @@ const Groups = ({
   let groups_score = castToScores(my_groups, total);
   let imagesByResult = imagesSetter(answers, correctAnswer);
   let colorSet = [
-    "#0ead69",
-    "#fdbd27",
-    "#ea3546",
-    "#2599e7",
-    "#d4d5fd",
-    "#f86624",
+    "#48C000",
+    "#F0A800",
   ];
   const data = {
     labels: answers,
@@ -50,7 +47,7 @@ const Groups = ({
           },
           font: {
             weight: "bold",
-            size: 40,
+            size: 50 ,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -58,11 +55,12 @@ const Groups = ({
           },
           formatter: function (value, ctx) {
             if (!ctx.active) {
+              console.log("not active");
               return Math.round((value * total) / 100);
             } else if (ctx.dataIndex == correctAnswer - 1) {
-              return "בהובלה";
+              return "בהובלה" ;
             } else {
-              return "מאחור";
+              return "מאחורה";
             }
           },
         },
@@ -76,27 +74,31 @@ const Groups = ({
         {sentence}
         {/* {icon} */}
       </Typography>
-      <audio autoPlay>
+      {/* <audio autoPlay>
         <source
           src={
             "https://www.dropbox.com/s/rkly14ns3hnpq3i/zapsplat_animals_birds_spotted_dove_call_australia_56396.mp3?raw=1"
           }
         />
-      </audio>
+      </audio> */}
       <div className='bottom-bars'>
-        <Bar
+        <HorizontalBar
           data={data}
           options={{
             layout: {
               padding: {
-                top: 40,
+                top: 50,
+                right: 50,
+                bottom: 50,
+                left: 50
               },
               margin: {
-                bottom: 20,
+                left: 30,
+                right: 50
               },
             },
             animation: {
-              duration: 2300,
+              duration: 2500,
             },
             legend: {
               display: false,
@@ -105,32 +107,17 @@ const Groups = ({
             plugins: {
               labels: {
                 render: "image",
-                textMargin: 10,
+                textMargin: 0,
                 images: imagesByResult,
-              },
-              datalabels: {
-                labels: {
-                  color: "blue",
-                  labels: {
-                    title: {
-                      font: {
-                        weight: "bold",
-                        size: 100,
-                      },
-                    },
-                    value: {
-                      color: "green",
-                    },
-                  },
-                },
               },
             },
             scales: {
-              xAxes: [
+              yAxes: [
                 {
                   display: true,
                   ticks: {
                     fontSize: 30,
+                    max: 10
                   },
                   gridLines: {
                     paddingTop: 10,
@@ -141,13 +128,14 @@ const Groups = ({
                   },
                 },
               ],
-              yAxes: [
+              xAxes: [
                 {
                   gridLines: {
-                    display: true,
+                    display: false,
                   },
                   ticks: {
-                    display: true,
+                    display: false,
+                    fontSize: 30,
                     beginAtZero: true,
                   },
 
@@ -161,14 +149,10 @@ const Groups = ({
   );
 };
 
-function CorrectnessIcon(result) {
-  if (result) {
-    return <img width={200} height={200} src={correctSvg} />;
-  } else {
-    return <img width={200} height={200} src={incorrectSvg} />;
-  }
-}
 function imagesSetter(answers, winning){
+  console.log("answers: " + answers);
+  console.log("winning: " + winning);
+
   let imagesByResult = [];
   let correctA = {
     src: correctSvg,
@@ -183,13 +167,14 @@ function imagesSetter(answers, winning){
   }
 
   for (let index = 0; index < answers.length; index++) {
-    if (index + 1 === winning) {
+    if (index + 1 == winning) {
         imagesByResult[index] = correctA;
       }
-   else {
+    else {
         imagesByResult[index] = wrongA;
+    }
   }
-  }
+  console.log(imagesByResult);
   return imagesByResult;
 }
 

@@ -35,7 +35,7 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
         <Typography variant='h2'>ברוכים הבאים </Typography>
         <Typography style ={{marginTop:"25px"}} variant='h8'>בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי המנחה </Typography>
         
-        <div className="flex-container-row">
+        <div className="flex-container-user-row">
           <div className="flex-container-user-form">
 
               <form className='form' onSubmit={(e) => onSubmit(e)}>
