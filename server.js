@@ -302,7 +302,8 @@ wsServer.on('connection', (request) => {
 		const connection = request;
 		var gameKey;
 		var userName;
-		const userID = production ? request._socket.remoteAddress : getUniqueID();
+		// const userID = production ? request._socket.remoteAddress : getUniqueID();
+		const userID = getUniqueID();
 
 		connection.on('message', function (message) {
 			try {
