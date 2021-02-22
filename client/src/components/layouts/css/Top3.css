@@ -22,7 +22,6 @@
   align-items: flex-end;
   height: calc(100vh- (60px));
   width: calc(100vw- (50px));
-  margin-bottom: -10%;
   border: 3px solid rgb(231, 12, 12);
 }
 
@@ -32,7 +31,7 @@
   justify-content: flex-end;
   align-items: center;
   width: 25%;
-  margin-top: 7%;
+  margin-top: 2%;
   border: 3px solid rgb(18, 216, 64);
 }
 
