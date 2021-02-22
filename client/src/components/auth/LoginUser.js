@@ -30,10 +30,11 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
     <Fragment>
       <div className='flex-container-user-main '>
         <Typography variant='h2'>ברוכים הבאים </Typography>
-        <Typography style={{ marginTop: "25px" }} variant='h8'>
-          בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי
-          המנחה{" "}
-        </Typography>
+        <Typography style ={{marginTop:"25px"}} variant='h8'>בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי המנחה </Typography>
+        
+        <div className="flex-container-user-row">
+          <div className="flex-container-user-form">
+
 
         <div className='flex-container-user-row'>
           <div className='flex-container-user-form'>
