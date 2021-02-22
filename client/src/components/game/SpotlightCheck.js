@@ -76,7 +76,6 @@ export default class SpotlightCheck extends React.Component {
     return(
         <div>
         <Confetti active={ this.state.confetti_now } config={this.state.config}/> 
-        {/* <button onClick={this.start} className="btn btn-try">Try it out!</button> */}
         <ReactCSSTransitionGroup
           transitionName="fade"
           transitionEnterTimeout={500}

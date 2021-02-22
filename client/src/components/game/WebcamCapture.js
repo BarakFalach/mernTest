@@ -23,14 +23,7 @@ class WebcamCapture extends React.Component {
     };
 	this.start = this.start.bind(this);
   this.allow = this.allow.bind(this);
-  // this.checkPermissions = this.checkPermissions.bind(this);
   }
-  
-  //  componentDidMount(){
-  //   setTimeout(() => {
-  //     this.checkPermissions();
-  //   }, 3000);
-  // }
 
   start() {
     this.setStatePromise({
@@ -67,32 +60,10 @@ class WebcamCapture extends React.Component {
 	this.webcamRef = webcam;
   };
 
-  // checkPermissions() {
-  //   navigator.permissions.query({name:'camera'}).then(this.hi(result));//function(result){
-  //   //     if (result.state == 'granted') {
-  //   //       // showLocalNewsWithGeolocation();
-  //   //     } else if (result.state == 'prompt') {
-  //   //       // showButtonToEnableLocalNews();
-  //   //     }
-  //   //     else if (result.state == 'denied') {
-  //   //       this.setStatePromise({notAllowed: true});
-  //   //       alert("Fuck");
-  //   //     }
-  //   // });
-  // };
-
-  notAllowed() {
-    this.props.CameraNotAllowed();
-  };
-
   allow(){
     if (this.state.disabledPictue){
       this.setStatePromise(({disabledPictue: false}))
     }
-  };
-
-  notAllowed() {
-    this.props.CameraNotAllowed();
   };
 
   render() {    

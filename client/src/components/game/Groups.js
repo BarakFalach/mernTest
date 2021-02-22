@@ -10,7 +10,7 @@ import "chartjs-plugin-labels";
 import "../layouts/css/BarsAnimation.css";
 
 const Groups = ({
-  my_groups, // check = {1:{curr_score: 1000}, 2:{curr_score: 100}},
+  my_groups,
   answers = ["1", "2"],
   winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
   correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
@@ -42,21 +42,12 @@ const Groups = ({
         data: Object.values(groups_score),
         datalabels: {
           anchor: "center",
-          // align: "start",
-          // offset: 20,
           backgroundColor: function (ctx) {
-            // var value = ctx.dataset.data[ctx.dataIndex];
-            // return value > 50 ? "white" : null;
             return null;
           },
           borderColor: function (ctx) {
-            // var value = ctx.dataset.data[ctx.dataIndex];
-            // return value > 0 ? "white" : null;
-            // return "white";
             return null;
           },
-          // borderWidth: 2,
-          // borderRadius: 4,
           font: {
             weight: "bold",
             size: 40,
@@ -64,7 +55,6 @@ const Groups = ({
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
             return value > 0 ? "white" : null;
-            // return "white";
           },
           formatter: function (value, ctx) {
             if (!ctx.active) {
@@ -81,7 +71,7 @@ const Groups = ({
   };
   return (
     <div className='flex-container'>
-      <Typography variant='h4' font='Montserrat'>מצב הקבוצות</Typography>
+      <Typography variant='h4' font='Montserrat'>מצב הקבוצות (פלח, תגיד איזה שם אתה רוצה)</Typography>
       <Typography variant='h5' font='Montserrat'>
         {sentence}
         {/* {icon} */}
