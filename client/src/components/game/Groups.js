@@ -10,8 +10,7 @@ import "chartjs-plugin-labels";
 // import "../layouts/css/BarsAnimation.css";
 
 const Groups = ({
-  my_groups = {1:{curr_score: 60},
-               2:{curr_score: 120} },
+  my_groups,
   answers = ["1", "2"],
   winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
   correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
@@ -74,13 +73,6 @@ const Groups = ({
         {sentence}
         {/* {icon} */}
       </Typography>
-      {/* <audio autoPlay>
-        <source
-          src={
-            "https://www.dropbox.com/s/rkly14ns3hnpq3i/zapsplat_animals_birds_spotted_dove_call_australia_56396.mp3?raw=1"
-          }
-        />
-      </audio> */}
       <div className='bottom-bars'>
         <HorizontalBar
           data={data}
