@@ -19,7 +19,7 @@ gameDefenition['question1'] = {
 		key: 'question1',
 	},
 	correct_answer: 1,
-	duration: 17,
+	duration: 18,
 };
 gameDefenition['bars1'] = {
 	key: 'bars1',
