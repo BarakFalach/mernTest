@@ -40,16 +40,17 @@ export const login = ({ name, keygame }) => async (dispatch) => {
 };
 
 //TODO MIGHT NEED =>async dispatch
-export const UserAnswer = (answerNum, time, key) => async () => {
-	console.log('ua ' + answerNum + ' t ' + time);
-	client.send(
-		JSON.stringify({
-			type: 'USER_ANSWER',
-			answer: answerNum,
-			time: time,
-			key: key,
-		})
-	);
+export const UserAnswer = (answerNum, time, quesNum) => async () => {
+  console.log(answerNum, time, quesNum);
+  client.send(
+    JSON.stringify({
+      type: "USER_ANSWER",
+      answer: answerNum,
+      time: time,
+      key: quesNum,
+    })
+  );
+
 };
 
 export const videoEnd = () => async () => {

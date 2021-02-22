@@ -4,6 +4,7 @@
   height: 100%; /* including!!! bar height*/
   justify-content: center;
 }
+
 .wholescreen-col {
   display: flex;
   flex-direction: column;
@@ -21,15 +22,16 @@
 }
 
 .question {
-  margin-top: 160px;
-  /* padding-bottom: 12px; */
-  font-size: 48px;
+  position: absolute;
   text-align: center;
+  font-size: 64px;
+  /* height: 96px; */
+  top: 160px;
 }
 
 .questAnimation {
   position: relative;
-  top: 160px;
+  top: 10%;
   animation-iteration-count: 1;
   animation: questease 0.8s ease-out forwards;
 }
@@ -38,44 +40,16 @@
   from {
     position: absolute;
     text-align: center;
-    font-size: 48px;
+    font-size: 64px;
     /* height: 96px; */
     top: 160px;
   }
   to {
     position: absolute;
     text-align: center;
-    font-size: 36px;
+    font-size: 48px;
     /* height: 96px; */
-    top: 20px;
-  }
-}
-
-.circleAnimation {
-  position: fixed; /* or absolute */
-  top: 50%;
-  left: 50%;
-  animation-delay: 5s;
-  animation-iteration-count: 1;
-  /* animation: upslowtrans 10s linear forwards; */
-  animation: circlease 1s ease-in forwards;
-}
-
-@keyframes circlease {
-  from {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: 48px;
-    margin-left: -50px;
-  }
-  to {
-    position: fixed;
-    top: 110%;
-    left: 50%;
-    margin-top: 100px;
-    margin-left: -50px;
-    transform: scale(0.1);
+    top: 10%;
   }
 }
 
@@ -85,7 +59,7 @@
   width: 900px;
   flex-wrap: wrap;
   flex-direction: row;
-  margin-top: 160px;
+  margin-top: 3%;
   justify-content: space-around;
   -webkit-animation: fadeInFromNone 1.5s ease-out;
   -moz-animation: fadeInFromNone 1.5s ease-out;
@@ -99,8 +73,8 @@
   height: 210px;
   width: 900px;
   flex-wrap: wrap;
+  margin-top: 3%;
   flex-direction: row;
-  margin-top: 160px;
   justify-content: space-around;
   align-items: center;
 }
@@ -124,41 +98,42 @@
   color: white;
 }
 .s1 {
-  border: 3px solid #0c6740;
+  border: 6px solid #0c6740;
   background-color: #0ead69;
 }
 .s2 {
-  border: 3px solid #b7940e;
+  border: 6px solid #b7940e;
   background-color: #fdbd27;
 }
 .s3 {
-  border: 3px solid #951b26;
+  border: 6px solid #951b26;
   background-color: #ea3546;
-}
-.hovering:enabled:hover {
-  border: 0px;
 }
 
 .s4 {
-  border: 3px solid #276678;
+  border: 6px solid #276678;
   background-color: #2599e7;
 }
 
 .e1 {
-  border: 3px solid #0c6740;
+  border: 6px solid #0c6740;
   background-color: #c0c0c0;
 }
 .e2 {
-  border: 3px solid #b7940e;
+  border: 6px solid #b7940e;
   background-color: #c0c0c0;
 }
 .e3 {
-  border: 3px solid #951b26;
+  border: 6px solid #951b26;
   background-color: #c0c0c0;
 }
 .e4 {
-  border: 3px solid #276678;
+  border: 6px solid #276678;
   background-color: #c0c0c0;
+}
+
+.hovering:enabled:hover {
+  border: 0px;
 }
 
 @-webkit-keyframes fadeInFromNone {
@@ -244,11 +219,9 @@
 }
 
 .clockCenter {
-  display: block;
-  margin: auto;
-  /* border: solid 1px black; */
-  height: 120px;
-  width: 120px;
+  margin-top: 8%;
+  height: 80px;
+  width: 80px;
   font-size: 26px;
 }
 .clockAnimation {
@@ -261,6 +234,22 @@
   width: 120px;
   animation: rotate 1s linear 1 forwards;
 }
+.clock-animation {
+  animation: opac 2s ease-in 1 forwards;
+}
+
+@keyframes opac {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .waitUsers {
   display: block;
   margin-left: auto;
@@ -306,5 +295,32 @@
   100% {
     transform: scale(0.8);
     opacity: 0.6;
+  }
+}
+.circleAnimation {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+  animation-delay: 5s;
+  animation-iteration-count: 1;
+  /* animation: upslowtrans 10s linear forwards; */
+  animation: circlease 1s ease-in forwards;
+}
+
+@keyframes circlease {
+  from {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: 48px;
+    margin-left: -50px;
+  }
+  to {
+    position: fixed;
+    top: 110%;
+    left: 50%;
+    margin-top: 100px;
+    margin-left: -50px;
+    transform: scale(0.1);
   }
 }
