@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import managerIcon from "../../assets/managar2.png";
 import playerIcon from "../../assets/player.png";
 import Typography from "@material-ui/core/Typography";
-import "../layouts/css/Questions.css";
+import "../layouts/css/Landing.css";
 const Landing = () => (
   <div>
     <div>
@@ -11,8 +11,7 @@ const Landing = () => (
         Welcome to LCE
       </Typography>
     </div>
-
-    <div className='flex-container-main'>
+    <div className='flex-container-landing-main'>
       <Link className='left-side' to='/loginAdmin'>
         <img
           alt='mangerIcon'
