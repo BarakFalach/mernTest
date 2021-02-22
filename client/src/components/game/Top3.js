@@ -97,7 +97,7 @@ class Top3 extends React.Component {
   
   render() {
     return(
-      <Fragment> 
+      <div> 
         <div>
           <SpotlightCheck /> 
           {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
@@ -109,6 +109,7 @@ class Top3 extends React.Component {
           {this.state.winner && (<audio autoPlay><source src={this.state.Applause} /></audio>)}
 
         </div>
+         
         {/* Users */}
         <div className="flex-container-main-top3">
             {/* Third (3) Place */}
@@ -124,7 +125,7 @@ class Top3 extends React.Component {
             </div> 
 
             {/* First (1) Place */}
-            <div style={{marginTop: "3%"}} className="flex-container-col-top3 playr-first">
+            <div className="flex-container-col-top3 playr-first">
               {/* <div className="empty-rec1"/> */}
               <img alt="playerIcon" src={Crown} width="91px" style={{transform: "rotate(10deg)"}}/>
               <div className="item-not-flex">
@@ -147,8 +148,8 @@ class Top3 extends React.Component {
               <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
               <img alt="icon place 2" src={StarShape} width="130px"/>
             </div> 
-        </div>
-      </Fragment>
+            </div>
+      </div>
     )
   };
 };
