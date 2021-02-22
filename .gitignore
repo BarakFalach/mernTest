@@ -8,4 +8,4 @@ client/.eslintcache
 client/src/components/layouts/css/EdenTesting.css
 client/src/components/game/AudioController.js
 client/public/question1_1.m4a
-client/src/components/layouts/css/Questions.css
+client/public/assets/sample/mouseclick.m4a

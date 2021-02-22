@@ -90,9 +90,7 @@ class RuningGame {
 			user = this.d_users_answers[index];
 			this.knowledge_question_answers[user.answer] += 1;
 			if (user.answer == questionPhase.correct_answer) {
-				this.d_users[user.userID].curr_score += Math.round(
-					(timeInMs - user.time) / 10
-				);
+				this.d_users[user.userID].curr_score += Math.round(user.time / 10);
 				this.d_users[user.userID].last_answer_correctness = true;
 				this.updateScoreForGroup(
 					this.d_users[user.userID].group,
@@ -108,7 +106,7 @@ class RuningGame {
 	 *  return: null
 	 */
 	updateScoreForGroup(group, score) {
-		this.groups[group].curr_score += score;
+		this.groups[group].curr_score += score / this.groups[group].participants;
 	}
 
 	/** this function create json object that contatins the users Data.
@@ -225,6 +223,7 @@ class RuningGame {
 			return;
 		}
 		this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
+		this.sendPhaseStatus();
 	}
 	/** This function update the user answer and score
 	 *  @updated dicts: d_users_answers, d_activeGames
@@ -377,6 +376,14 @@ class RuningGame {
 			})
 		);
 	}
+	sendPhaseStatus() {
+		this.admin.connection.send(
+			JSON.stringify({
+				type: PHASE,
+				phaseIndex: this.nextPhase - 1,
+			})
+		);
+	}
 
 	/**
 	 * @param {Json} user_dic - Json data structure to find user by name in it.
@@ -421,6 +428,10 @@ class RuningGame {
 			// write CSV to a file
 			fs.writeFileSync('todos.csv', csv);
 		});
+	}
+	admin_re_enter() {
+		this.sendUserTable();
+		this.sendPhaseStatus();
 	}
 }
 module.exports = RuningGame;
