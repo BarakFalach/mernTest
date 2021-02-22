@@ -66,21 +66,22 @@ class WebcamCapture extends React.Component {
     }
   };
 
-  render() {    
-    
-    function updateAllow(state) {
-      if(state === 'denied'){
-        document.getElementById('passPage').click();
-      }
+  updateAllow(state) {
+    if(state === 'denied' && document.getElementById('passPage')!==null){
+      document.getElementById('passPage').click();
     }
-    
+  }
+  
+  componentDidMount() {
     navigator.permissions.query({ name: 'camera' }).then((result) => {
-      updateAllow(result.state);
+      this.updateAllow(result.state);
       result.addEventListener('change', () => {
-        updateAllow(result.state);
+        this.updateAllow(result.state);
       });
     });
+  }
 
+  render() {    
     return (
       <div>
         {this.state.audio && (
