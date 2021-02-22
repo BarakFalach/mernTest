@@ -127,7 +127,7 @@ class RuningGame {
 	 * @param {*} gameKey
 	 */
 	handle_req_user_login(userID, userName, connection, gameKey) {
-		var phase = 'defult';
+		var phase = 'default';
 		var curUser = this.checkIfDisconnected(userID, userName);
 		if (curUser == undefined) {
 			curUser = new User(
