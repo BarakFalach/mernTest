@@ -23,7 +23,9 @@ const Bars = ({
   let correctAns = (
     <h7 style={{ display: "inline-block" }}>
       התשובה הנכונה היא:{" "}
-      <h7 style={{ display: "inline-block", color: "green" }}>{correctTerm}</h7>
+      <h7 style={{ display: "inline-block", color: "green" }}>
+        {correctTerm - 1}
+      </h7>
     </h7>
   );
   let distributionPercent = castToPercent(distribution);
