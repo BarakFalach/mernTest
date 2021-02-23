@@ -8,7 +8,7 @@ import {
 const initialState = {
   name: "",
   isAuthenticated: false,
-  userState: {},
+  userState: { phaseProp: {} },
   // score: "0",
   group: "",
 };
