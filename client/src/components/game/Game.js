@@ -6,28 +6,21 @@ import "../layouts/css/Game.css";
 import scoreLogo from "../../assets/bottomBar/score.svg";
 import playerNumLogo from "../../assets/bottomBar/playerNum.svg";
 import groupLogo from "../../assets/bottomBar/group.svg";
-
-// import { Question } from "./Question";
-// document.body.style.backgroundColor = "#2d4059";
-
 const Game = ({ score, name, group }) => {
   return (
-    <Fragment>
-      <div>
-        <Phase/>
+    <div>
+      <div className='game-fullscreen'>
+        <Phase />
       </div>
-
-      <div className="bottomBar">
-        <h1 className="text">{group}</h1>
-        <img className="group" src={groupLogo} />
-        <h1 className="text">{name}</h1>
-        <img className="icon" src={playerNumLogo} />
-        <h1 className="text">{score}</h1>
-        <img className="icon" src={scoreLogo} alt="scoreLogo" />
+      <div className='bottomBar'>
+        <img className='game-icon' src={scoreLogo} alt='scoreLogo' />
+        <h1 className='game-text'>{score}</h1>
+        <img className='game-icon' src={playerNumLogo} />
+        <h1 className='game-text'>{name}</h1>
+        <img className='game-icon' src={groupLogo} />
+        <h1 className='game-text'>{group}</h1>
       </div>
-
-    </Fragment>
-    
+    </div>
   );
 };
 Game.propTypes = {
