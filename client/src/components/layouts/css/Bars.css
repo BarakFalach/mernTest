@@ -1,0 +1,19 @@
+.bottom-bars {
+  width: 100%;
+  text-align: center;
+  height: 85%;
+}
+.flex-container-main-bars {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.header-bars {
+  font-size: calc(12px + 1.5vh);
+  color: #273043;
+  margin-top: 2%;
+}

@@ -10,11 +10,13 @@ import ReactRoundedImage from "react-rounded-image";
 import "../layouts/css/Top3.css";
 
 
-class Top3 extends React.Component {
-  
-  constructor(props) {
+class Top3 extends React.Component {  
+   constructor(props) {
     super(props);
     this.state = {
+      width: 0, 
+      height: 0,
+
       users: props.users,
       
       winner: false,
@@ -37,12 +39,29 @@ class Top3 extends React.Component {
       firstAudio: "assets/top3/first.m4a",
       secondAudio: "assets/top3/second.m4a",
       thirdAudio: "assets/top3/third.m4a",
+      
     };
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+
   }  
 
   componentDidMount() {
-   this.start();
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+    this.start();
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+  
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
+
+  minHeightWidth() {
+    return(Math.min(this.state.height, this.state.width));
+  } 
 
   start() {
     this.setStatePromise({third: false,})
@@ -112,43 +131,57 @@ class Top3 extends React.Component {
          
         {/* Users */}
         <div className="flex-container-main-top3">
-            {/* Third (3) Place */}
-            <div className="flex-container-col-top3 playr-third">
-              {/* <div className="empty-rec"/> */}
-              <div className="item-not-flex">
-                <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
-                <ReactRoundedImage image={this.userPic(3)} roundedSize="0" imageWidth="140" imageHeight="140" />
-              </div>
+          <div className="header-top3">השחקנים המובילים במשחק</div>
+          <div className="flex-container-row-top3">
+              {/* Third (3) Place */}
+              <div className="flex-container-col-top3 playr-third">
+                <div className="item-not-flex">
+                  <ReactRoundedImage 
+                      image={this.userPic(3)} 
+                      roundedColor="#00000"
+                      roundedSize="0" 
+                      imageWidth={this.minHeightWidth()*0.2} 
+                      imageHeight={this.minHeightWidth()*0.2} />
+                  <div class="ellipse">{this.state.place<=3? this.userName(3): "#"}</div>
+                </div>
 
-              <div className="score-text inline-block">{this.state.place<=3? this.userScore(3): "#"}</div> 
-              <img alt="icon place 3" src={StarShape} width="130px"/>
-            </div> 
+                <div className="score-text inline-block" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=3? this.userScore(3): "#"}</div> 
+                <img className="icon-star-normal" alt="icon place 3" src={StarShape}/>
+              </div> 
 
-            {/* First (1) Place */}
-            <div className="flex-container-col-top3 playr-first">
-              {/* <div className="empty-rec1"/> */}
-              <img alt="playerIcon" src={Crown} width="91px" style={{transform: "rotate(10deg)"}}/>
-              <div className="item-not-flex">
-                <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
-                <ReactRoundedImage image={this.userPic(1)} roundedSize="0" imageWidth="140" imageHeight="140" />
+              {/* First (1) Place */}
+              <div className="flex-container-col-top3 playr-first">
+                <img className="icon-crown-top3" alt="playerIcon" src={Crown} style={{transform: "rotate(10deg)"}}/>
+                <div className="item-not-flex">
+                  <ReactRoundedImage 
+                      roundedColor="#00000"
+                      image={this.userPic(1)} 
+                      roundedSize="0" 
+                      imageWidth={this.minHeightWidth()*0.2} 
+                      imageHeight={this.minHeightWidth()*0.2} />
+                  <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
+                </div>
+                <div className="score-text" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=1? this.userScore(1): "#"}</div> 
+                <img className="icon-star-winner" alt="icon place 1" src={StarShape}/>     
+              </div> 
 
-              </div>
-              <div className="score-text">{this.state.place<=1? this.userScore(1): "#"}</div> 
-              <img alt="icon place 1" src={StarShape} width="180px"/>     
-              <div className="empty-rec"/>
-            </div> 
-
-            {/* Second Place */}
-            <div className="flex-container-col-top3 playr-second">
-              {/* <div className="empty-rec"/> */}
-              <div className="item-not-flex">
-                <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
-                <ReactRoundedImage image={this.userPic(2)} roundedSize="0" imageWidth="140" imageHeight="140" />
-              </div>
-              <div className="score-text">{this.state.place<=2? this.userScore(2): "#"}</div> 
-              <img alt="icon place 2" src={StarShape} width="130px"/>
-            </div> 
+              {/* Second Place */}
+              <div className="flex-container-col-top3 playr-second">
+                <div className="item-not-flex">
+                  <ReactRoundedImage 
+                      roundedColor="#00000"
+                      image={this.userPic(2)} 
+                      roundedSize="0" 
+                      imageWidth={this.minHeightWidth()*0.20} 
+                      imageHeight={this.minHeightWidth()*0.20}
+                   />
+                  <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
+                </div>
+                <div className="score-text" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=2? this.userScore(2): "#"}</div> 
+                <img className="icon-star-normal" alt="icon place 2" src={StarShape}/>
+              </div> 
             </div>
+          </div>
       </div>
     )
   };
