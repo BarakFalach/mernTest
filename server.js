@@ -5,7 +5,8 @@ const http = require("http");
 const https = require("https");
 const WebSocket = require("ws");
 const production = process.env.NODE_ENV === "production";
-console.log(process.env.NODE_ENV);
+
+console.log(production);
 const ws_PORT = 8000;
 const INDEX = "/index.html";
 const fs = require("fs");
@@ -43,12 +44,19 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log("Server Started at: " + PORT));
-var server;
-server = production ? https.createServer(options, app) : http.createServer();
-const wsServer = new WebSocket.Server({ server });
-server.listen(ws_PORT);
+var server_ws = production
+  ? https.createServer(options, app)
+  : http.createServer();
+var SSserver = production
+  ? https.createServer(options, app)
+  : http.createServer();
+const wsServer = new WebSocket.Server({ server: server_ws });
 
+// SSserver.listen(PORT, () => console.log("Server Started at: " + PORT));
+production
+  ? SSserver.listen(PORT, () => console.log("Server Started at: " + PORT))
+  : app.listen(PORT, () => console.log("Server Started at: " + PORT));
+server_ws.listen(ws_PORT, () => console.log("Server Started at: " + ws_PORT));
 //#################################################################################################################################################################################################################
 
 // Const enums
