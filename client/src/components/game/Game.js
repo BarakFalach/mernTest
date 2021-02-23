@@ -38,4 +38,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login })(Game);
+export default connect(mapStateToProps, {})(Game);

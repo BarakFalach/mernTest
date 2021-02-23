@@ -10,9 +10,9 @@ import "../layouts/css/Bars.css";
 const Bars = ({
   distribution,
   correctAnswer,
-  answers,
+  correctTerm,
   userAnswer,
-  audioUrl,
+  audioKey,
 }) => {
   let sentence;
   if (correctAnswer == userAnswer) {
@@ -23,13 +23,15 @@ const Bars = ({
   let correctAns = (
     <h7 style={{ display: "inline-block" }}>
       התשובה הנכונה היא:{" "}
-      <h7 style={{ display: "inline-block", color: "green" }}>
-        {answers[correctAnswer - 1]}
-      </h7>
+      <h7 style={{ display: "inline-block", color: "green" }}>{correctTerm}</h7>
     </h7>
   );
   let distributionPercent = castToPercent(distribution);
-  let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
+  let imagesByResult = imagesSetter(
+    Object.keys(distribution).length,
+    correctAnswer,
+    userAnswer
+  );
   let colorSet = [
     "#0ead69",
     "#fdbd27",
@@ -39,7 +41,7 @@ const Bars = ({
     "#f86624",
   ];
   const data = {
-    labels: answers,
+    labels: Object.keys(distribution),
     datasets: [
       {
         backgroundColor: colorSet,
@@ -48,7 +50,6 @@ const Bars = ({
         data: Object.values(distributionPercent),
         datalabels: {
           anchor: "center",
-
           offset: 0,
           backgroundColor: function (ctx) {
             // var value = ctx.dataset.data[ctx.dataIndex];
@@ -77,9 +78,9 @@ const Bars = ({
             if (!ctx.active) {
               return value + "%";
             } else if (ctx.dataIndex == correctAnswer - 1) {
-              return "תשובה נכונה";
+              return "התשובה הנכונה";
             } else if (ctx.dataIndex == userAnswer - 1) {
-              return "Yours";
+              return "תשובתך";
             } else {
               return value + "%";
             }
@@ -95,11 +96,7 @@ const Bars = ({
         {correctAns}
       </h1>
       <audio autoPlay>
-        <source
-          src={
-            "https://www.dropbox.com/s/rkly14ns3hnpq3i/zapsplat_animals_birds_spotted_dove_call_australia_56396.mp3?raw=1"
-          }
-        />
+        <source src={"assets/bars/" + audioKey + ".m4a"} />
       </audio>
       <div dir='ltr' className='bottom-bars'>
         <Bar
@@ -157,18 +154,14 @@ const Bars = ({
   );
 };
 
-function CorrectnessIcon(result) {
-  if (result) {
-    return <img width={30} height={30} src={correctSvg} />;
-  } else {
-    return <img width={30} height={30} src={incorrectSvg} />;
-  }
-}
-function imagesSetter(answers, correctAnswer, userAnswer) {
+function imagesSetter(numOfAnswers, correctAnswer, userAnswer) {
   let imagesByResult = [];
-  for (let index = 0; index < answers.length; index++) {
+  for (let index = 0; index < numOfAnswers; index++) {
+    console.log(index);
     if (index + 1 === userAnswer || index + 1 === correctAnswer) {
       if (userAnswer === index + 1) {
+        console.log("incorrect is at index " + index);
+
         imagesByResult[index] = {
           //Wrong Answer
           src: incorrectSvg,
@@ -190,13 +183,7 @@ function imagesSetter(answers, correctAnswer, userAnswer) {
   }
   return imagesByResult;
 }
-Bars.propTypes = {
-  distribution: PropTypes.object.isRequired,
-  correctAnswer: PropTypes.number.isRequired,
-  userAnswer: PropTypes.number.isRequired,
-  answers: PropTypes.array.isRequired,
-  audioUrl: PropTypes.string.isRequired,
-};
+
 function castToPercent(distribution) {
   let total = 0;
   Object.values(distribution).forEach((element) => {
@@ -204,10 +191,12 @@ function castToPercent(distribution) {
   });
 
   let distributionPercent = {};
+  let tmp = 1;
   Object.keys(distribution).forEach((element) => {
-    distributionPercent[element] = Math.round(
+    distributionPercent[tmp] = Math.round(
       (100 * distribution[element]) / total
     );
+    tmp++;
   });
   return distributionPercent;
 }
@@ -216,7 +205,16 @@ const mapStateToProps = (state) => ({
   distribution: state.user.userState.phaseProp.distribution,
   correctAnswer: state.user.userState.phaseProp.correctAnswer,
   userAnswer: state.user.userState.phaseProp.userAnswer,
-  answers: state.user.userState.phaseProp.answers,
+  correctTerm: state.user.userState.phaseProp.correctTerm,
+  audioKey: state.user.userState.phaseProp.key,
 });
+
+Bars.propTypes = {
+  distribution: PropTypes.object.isRequired,
+  correctAnswer: PropTypes.number.isRequired,
+  userAnswer: PropTypes.number.isRequired,
+  correctTerm: PropTypes.string.isRequired,
+  audioKey: PropTypes.string.isRequired,
+};
 
 export default connect(mapStateToProps, {})(Bars);

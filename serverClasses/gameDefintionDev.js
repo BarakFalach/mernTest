@@ -24,7 +24,7 @@ gameDefenition["question1"] = {
 gameDefenition["bars1"] = {
   key: "bars1",
   type: "Bars",
-  duration: 5,
+  duration: 10,
 };
 gameDefenition["top3_1"] = {
   key: "top3_1",

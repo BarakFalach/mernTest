@@ -33,7 +33,7 @@ body {
   display: flex;
   height: 92vh;
   width: 100%;
-  border: 6px solid pink;
+  /* border: 6px solid pink; */
   flex-direction: row;
   justify-content: center;
 }

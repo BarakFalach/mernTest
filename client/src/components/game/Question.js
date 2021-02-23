@@ -127,10 +127,12 @@ class Question extends React.Component {
         let questDiv = (
           <div>
             <button className={classNames[index]} disabled={true}>
-              <div className={"numberCircle"}>{index + 1}</div>
-              <Textfit max={40} min={26} mode='multi'>
-                {this.props.answers[index]}
-              </Textfit>
+              <div className='flexbox-row-single-ques'>
+                <div className={"numberCircle"}>{index + 1}</div>
+                <div className='text-inside-ans'>
+                  {this.props.answers[index]}
+                </div>
+              </div>
             </button>
           </div>
         );
@@ -173,10 +175,10 @@ class Question extends React.Component {
             className={classNames[index]}
             onClick={() => this.onAnswerClick(index + 1)}
           >
-            <div className={"numberCircle"}>{index + 1}</div>
-            <Textfit max={40} min={26} mode='multi'>
-              {this.props.answers[index]}
-            </Textfit>
+            <div className='flexbox-row-single-ques'>
+              <div className={"numberCircle"}>{index + 1}</div>
+              <div className='text-inside-ans'>{this.props.answers[index]}</div>
+            </div>
           </button>
         );
         allQuestDivs.push(questDiv);
@@ -219,9 +221,10 @@ class Question extends React.Component {
       ) {
         let questDiv = (
           <button disabled={true} className={classNames[index]}>
-            <Textfit max={40} min={26} mode='multi'>
-              {this.props.answers[index]}
-            </Textfit>
+            <div className='flexbox-row-single-ques'>
+              <div className={"numberCircle"}>{index + 1}</div>
+              <div className='text-inside-ans'>{this.props.answers[index]}</div>
+            </div>
           </button>
         );
         allQuestDivs.push(questDiv);
@@ -253,65 +256,43 @@ class Question extends React.Component {
     */
 
     const listeningQuestion = (
-      <div className='wholescreen'>
-        <div className='flex-container'>
-          <div dir='rtl' className='question'>
-            {this.props.question}
-          </div>
-          <audio id='myAudioQues' autoPlay>
-            <source src={this.audioPathQuestion} />
-          </audio>
-          <div style={{ marginTop: "20px" }}>
-            <ScaleLoader />
-          </div>
+      <div className='flex-container-q'>
+        <div className='question'>{this.props.question}</div>
+        <div>
+          <ScaleLoader />
         </div>
+        <audio id='myAudioQues' autoPlay>
+          <source src={this.audioPathQuestion} />
+        </audio>
       </div>
     );
 
     const animation = (
-      <div className='wholescreen-col'>
-        <div dir='rtl' className='questAnimation'>
-          {this.props.question}
-        </div>
+      <div className='flex-container-q'>
+        <div className='quest-animation'>{this.props.question}</div>
         <div className='clock-animation clockCenter'>{this.clocktimer}</div>
-        <div className='quest-container'>{allQuestDivs}</div>
+        <div className='quest-container-answered'>{allQuestDivs}</div>
       </div>
     );
 
     const listeningAnswers = (
-      <div className='wholescreen-col'>
-        <div
-          dir='rtl'
-          style={{ position: "absolute", top: "10%", fontSize: "48px" }}
-        >
-          {this.props.question}
-        </div>
+      <div className='flex-container-q'>
+        <div className='quest-listen-answers'>{this.props.question}</div>
         <div className='clockCenter'>{this.clocktimer}</div>
         <div className='quest-container-answered'>{allQuestDivs}</div>
         <KeyboardEventHandler
           handleKeys={this.indexes}
           onKeyEvent={(key) => this.handleKeyDown(key)}
         />
-        {/* <audio id='click' autoPlay>
-          <source src={clickSound} />
-        </audio> */}
       </div>
     );
 
     const answeredAndWait = (
-      <div className='wholescreen-col'>
-        <div
-          dir='rtl'
-          style={{ position: "absolute", top: "10%", fontSize: "48px" }}
-        >
-          {this.props.question}
-        </div>
+      <div className='flex-container-q'>
+        <div className='quest-listen-answers'>{this.props.question}</div>
         <div className='clockCenter'>{this.clocktimer}</div>
         <div className='quest-container-answered'>{allQuestDivs}</div>
-        <div className='waitUsers'>wait for your last friends...</div>
-        {/* <audio id='click' autoPlay>
-          <source src={clickSound} />
-        </audio> */}
+        <div className='wait-users'>תשובתך נקלטה.. ממתין לשאר החברים </div>
       </div>
     );
     if (part === "listening q") {
