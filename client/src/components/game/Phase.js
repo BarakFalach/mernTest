@@ -33,7 +33,7 @@ const Phase = ({ phase }) => {
       return <WebcamCapture />;
     default:
       //   return <Bars />;
-      return <Goodbye />;
+      return <Welcome />;
   }
 };
 
