@@ -13,8 +13,12 @@ input::placeholder {
 
 input {
   text-align: center;
+  font-family: "Secular One", sans-serif;
 }
-
+button {
+  text-align: center;
+  font-family: "Secular One", sans-serif;
+}
 #testbutton {
   width: 150px;
   height: 50px;

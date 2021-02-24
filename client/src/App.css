@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Secular+One&display=swap");
 :root {
   --primary-color: #17a2b8;
   --dark-color: #343a40;
@@ -6,11 +7,22 @@
   --success-color: #28a745;
 }
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Secular One", sans-serif;
   background-image: url("./assets/giftly.png");
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: #dfd5fd;
+  color: #273043;
+}
+input {
+  text-align: center;
+  font-family: "Secular One", sans-serif;
+  color: #273043;
+}
+button {
+  text-align: center;
+  font-family: "Secular One", sans-serif;
+  color: #273043;
 }
 
 .heading {

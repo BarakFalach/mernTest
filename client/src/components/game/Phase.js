@@ -32,7 +32,6 @@ const Phase = ({ phase }) => {
     case "webCam":
       return <WebcamCapture />;
     default:
-      //   return <Bars />;
       return <Welcome />;
   }
 };

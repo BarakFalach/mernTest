@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import correctSvg from "../../assets/success-green-check-mark.svg";
 import incorrectSvg from "../../assets/wrong.svg";
@@ -67,7 +67,7 @@ const Bars = ({
           // borderRadius: 4,
           font: {
             weight: "bold",
-            size: Math.min(windowSize.height, windowSize.width)*0.05,
+            size: Math.min(windowSize.height, windowSize.width) * 0.05,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -90,15 +90,15 @@ const Bars = ({
     ],
   };
   return (
-    <div className="flex-container-main-bars">
-      <h1 className="header-bars">{sentence}</h1>
-      <h1 className="header-bars" style={{ marginTop: "0%" }}>
+    <div className='flex-container-main-bars'>
+      <h1 className='header-bars'>{sentence}</h1>
+      <h1 className='header-bars' style={{ marginTop: "0%" }}>
         {correctAns}
       </h1>
       <audio autoPlay>
         <source src={"assets/bars/" + audioKey + ".m4a"} />
       </audio>
-      <div dir="ltr" className="bottom-bars">
+      <div dir='ltr' className='bottom-bars'>
         <Bar
           data={data}
           options={{
@@ -122,7 +122,7 @@ const Bars = ({
             scales: {
               xAxes: [
                 {
-                  maxBarThickness: 300,
+                  maxBarThickness: windowSize.width * 0.15,
                   display: true,
                   ticks: {
                     fontSize: 20,

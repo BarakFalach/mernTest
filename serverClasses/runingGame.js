@@ -5,6 +5,7 @@ const PHASE = "PHASE";
 const USER = "USER";
 const converter = require("json-2-csv");
 const { json } = require("express");
+const { Socket } = require("dgram");
 fs = require("fs");
 
 class RuningGame {
@@ -56,22 +57,28 @@ class RuningGame {
   }
 
   /**
-   *  change last_answer_corecntess to false
-   *  add current distrebution to gameResult
+   *  @update - User, clean answers field for connected and archive users
+   *  @write - write the result for the csv
    */
-  cleanUsersLastAnswer(questionPhase) {
+  async cleanUsersLastAnswer(questionPhase) {
     for (var item in this.d_users) {
+      this.d_users[item].last_answer_correctness = false;
+      this.d_users[item].last_answer = 0;
+    }
+    for (var item in this.archive_user_dict) {
       this.d_users[item].last_answer_correctness = false;
       this.d_users[item].last_answer = 0;
     }
     this.d_users_answers = [];
     this.knowledge_question_dist[0] =
       this.curr_connected_users - this.sumValues(this.knowledge_question_dist);
-    const curQuestionDist = {
-      questionName: questionPhase.key,
-      distrebution: this.knowledge_question_dist,
-    };
-    this.gameResult.push(curQuestionDist);
+    if (questionPhase) {
+      const curQuestionDist = {
+        questionName: questionPhase.key,
+        distrebution: this.knowledge_question_dist,
+      };
+      this.gameResult.push(curQuestionDist);
+    }
   }
 
   /** this function sum the values of a given dict */
@@ -80,24 +87,24 @@ class RuningGame {
   }
 
   /** This function clean the last_answer_correctness to all game's users to false
-   *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
+   * @update dicts: knowledge_question_answers
+   * @update User : last_asnwer, last_time, curr_score
+   * @update Group : Group Score.
    *  return: null
    */
   updateScoreForUsers(questionPhase) {
     var user = {};
-    const timeInMs = questionPhase.phaseProp.time * 1000;
-    for (var index in this.d_users_answers) {
-      user = this.d_users_answers[index];
-      this.knowledge_question_answers[user.answer] += 1;
-      if (user.answer == questionPhase.correct_answer) {
-        this.d_users[user.userID].curr_score += Math.round(user.time / 10);
-        this.d_users[user.userID].last_answer_correctness = true;
-        this.updateScoreForGroup(
-          this.d_users[user.userID].group,
-          Math.round(user.time / 10)
-        );
+    for (var index in this.d_users) {
+      user = this.d_users[index];
+      user.last_answer !== 0
+        ? (this.knowledge_question_answers[user.last_answer] += 1)
+        : "";
+      if (user.last_answer == questionPhase.correct_answer) {
+        user.curr_score += Math.round(user.last_time / 10);
+        user.last_answer_correctness = true;
+        this.updateScoreForGroup(user.group, Math.round(user.time / 10));
       } else {
-        this.d_users[user.userID].last_answer_correctness = false;
+        user.last_answer_correctness = false;
       }
     }
   }
@@ -126,21 +133,10 @@ class RuningGame {
    * @param {*} connection - the webScoket connection of this user
    * @param {*} gameKey
    */
-  handle_req_user_login(userID, userName, connection, gameKey) {
+  handle_req_user_login(userID, connection, gameKey) {
     var phase = "default";
-    var curUser = this.checkIfDisconnected(userID, userName);
-    if (curUser == undefined) {
-      curUser = new User(
-        userName,
-        gameKey,
-        this.getGroupNum(),
-        this.numberStack.pop()
-      );
-      // phase = 'webCam';
-    }
-
+    var curUser = new User(gameKey, this.getGroupNum(), this.numberStack.pop());
     curUser.setConnection(connection);
-
     this.d_users[userID] = curUser;
     this.curr_connected_users++;
     this.groups[curUser.group].participants++;
@@ -151,7 +147,7 @@ class RuningGame {
         id: userID,
         name: curUser.userNumber,
         score: curUser.curr_score,
-        keygame: gameKey, //TODO:::  change this veriable in client
+        gameKey: gameKey, //TODO:::  change this veriable in client
         group: curUser.group,
         phase: phase,
         phaseProp: {
@@ -230,7 +226,7 @@ class RuningGame {
     this.sendPhaseStatus();
   }
   /** This function update the user answer and score
-   *  @updated dicts: d_users_answers, d_activeGames
+   *  @updated dicts: User last_asnwer, last_time
    *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
    */
   handle_user_answer(userID, answer, time, key) {
@@ -243,7 +239,7 @@ class RuningGame {
       time: time,
     };
     this.d_users[userID].last_answer = answer;
-    this.d_users_answers.push(answerProp);
+    this.d_users[userID].last_time = time;
   }
 
   handle_user_img(userID, img) {
@@ -295,7 +291,8 @@ class RuningGame {
   handle_delete_user(userID, gameKey) {
     try {
       const groupNumber = this.d_users[userID].group;
-      delete this.groups[groupNumber].participants--;
+      this.d_users[userID].setConnection();
+      this.groups[groupNumber].participants--;
       this.archive_user_dict[userID] = this.d_users[userID];
       delete this.d_users[userID];
       this.curr_connected_users--;
@@ -410,11 +407,11 @@ class RuningGame {
    * @param {string} name - user name to search
    * @returns {string} return the user id object or undifined if false
    */
-  findUserByName(user_dic, _name) {
+  findUserByNumber(user_dic, _nmber) {
     var curUser;
     for (var user in user_dic) {
       if (user_dic[user] != undefined) {
-        if (user_dic[user].name == _name) {
+        if (user_dic[user].userNumber == _nmber) {
           curUser = user;
           break;
         }
@@ -423,21 +420,41 @@ class RuningGame {
     return curUser;
   }
   /**
-   * find if the user appears in the arcive, in production find by id (ip) in develop find by name
-   * @param {*} userID - the user id
-   * @param {*} userName - the user name
-   * @retrn curUser - if exist ? userObject : undifiend
+   * find if the user appears in the arcive, create user, send user to default screen, send admin info.
+   * @param {String} userID - the user id
+   * @param {Number} userNumber - the user number from the local user storgae
+   * @param {Socket} connection - the new user connection
+   * @retrn void
    */
-  checkIfDisconnected(userID, userName) {
-    userID =
-      process.env.NODE_ENV === "production"
-        ? userID
-        : this.findUserByName(this.archive_user_dict, userName);
-    const curUser = this.archive_user_dict[userID];
-    if (curUser != undefined) {
-      delete this.archive_user_dict[userID];
+  handle_user_reconnect(userID, connection, userNumber, gameKey) {
+    //TODO:: mvoe to number production and dev
+    const fatchedUser = this.findUserByNumber(
+      this.archive_user_dict,
+      userNumber
+    );
+    if (fatchedUser) {
+      const curUser = this.archive_user_dict[fatchedUser];
+      this.d_users[userID] = curUser;
+      this.d_users[userID].setConnection(connection);
+      delete this.archive_user_dict[fatchedUser];
+      this.curr_connected_users++;
+      this.groups[curUser.group].participants++;
+      connection.send(
+        JSON.stringify({
+          type: GAME_KEY_SUCCESS,
+          id: userID,
+          name: curUser.userNumber,
+          score: curUser.curr_score,
+          gameKey: gameKey,
+          group: curUser.group,
+          phase: "default", //TODO create screen re connect
+          phaseProp: {
+            ratio: this.curr_connected_users / this.num_of_participates,
+          },
+        })
+      );
+      this.sendUserTable();
     }
-    return curUser;
   }
   writeResultCsv() {
     converter.json2csv(this.gameResult, (err, csv) => {
