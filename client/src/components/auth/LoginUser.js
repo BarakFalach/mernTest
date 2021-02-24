@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
 import { Redirect } from "react-router-dom";
+import { loadState } from "../../localStorage";
 import "../layouts/css/LoginUser.css";
 const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     gameKey: "",
   });
-
 
   useEffect(() => {
     var load = loadState();
@@ -28,13 +28,13 @@ const LoginUser = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to='/game' />;
+    return <Redirect to="/game" />;
   }
 
   const { name, gameKey } = formData;
   return (
     <Fragment>
-      <div className='flex-container-user-main '>
+      <div className="flex-container-user-main ">
         <h2>ברוכים הבאים </h2>
         <h2 style={{ marginTop: "2%" }}>
           בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי
@@ -43,9 +43,9 @@ const LoginUser = ({ login, isAuthenticated }) => {
         <form onSubmit={(e) => onSubmit(e)}>
           <div style={{ marginTop: "10%" }}>
             <input
-              type='text'
-              placeholder='שם מלא'
-              name='name'
+              type="text"
+              placeholder="שם מלא"
+              name="name"
               value={name}
               onChange={(e) => onChange(e)}
               required
@@ -53,18 +53,17 @@ const LoginUser = ({ login, isAuthenticated }) => {
           </div>
           <div style={{ marginTop: "10%" }}>
             <input
-              type='text'
-              placeholder='קוד משחק'
-              name='keygame'
-              textAlign='middle'
-              value={keygame}
-
+              type="text"
+              placeholder="קוד משחק"
+              name="keygame"
+              textAlign="middle"
+              value={gameKey}
               onChange={(e) => onChange(e)}
               required
             />
           </div>
           <div style={{ marginTop: "15%" }}>
-            <button type='submit' color='primary'>
+            <button type="submit" color="primary">
               היכנס/י
             </button>
           </div>
