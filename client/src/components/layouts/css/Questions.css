@@ -181,7 +181,6 @@
 .quest-container-answered {
   display: flex;
   height: 33vh;
-  /* border: 5px solid green; */
   width: 62vw;
   flex-wrap: wrap;
   margin-top: 6%;
@@ -190,7 +189,6 @@
   align-items: center;
   min-height: 120px;
   min-width: 340px;
-  border: px rgb(195, 0, 255) solid;
 }
 .singleAnswer {
   width: 30vw;
@@ -211,8 +209,24 @@
   /* border: 2px solid red; */
   height: 100%;
   width: 100%;
-  border: 3px solid seagreen;
 }
+.numberCircle {
+  position: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 50%;
+  width: 6vmin;
+  height: 6vmin;
+  border: 0.6vmin solid rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  text-align: center;
+  font-family: "Montserrat";
+  font-weight: bold;
+  font-size: 3.7vmin;
+  /* margin-right: max(100px, 5vmin); */
+}
+
 .text-inside-ans {
   display: flex;
   flex-direction: row;
@@ -223,6 +237,7 @@
   width: 23vw;
   max-height: 11.1vmin;
   margin: 0.5vmax;
+  line-height: 90%;
 }
 @media screen and (max-height: 900px) {
   .text-inside-ans {
@@ -239,58 +254,8 @@
     font-size: 3vmin;
   }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .text-inside-ans {
-    font-size: 3vmin;
+    font-size: 2.6vmin;
   }
-}
-
-/* @media screen and (max-height: 650px) {
-  .text-inside-ans {
-    font-size: 3.5vmin;
-  }
-}
-@media screen and (max-width: 650px) {
-  .text-inside-ans {
-    font-size: 3.5vmin;
-  }
-}
-
-@media screen and (max-height: 550px) {
-  .text-inside-ans {
-    font-size: 3.3vmin;
-  }
-}
-@media screen and (max-width: 550px) {
-  .text-inside-ans {
-    font-size: 3.3vmin;
-  }
-}
-
-@media screen and (max-height: 500px) {
-  .text-inside-ans {
-    font-size: 3vmin;
-  }
-}
-@media screen and (max-width: 500px) {
-  .text-inside-ans {
-    font-size: 3vmin;
-  }
-} */
-
-.numberCircle {
-  position: block;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 50%;
-  width: 6vmin;
-  height: 6vmin;
-  border: 0.6vmin solid rgb(255, 255, 255);
-  color: rgb(255, 255, 255);
-  text-align: center;
-  font-family: "Montserrat";
-  font-weight: bold;
-  font-size: 3.7vmin;
-  /* margin-right: max(100px, 5vmin); */
 }

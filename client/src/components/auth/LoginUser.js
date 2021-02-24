@@ -2,14 +2,13 @@ import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../actions/user";
-import { DialogTitle, Typography, TextField, Button } from "@material-ui/core";
-import { loadState } from "../../localStorage.js";
 import { Redirect } from "react-router-dom";
 import "../layouts/css/LoginUser.css";
-const LoginUser = ({ login, isAuthenticated, questions }) => {
+const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     gameKey: "",
   });
+
 
   useEffect(() => {
     var load = loadState();
@@ -29,35 +28,45 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to="/game" />;
+    return <Redirect to='/game' />;
   }
 
   const { name, gameKey } = formData;
   return (
     <Fragment>
-      <div className="flex-container-user-main ">
-        <Typography variant="h2">ברוכים הבאים </Typography>
-        <Typography style={{ marginTop: "2%" }} variant="h8">
-          בשלב הראשון, אנא מלאו את קוד המשחק הניתן לכם על ידי המנחה{" "}
-        </Typography>
-
+      <div className='flex-container-user-main '>
+        <h2>ברוכים הבאים </h2>
+        <h2 style={{ marginTop: "2%" }}>
+          בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי
+          המנחה{" "}
+        </h2>
         <form onSubmit={(e) => onSubmit(e)}>
           <div style={{ marginTop: "10%" }}>
-            <TextField
-              className="formField"
-              type="text"
-              placeholder="קוד משחק"
-              name="gameKey"
-              textAlign="middle"
-              value={gameKey}
+            <input
+              type='text'
+              placeholder='שם מלא'
+              name='name'
+              value={name}
+              onChange={(e) => onChange(e)}
+              required
+            />
+          </div>
+          <div style={{ marginTop: "10%" }}>
+            <input
+              type='text'
+              placeholder='קוד משחק'
+              name='keygame'
+              textAlign='middle'
+              value={keygame}
+
               onChange={(e) => onChange(e)}
               required
             />
           </div>
           <div style={{ marginTop: "15%" }}>
-            <Button id="testbutton" type="submit" color="primary">
+            <button type='submit' color='primary'>
               היכנס/י
-            </Button>
+            </button>
           </div>
         </form>
       </div>
@@ -67,13 +76,11 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
 
 LoginUser.propTypes = {
   isAuthenticated: PropTypes.bool,
-  questions: PropTypes.array,
   login: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
-  questions: state.user.questions,
 });
 
 export default connect(mapStateToProps, { login })(LoginUser);
