@@ -1,7 +1,6 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from "../../actions/user";
 import Question from "./Question";
 import Bars from "./Bars";
 import { Answer } from "./Answer";
@@ -11,7 +10,7 @@ import { Poll } from "./Poll";
 import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
-import Goodbye from "./GoodBye";
+// import Goodbye from "./GoodBye";
 
 const Phase = ({ phase }) => {
   switch (phase) {

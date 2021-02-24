@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@material-ui/core";
-
+import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 import { initGame, startGame } from "../../actions/dashboard";
 import GameDashboard from "./GameDashboard";
-
 const ControlPanel = ({ name, logout, initGame }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [numOfPlayers, setPlayers] = useState(40);
@@ -47,6 +45,7 @@ const ControlPanel = ({ name, logout, initGame }) => {
               required
             />
           </div>
+
           <button onClick={onSubmit}>init Game</button>
         </div>
       </form>
