@@ -134,7 +134,7 @@ class RuningGame {
    * @param {*} gameKey
    */
   handle_req_user_login(userID, connection, gameKey) {
-    var phase = "default";
+    var phase = "webCam";
     var curUser = new User(gameKey, this.getGroupNum(), this.numberStack.pop());
     curUser.setConnection(connection);
     this.d_users[userID] = curUser;
