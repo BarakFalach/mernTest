@@ -17,7 +17,7 @@ const Phase = ({ phase, keyOfPhase }) => {
   console.log(keyOfPhase);
   switch (phase) {
     case "Question":
-      return <Question interval={keyOfPhase} />; // Fix the problem of
+      return <Question key={keyOfPhase} />; // Fix the problem of
     case "answer":
       return <Answer />;
     case "video":
