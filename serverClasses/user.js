@@ -8,7 +8,7 @@ class User {
     this.last_time;
     this.connection;
     this.userNumber = userNumber;
-    this.img;
+    this.img = "0";
   }
   setConnection(connection) {
     this.connection = connection;
@@ -20,6 +20,12 @@ class User {
       group_num: this.group,
       curr_score: this.curr_score,
       last_answer_correctness: this.last_answer_correctness,
+    };
+  }
+  topToJSON() {
+    return {
+      userNumber: this.userNumber,
+      curr_score: this.curr_score,
       img: this.img,
     };
   }

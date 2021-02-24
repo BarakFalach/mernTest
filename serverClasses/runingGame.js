@@ -233,11 +233,6 @@ class RuningGame {
     console.log(key);
     if (key != this.curr_phase.key) return; //TODO: change to cur_phase.key
     if (time <= 0) time = 0;
-    const answerProp = {
-      userID: userID,
-      answer: answer,
-      time: time,
-    };
     this.d_users[userID].last_answer = answer;
     this.d_users[userID].last_time = time;
   }
@@ -336,7 +331,7 @@ class RuningGame {
    */
   top3Users() {
     const usersByScore = this.sortByScore();
-    const topUsers = usersByScore.slice(0, 3);
+    const topUsers = this.userJsonTop3(usersByScore);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
@@ -344,12 +339,19 @@ class RuningGame {
           phase: "top3",
           phaseProp: {
             users: topUsers,
-            audio: this.curr_phase.phaseProp.audioArr,
           },
           score: this.d_users[key].curr_score,
         })
       );
     }
+  }
+  userJsonTop3(topUsers) {
+    topUsers = topUsers.slice(0, 3);
+    const users = [];
+    for (key in topUsers) {
+      users.push(topUsers[key].topToJSON());
+    }
+    return users;
   }
   topGroups() {
     for (key in this.d_users) {
@@ -469,6 +471,25 @@ class RuningGame {
   admin_re_enter() {
     this.sendUserTable();
     this.sendPhaseStatus();
+  }
+  startGame() {
+    for (key in this.d_users) {
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: PHASE,
+          phase: "bars",
+          phaseProp: {
+            distribution: this.knowledge_question_dist,
+            correctAnswer: questionPhase.correct_answer,
+            correctTerm:
+              questionPhase.phaseProp.answers[questionPhase.correct_answer - 1],
+            userAnswer: this.d_users[key].last_answer,
+            key: questionPhase.phaseProp.key,
+          },
+          score: this.d_users[key].curr_score,
+        })
+      );
+    }
   }
 }
 module.exports = RuningGame;
