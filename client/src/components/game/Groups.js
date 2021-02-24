@@ -7,20 +7,22 @@ import correctSvg from "../../assets/rabbit.png";
 import incorrectSvg from "../../assets/turtle.png";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
-// import "../layouts/css/BarsAnimation.css";
+import "../layouts/css/Groups.css";
 
 const Groups = ({
-  my_groups,
+  my_groups = {1:{curr_score:60},
+               2:{curr_score:20}},
   answers = ["1", "2"],
   winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
   correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
 }) => {
   let sentence;
   if (winning === 0) {
-    sentence = "תיקו בין הקבוצות";
+    sentence = "jrt";//"תיקו בין הקבוצות";
   } else {
     sentence = "קבוצה " + winning + " היא הקבוצה המובילה";
   }
+  console.log(my_groups);
   let total = getTotalScores(my_groups)
   let groups_score = castToScores(my_groups, total);
   let imagesByResult = imagesSetter(answers, correctAnswer);
@@ -46,7 +48,7 @@ const Groups = ({
           },
           font: {
             weight: "bold",
-            size: 50 ,
+            size: 45,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -67,13 +69,13 @@ const Groups = ({
     ],
   };
   return (
-    <div className='flex-container'>
-      <Typography variant='h4' font='Montserrat'>מצב הקבוצות (פלח, תגיד איזה שם אתה רוצה)</Typography>
-      <Typography variant='h5' font='Montserrat'>
+    <div className='flex-container-groups'>
+      <Typography style={{marginTop:"1.5%"}} variant='h4' font='Montserrat'>מצב הקבוצות (פלח, תגיד איזה שם אתה רוצה)</Typography>
+      <Typography style={{marginTop:"0.5%"}} variant='h5' font='Montserrat'>
         {sentence}
         {/* {icon} */}
       </Typography>
-      <div className='bottom-bars'>
+      <div className='bottom-bars-groups'>
         <HorizontalBar
           data={data}
           options={{
@@ -85,8 +87,8 @@ const Groups = ({
                 left: 50
               },
               margin: {
-                left: 30,
-                right: 50
+                // left: 30,
+                // right: 50
               },
             },
             animation: {
@@ -191,7 +193,7 @@ Groups.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    my_groups: state.user.userState.phaseProp,
+    //my_groups: state.user.userState.phaseProp,
 });
 
 export default connect(mapStateToProps, {})(Groups);

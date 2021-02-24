@@ -1,14 +1,12 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
-import Typography from "@material-ui/core/Typography";
 import { Bar } from "react-chartjs-2";
 import correctSvg from "../../assets/success-green-check-mark.svg";
 import incorrectSvg from "../../assets/wrong.svg";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
-import "../layouts/css/BarsAnimation.css";
-// import  aud from "../../assets/beep.mp3"
+import "../layouts/css/Bars.css";
 const Bars = ({
   distribution,
   correctAnswer,
@@ -17,14 +15,19 @@ const Bars = ({
   audioUrl,
 }) => {
   let sentence;
-  // let icon;
   if (correctAnswer == userAnswer) {
-    sentence = "Well Done! Your answer is correct! ";
-    // icon = CorrectnessIcon(true);
+    sentence = "כל הכבוד ! תשובתך נכונה.";
   } else {
-    sentence = "Unfortunately, Your answer is not the right answer.. ";
-    // icon = CorrectnessIcon(false);
+    sentence = "טעית, בפעם הבאה תצליח";
   }
+  let correctAns = (
+    <h7 style={{ display: "inline-block" }}>
+      התשובה הנכונה היא:{" "}
+      <h7 style={{ display: "inline-block", color: "green" }}>
+        {answers[correctAnswer - 1]}
+      </h7>
+    </h7>
+  );
   let distributionPercent = castToPercent(distribution);
   let imagesByResult = imagesSetter(answers, correctAnswer, userAnswer);
   let colorSet = [
@@ -44,9 +47,9 @@ const Bars = ({
         hoverBorderColor: "rgba(255,99,132,1)",
         data: Object.values(distributionPercent),
         datalabels: {
-          anchor: "end",
-          align: "start",
-          offset: 20,
+          anchor: "center",
+
+          offset: 0,
           backgroundColor: function (ctx) {
             // var value = ctx.dataset.data[ctx.dataIndex];
             // return value > 50 ? "white" : null;
@@ -62,7 +65,7 @@ const Bars = ({
           // borderRadius: 4,
           font: {
             weight: "bold",
-            size: 40,
+            size: 30,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -74,7 +77,7 @@ const Bars = ({
             if (!ctx.active) {
               return value + "%";
             } else if (ctx.dataIndex == correctAnswer - 1) {
-              return "Correct";
+              return "תשובה נכונה";
             } else if (ctx.dataIndex == userAnswer - 1) {
               return "Yours";
             } else {
@@ -86,11 +89,11 @@ const Bars = ({
     ],
   };
   return (
-    <div className='flex-container'>
-      <Typography variant='h5' font='Montserrat'>
-        {sentence}
-        {/* {icon} */}
-      </Typography>
+    <div className='flex-container-main-bars'>
+      <h1 className='header-bars'>{sentence}</h1>
+      <h1 className='header-bars' style={{ marginTop: "0%" }}>
+        {correctAns}
+      </h1>
       <audio autoPlay>
         <source
           src={
@@ -98,17 +101,12 @@ const Bars = ({
           }
         />
       </audio>
-      <div className='bottom-bars'>
+      <div dir='ltr' className='bottom-bars'>
         <Bar
           data={data}
           options={{
             layout: {
-              padding: {
-                top: 40,
-              },
-              margin: {
-                bottom: 20,
-              },
+              padding: { top: 80 },
             },
             animation: {
               duration: 2300,
@@ -120,35 +118,20 @@ const Bars = ({
             plugins: {
               labels: {
                 render: "image",
-                textMargin: 10,
+                textMargin: 5,
                 images: imagesByResult,
-              },
-              datalabels: {
-                labels: {
-                  color: "blue",
-                  labels: {
-                    title: {
-                      font: {
-                        weight: "bold",
-                        size: 100,
-                      },
-                    },
-                    value: {
-                      color: "green",
-                    },
-                  },
-                },
               },
             },
             scales: {
               xAxes: [
                 {
+                  maxBarThickness: 300,
                   display: true,
                   ticks: {
-                    fontSize: 30,
+                    fontSize: 20,
                   },
                   gridLines: {
-                    paddingTop: 10,
+                    //xAxe Line
                     drawBorder: true,
                     color: "black",
                     drawOnChartArea: false,

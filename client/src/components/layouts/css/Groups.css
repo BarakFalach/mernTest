@@ -1,0 +1,19 @@
+.flex-container-groups {
+  /* position: fixed; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh- (1%));
+  width: calc(100vw- (1%));
+  border: 3px solid rgb(231, 12, 12);
+  text-align: center;
+}
+
+.bottom-bars-groups {
+  text-align: center;
+  /* position: fixed; */
+  /* height: 80%; */
+  /* margin-bottom: 1000px; */
+  /* width: 80%; */
+}
