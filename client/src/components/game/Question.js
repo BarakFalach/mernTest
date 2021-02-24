@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { UserAnswer } from "../../actions/user";
 import KeyboardEventHandler from "react-keyboard-event-handler";
-import { Textfit } from "react-textfit";
 import "../layouts/css/Questions.css";
 import { ScaleLoader } from "react-spinners";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
@@ -13,10 +12,10 @@ class Question extends React.Component {
     this.state = {
       part: "listening q",
       calledTime: new Date(),
-      quesDuration: 0,
       selected: -1, // start from 0 . for present the currect answer
       key: 0,
     };
+    this.quesDuration = 0;
     this.classNames = null;
     this.indexes = [props.answers.length];
     this.clocktimer = null;
@@ -24,6 +23,12 @@ class Question extends React.Component {
     this.createIndexes(props.answers.length);
     this.audioPathQuestion = "assets/question/" + this.props.quesNum + "_1.m4a";
     this.audioPathAnswers = "assets/question/" + this.props.quesNum + "_2.m4a";
+    this.ansAudio = null;
+    this.audioElement = null;
+    this.firstL = this.firstAudioListener.bind(this);
+    this.secondL = this.secondAudioListener.bind(this);
+    this.windowL = this.windowListener.bind(this);
+    this.ansL = this.ansAudioListener.bind(this);
   }
 
   createIndexes = (numOfAnswers) => {
@@ -37,7 +42,7 @@ class Question extends React.Component {
   remainTimeFunc = () => {
     var remainTime =
       this.state.calledTime.getTime() +
-      (this.state.quesDuration + this.state.ansAudio.duration) * 1000 +
+      (this.quesDuration + this.ansAudio.duration) * 1000 +
       this.props.time * 1000 -
       new Date().getTime();
     return remainTime;
@@ -77,42 +82,57 @@ class Question extends React.Component {
     return <div>{remainingTime}</div>;
   };
 
+  firstAudioListener(e) {
+    this.setState({ part: "animation" });
+  }
+  secondAudioListener(e) {
+    this.quesDuration = e.target.duration;
+  }
+  ansAudioListener(e) {
+    this.setState({ part: "choosing" });
+  }
+  windowListener(e) {
+    if (this.state.part === "choosing") {
+      this.setState({ key: this.state.key + 1 });
+    }
+  }
+
+  componentWillUnmount() {
+    console.log("enterd unmount");
+    this.audioElement.removeEventListener("ended", this.firstL);
+    this.audioElement.removeEventListener("loadedmetadata", this.secondL);
+    this.ansAudio.removeEventListener("ended", this.ansL);
+    if (!this.audioElement.ended) {
+      console.log("questions audio stopped in the middle");
+      this.audioElement.pause();
+    }
+    if (!this.ansAudio.ended) {
+      this.ansAudio.pause();
+      console.log("answers audio stopped in the middle");
+    }
+    window.removeEventListener("focus", this.windowL);
+  }
+
   componentDidMount() {
-    const self = this;
+    console.log("enterd did mount");
     if (this.state.part === "listening q") {
-      var audioElement = document.getElementById("myAudioQues");
-      if (audioElement != null) {
-        audioElement.addEventListener(
-          "ended",
-          function () {
-            self.setState({ part: "animation" });
-          },
-          false
-        );
+      this.audioElement = document.getElementById("myAudioQues");
+      if (this.audioElement != null) {
+        this.audioElement.addEventListener("ended", this.firstL);
       }
-      audioElement.addEventListener("loadedmetadata", (e) => {
-        self.state.quesDuration = e.target.duration;
-      });
-      window.addEventListener("focus", () => {
-        if (self.state.part === "choosing") {
-          self.setState({ key: self.state.key + 1 });
-        }
-      });
+      this.audioElement.addEventListener("loadedmetadata", this.secondL);
+      window.addEventListener("focus", this.windowL);
     }
   }
 
   render() {
     let allQuestDivs = [];
     const part = this.state.part;
-    console.log("render part  ----> " + this.state.part);
     if (part === "listening q") {
-      let ansAudio = new Audio(this.audioPathAnswers);
-      ansAudio.addEventListener("ended", () =>
-        this.setState({ part: "choosing" })
-      );
-      this.state.ansAudio = ansAudio;
+      this.ansAudio = new Audio(this.audioPathAnswers);
+      this.ansAudio.addEventListener("ended", this.ansL);
     } else if (part === "animation") {
-      this.state.ansAudio.play();
+      this.ansAudio.play();
       const classNames = [
         " singleAnswer e1",
         " singleAnswer e2",
@@ -125,7 +145,7 @@ class Question extends React.Component {
         index = index + 1
       ) {
         let questDiv = (
-          <div>
+          <div key={index}>
             <button className={classNames[index]} disabled={true}>
               <div className='flexbox-row-single-ques'>
                 <div className={"numberCircle"}>{index + 1}</div>
@@ -172,6 +192,7 @@ class Question extends React.Component {
       ) {
         let questDiv = (
           <button
+            key={index}
             className={classNames[index]}
             onClick={() => this.onAnswerClick(index + 1)}
           >
@@ -220,7 +241,7 @@ class Question extends React.Component {
         index = index + 1
       ) {
         let questDiv = (
-          <button disabled={true} className={classNames[index]}>
+          <button key={index} disabled={true} className={classNames[index]}>
             <div className='flexbox-row-single-ques'>
               <div className={"numberCircle"}>{index + 1}</div>
               <div className='text-inside-ans'>{this.props.answers[index]}</div>
@@ -323,355 +344,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { UserAnswer })(Question);
-
-// import { connect } from "react-redux";
-// import PropTypes from "prop-types";
-// import React from "react";
-// import { UserAnswer } from "../../actions/user";
-// import KeyboardEventHandler from "react-keyboard-event-handler";
-// import { Textfit } from "react-textfit";
-// import "../layouts/css/Questions.css";
-// import { ScaleLoader } from "react-spinners";
-// import { CountdownCircleTimer } from "react-countdown-circle-timer";
-// // Didnt finished Timing !!! not heard is correct
-// class Question extends React.Component {
-//   constructor() {
-//     super();
-
-//     this.state = {
-//       part: "listening q",
-//       calledTime: new Date(),
-//       quesDuration: 0,
-//       selected: -1, // start from 0 . for present the currect answer
-//       key: 0,
-//     };
-//   }
-
-//   remainTimeFunc = () => {
-//     var remainTime =
-//       this.state.calledTime.getTime() +
-//       (this.state.quesDuration + this.state.ansAudio.duration) * 1000 +
-//       this.props.time * 1000 -
-//       new Date().getTime();
-//     return remainTime;
-//   };
-
-//   onAnswerClick = (ind) => {
-//     this.setState({ part: "answered", selected: ind - 1 });
-//     this.props.UserAnswer(
-//       ind,
-//       Math.round(this.remainTimeFunc()),
-//       this.props.quesNum
-//     );
-//   };
-
-//   handleKeyDown = (key) => {
-//     this.setState({
-//       part: "answered",
-//       selected: parseInt(key) - 1,
-//     });
-//     this.props.UserAnswer(
-//       parseInt(key),
-//       Math.round(this.remainTimeFunc()),
-//       this.props.quesNum
-//     );
-//   };
-
-//   componentDidMount() {
-//     const self = this;
-//     if (this.state.part === "listening q") {
-//       var audioElement = document.getElementById("myAudioQues");
-//       if (audioElement != null) {
-//         audioElement.addEventListener(
-//           "ended",
-//           function () {
-//             self.setState({ part: "animation" });
-//           },
-//           false
-//         );
-//       }
-//       audioElement.addEventListener("loadedmetadata", (e) => {
-//         self.state.quesDuration = e.target.duration;
-//       });
-//       window.addEventListener("focus", () => {
-//         if (self.state.part === "choosing") {
-//           self.setState({ key: self.state.key + 1 });
-//         }
-//       });
-//     }
-//   }
-
-//   render() {
-//     console.log("render part  ----> " + this.state.part);
-//     var part = this.state.part;
-//     var questDiv;
-//     var allQuestDivs = [];
-//     var classNames = [];
-//     const indexes = [];
-//     var clocktimer;
-//     let tmp = 0;
-//     var remainTime;
-//     const renderTime = ({ remainingTime }) => {
-//       if (remainingTime === 0) {
-//         return <div dir='ltr'>!</div>;
-//       }
-//       return <div>{remainingTime}</div>;
-//     };
-//     const audioPathQuestion =
-//       "assets/question/" + this.props.quesNum + "_1.m4a";
-//     const audioPathAnswers = "assets/question/" + this.props.quesNum + "_2.m4a";
-//     // const clickSound = "assets/sample/mouseclick.m4a";
-//     for (let index = 0; index < this.props.answers.length; index++) {
-//       tmp = index + 1;
-//       indexes[index] = tmp + "";
-//     }
-
-//     /* Defining Components */
-
-//     if (part === "listening q") {
-//       var ansAudio = new Audio(audioPathAnswers);
-//       ansAudio.addEventListener("ended", () =>
-//         this.setState({ part: "choosing" })
-//       );
-//       this.state.ansAudio = ansAudio;
-//     } else if (part === "animation") {
-//       this.state.ansAudio.play();
-//       classNames = [
-//         "hovering singleAnswer e1",
-//         "hovering singleAnswer e2",
-//         "hovering singleAnswer e3",
-//         "hovering singleAnswer e4",
-//       ];
-//       for (
-//         let index = 0;
-//         index < this.props.answers.length;
-//         index = index + 1
-//       ) {
-//         questDiv = (
-//           <div>
-//             <button className={classNames[index]} disabled={true}>
-//               <div className={"numberCircle"}>{index + 1}</div>
-//               <Textfit max={40} min={26} mode='multi'>
-//                 {this.props.answers[index]}
-//               </Textfit>
-//             </button>
-//           </div>
-//         );
-//         allQuestDivs.push(questDiv);
-//       }
-//       clocktimer = (
-//         <div className='clockCenter'>
-//           <CountdownCircleTimer
-//             isPlaying={false}
-//             size={80}
-//             // duration={() => getRemainTime()}
-//             duration={this.props.time}
-//             colors={[
-//               ["#004777", 0.33],
-//               ["#F7B801", 0.33],
-//               ["#A30000", 0.33],
-//             ]}
-//             // onComplete={() => {
-//             //   this.setState({ part: "answered" });
-//             // }}
-//           >
-//             {({ remainingTime }) => remainingTime}
-//           </CountdownCircleTimer>
-//         </div>
-//       );
-//     } else if (part === "choosing") {
-//       classNames = [
-//         "singleAnswer s1",
-//         "singleAnswer s2",
-//         "singleAnswer s3",
-//         "singleAnswer s4",
-//       ];
-//       for (
-//         let index = 0;
-//         index < this.props.answers.length;
-//         index = index + 1
-//       ) {
-//         questDiv = (
-//           <button
-//             className={classNames[index]}
-//             onClick={() => this.onAnswerClick(index + 1)}
-//           >
-//             <div className={"numberCircle"}>{index + 1}</div>
-//             <Textfit max={40} min={26} mode='multi'>
-//               {this.props.answers[index]}
-//             </Textfit>
-//           </button>
-//         );
-//         allQuestDivs.push(questDiv);
-//       }
-//       remainTime = this.remainTimeFunc();
-//       remainTime = remainTime > 500 ? remainTime : 0;
-//       clocktimer = (
-//         <div className='clockCenter'>
-//           <CountdownCircleTimer
-//             key={this.state.key}
-//             size={80}
-//             isPlaying={true}
-//             duration={this.props.time} // should be Time Left !
-//             initialRemainingTime={remainTime / 1000}
-//             colors={[
-//               ["#004777", 0.33],
-//               ["#F7B801", 0.33],
-//               ["#A30000", 0.33],
-//             ]}
-//           >
-//             {renderTime}
-//           </CountdownCircleTimer>
-//         </div>
-//       );
-//     } else if (part === "answered") {
-//       classNames = [
-//         "singleAnswer e1",
-//         "singleAnswer e2",
-//         "singleAnswer e3",
-//         "singleAnswer e4",
-//       ];
-//       if (this.state.selected >= 0) {
-//         classNames[this.state.selected] =
-//           "singleAnswer s" + (this.state.selected + 1);
-//       }
-//       for (
-//         let index = 0;
-//         index < this.props.answers.length;
-//         index = index + 1
-//       ) {
-//         questDiv = (
-//           <button disabled={true} className={classNames[index]}>
-//             <Textfit max={40} min={26} mode='multi'>
-//               {this.props.answers[index]}
-//             </Textfit>
-//           </button>
-//         );
-//         allQuestDivs.push(questDiv);
-//       }
-//       remainTime = this.remainTimeFunc();
-//       remainTime = remainTime > 500 ? remainTime : 0;
-//       const renderTime = ({ remainingTime }) => {
-//         if (remainingTime === 0) {
-//           return <div dir='ltr'>!</div>;
-//         }
-//         return <div>{remainingTime}</div>;
-//       };
-
-//       clocktimer = (
-//         <div className='clockCenter'>
-//           <CountdownCircleTimer
-//             size={80}
-//             isPlaying
-//             duration={this.props.time} // should be Time Left !
-//             initialRemainingTime={remainTime / 1000}
-//             colors={[
-//               ["#004777", 0.33],
-//               ["#F7B801", 0.33],
-//               ["#A30000", 0.33],
-//             ]}
-//           >
-//             {renderTime}
-//           </CountdownCircleTimer>
-//         </div>
-//       );
-//     }
-
-//     /*
-//     Func Declarations :
-//     */
-
-//     /*
-//     Components Declareations :
-//     */
-
-//     const listeningQuestion = (
-//       <div className='wholescreen'>
-//         <div className='flex-container'>
-//           <div dir='rtl' className='question'>
-//             {this.props.question}
-//           </div>
-//           <audio id='myAudioQues' autoPlay>
-//             <source src={audioPathQuestion} />
-//           </audio>
-//           <div style={{ marginTop: "20px" }}>
-//             <ScaleLoader />
-//           </div>
-//         </div>
-//       </div>
-//     );
-
-//     const animation = (
-//       <div className='wholescreen-col'>
-//         <div dir='rtl' className='questAnimation'>
-//           {this.props.question}
-//         </div>
-//         <div className='clock-animation clockCenter'>{clocktimer}</div>
-//         <div className='quest-container'>{allQuestDivs}</div>
-//       </div>
-//     );
-
-//     const listeningAnswers = (
-//       <div className='wholescreen-col'>
-//         <div
-//           dir='rtl'
-//           style={{ position: "absolute", top: "10%", fontSize: "48px" }}
-//         >
-//           {this.props.question}
-//         </div>
-//         <div className='clockCenter'>{clocktimer}</div>
-//         <div className='quest-container-answered'>{allQuestDivs}</div>
-//         <KeyboardEventHandler
-//           handleKeys={indexes}
-//           onKeyEvent={(key, e) => this.handleKeyDown(key)}
-//         />
-//         {/* <audio id='click' autoPlay>
-//           <source src={clickSound} />
-//         </audio> */}
-//       </div>
-//     );
-
-//     const answeredAndWait = (
-//       <div className='wholescreen-col'>
-//         <div
-//           dir='rtl'
-//           style={{ position: "absolute", top: "10%", fontSize: "48px" }}
-//         >
-//           {this.props.question}
-//         </div>
-//         <div className='clockCenter'>{clocktimer}</div>
-//         <div className='quest-container-answered'>{allQuestDivs}</div>
-//         <div className='waitUsers'>wait for your last friends...</div>
-//         {/* <audio id='click' autoPlay>
-//           <source src={clickSound} />
-//         </audio> */}
-//       </div>
-//     );
-//     if (part === "listening q") {
-//       return listeningQuestion;
-//     } else if (part === "animation") {
-//       return animation;
-//     } else if (part === "choosing") {
-//       return listeningAnswers;
-//     } else if (part === "answered") {
-//       return answeredAndWait;
-//     }
-//   }
-// }
-
-// Question.propTypes = {
-//   question: PropTypes.string.isRequired,
-//   answers: PropTypes.array,
-//   time: PropTypes.number,
-//   UserAnswer: PropTypes.func.isRequired,
-//   quesNum: PropTypes.string.isRequired,
-// };
-
-// const mapStateToProps = (state) => ({
-//   question: state.user.userState.phaseProp.question,
-//   answers: state.user.userState.phaseProp.answers,
-//   time: state.user.userState.phaseProp.time,
-//   quesNum: state.user.userState.phaseProp.key,
-// });
-
-// export default connect(mapStateToProps, { UserAnswer })(Question);

@@ -1,7 +1,7 @@
 import Webcam from "react-webcam";
 import { sendPicture, CameraNotAllowed } from "../../actions/user";
 import PropTypes from "prop-types";
-import React, { Component, useState, useEffect } from "react";
+import React from "react";
 import { Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
@@ -17,18 +17,18 @@ class WebcamCapture extends React.Component {
       Seconds: 1,
       ImgExist: false,
       CaptureImage: null,
-	  audio: false,
-    disabledPictue: true,
-    notAllowed: false,
+      audio: false,
+      disabledPictue: true,
+      notAllowed: false,
     };
-	this.start = this.start.bind(this);
-  this.allow = this.allow.bind(this);
+    this.start = this.start.bind(this);
+    this.allow = this.allow.bind(this);
   }
 
   start() {
     this.setStatePromise({
       ImgExist: false,
-      ShowText: true,	
+      ShowText: true,
       Seconds: 3,
       audio: false,
     })
@@ -57,36 +57,36 @@ class WebcamCapture extends React.Component {
   }
 
   setRef = (webcam) => {
-	this.webcamRef = webcam;
+    this.webcamRef = webcam;
   };
 
-  allow(){
-    if (this.state.disabledPictue){
-      this.setStatePromise(({disabledPictue: false}))
-    }
-  };
-
-  updateAllow(state) {
-    if(state === 'denied' && document.getElementById('passPage')!==null){
-      document.getElementById('passPage').click();
+  allow() {
+    if (this.state.disabledPictue) {
+      this.setStatePromise({ disabledPictue: false });
     }
   }
-  
+
+  updateAllow(state) {
+    if (state === "denied" && document.getElementById("passPage") !== null) {
+      document.getElementById("passPage").click();
+    }
+  }
+
   componentDidMount() {
-    navigator.permissions.query({ name: 'camera' }).then((result) => {
+    navigator.permissions.query({ name: "camera" }).then((result) => {
       this.updateAllow(result.state);
-      result.addEventListener('change', () => {
+      result.addEventListener("change", () => {
         this.updateAllow(result.state);
       });
     });
   }
 
-  render() {    
+  render() {
     return (
       <div>
         {this.state.audio && (
           <audio autoPlay>
-            <source type="audio/mp3" src={ScreenshotAudio} />
+            <source type='audio/mp3' src={ScreenshotAudio} />
           </audio>
         )}
         {!this.state.ImgExist && <div className="mark" />}
@@ -103,15 +103,16 @@ class WebcamCapture extends React.Component {
                     imageWidth="350"
                     imageHeight="350"
                   />
+
               ) : (
                 <div className="camera-before">
                   <Webcam
                     className="camera-before"
                     ref={this.setRef}
                     audio={false}
-                    height="350"
+                    height='350'
                     onUserMedia={this.allow}
-                    screenshotFormat="image/jpeg"
+                    screenshotFormat='image/jpeg'
                   />
                 </div>
               )}
@@ -129,6 +130,7 @@ class WebcamCapture extends React.Component {
                 <button
                   className="myButton"
 				          onClick={sendPicture(this.state.CaptureImage)}
+
                 >
                   אשר/י תמונה
                 </button>
@@ -136,14 +138,17 @@ class WebcamCapture extends React.Component {
             </div>
           </div>
         {this.state.ShowText && (
-          <div className="counter-text">{this.state.Seconds}</div>
+          <div className='counter-text'>{this.state.Seconds}</div>
         )}
-      <button id="passPage" style={{visibility: "hidden"}} onClick={CameraNotAllowed()}></button>
+        <button
+          id='passPage'
+          style={{ visibility: "hidden" }}
+          onClick={CameraNotAllowed()}
+        ></button>
       </div>
     );
   }
 }
-
 
 WebcamCapture.propTypes = {
   sendPicture: PropTypes.func.isRequired,
@@ -152,4 +157,6 @@ WebcamCapture.propTypes = {
 
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, { sendPicture, CameraNotAllowed })(WebcamCapture);
+export default connect(mapStateToProps, { sendPicture, CameraNotAllowed })(
+  WebcamCapture
+);

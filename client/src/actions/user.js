@@ -1,4 +1,4 @@
-import { KEYGAME_SUCCESS, KEYGAME_FAIL, CHANGE_SCREEN } from "./types";
+import { KEYGAME_FAIL } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;

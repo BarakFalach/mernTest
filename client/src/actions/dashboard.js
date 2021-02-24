@@ -1,9 +1,4 @@
-import {
-  KEYGAME_SUCCESS,
-  KEYGAME_FAIL,
-  PHASE,
-  CREATE_NEW_GAME_INSTANCE,
-} from "./types";
+import { KEYGAME_FAIL, PHASE, CREATE_NEW_GAME_INSTANCE } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;
@@ -11,7 +6,6 @@ var client;
 export const initGame = (numOfPlayers = 40, name) => async (dispatch) => {
   try {
     client = new W3CWebSocket(PATH + ":" + ServerPORT);
-
     client.onopen = () => {
       client.send(
         JSON.stringify({

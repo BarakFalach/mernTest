@@ -73,6 +73,8 @@ const [
   IMG,
   CAMERA_NOT_ALLOWED,
   USER_RECONNECT,
+  START_GAME,
+  END_GAME,
 ] = [
   40,
   "USER_ANSWER",
@@ -87,6 +89,8 @@ const [
   "IMG",
   "CAMERA_NOT_ALLOWED",
   "USER_RECONNECT",
+  "START_GAME",
+  "END_GAME",
 ];
 const User = require("./serverClasses/user");
 const Admin = require("./serverClasses/admin");
@@ -375,6 +379,7 @@ wsServer.on("connection", (request) => {
             break;
           case START_GAME:
             d_activeGames[gameKey].startGame();
+            break;
 
           case USER_ANSWER:
             d_activeGames[gameKey].handle_user_answer(
@@ -397,8 +402,13 @@ wsServer.on("connection", (request) => {
             break;
           case IMG:
             d_activeGames[gameKey].handle_user_img(userID, userlog.img);
+            break;
           case CAMERA_NOT_ALLOWED:
             d_activeGames[gameKey].handle_user_img(userID, "");
+            break;
+          case END_GAME:
+            delete d_activeGames[gameKey];
+            break;
         }
       } catch (err) {
         console.log(err.message);

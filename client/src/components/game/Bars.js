@@ -16,16 +16,18 @@ const Bars = ({
 }) => {
   const windowSize = useWindowSize();
   let sentence;
-  if (correctAnswer == userAnswer) {
+  if (correctAnswer === userAnswer) {
     sentence = "כל הכבוד ! תשובתך נכונה.";
   } else {
     sentence = "טעית, בפעם הבאה תצליח";
   }
   let correctAns = (
-    <h7 style={{ display: "inline-block" }}>
+    <title style={{ display: "inline-block" }}>
       התשובה הנכונה היא:{" "}
-      <h7 style={{ display: "inline-block", color: "green" }}>{correctTerm}</h7>
-    </h7>
+      <title style={{ display: "inline-block", color: "green" }}>
+        {correctTerm}
+      </title>
+    </title>
   );
   let distributionPercent = castToPercent(distribution);
   let imagesByResult = imagesSetter(
@@ -45,6 +47,7 @@ const Bars = ({
     labels: Object.keys(distribution),
     datasets: [
       {
+        maxBarThickness: windowSize.width * 0.15,
         backgroundColor: colorSet,
         borderColor: colorSet,
         hoverBorderColor: "rgba(255,99,132,1)",
@@ -77,9 +80,9 @@ const Bars = ({
           formatter: function (value, ctx) {
             if (!ctx.active) {
               return value + "%";
-            } else if (ctx.dataIndex == correctAnswer - 1) {
+            } else if (ctx.dataIndex === correctAnswer - 1) {
               return "התשובה הנכונה";
-            } else if (ctx.dataIndex == userAnswer - 1) {
+            } else if (ctx.dataIndex === userAnswer - 1) {
               return "תשובתך";
             } else {
               return value + "%";
@@ -122,7 +125,6 @@ const Bars = ({
             scales: {
               xAxes: [
                 {
-                  maxBarThickness: windowSize.width * 0.15,
                   display: true,
                   ticks: {
                     fontSize: 20,

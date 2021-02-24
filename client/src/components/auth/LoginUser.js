@@ -9,12 +9,12 @@ const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     gameKey: "",
   });
-
+  //TODO: Falach need to fix ->empty array.
   useEffect(() => {
     var load = loadState();
     console.log(load);
 
-    if (load != undefined) {
+    if (load !== null) {
       login({ number: load.number, gameKey: load.gameKey });
     }
   }, []);
@@ -28,13 +28,13 @@ const LoginUser = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to="/game" />;
+    return <Redirect to='/game' />;
   }
 
   const { gameKey } = formData;
   return (
     <Fragment>
-      <div className="flex-container-user-main ">
+      <div className='flex-container-user-main '>
         <h2>ברוכים הבאים </h2>
         <h2 style={{ marginTop: "2%" }}>
           בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי
@@ -43,17 +43,16 @@ const LoginUser = ({ login, isAuthenticated }) => {
         <form onSubmit={(e) => onSubmit(e)}>
           <div style={{ marginTop: "10%" }}>
             <input
-              type="text"
-              placeholder="קוד משחק"
-              name="gameKey"
-              textAlign="middle"
+              type='text'
+              placeholder='קוד משחק'
+              name='gameKey'
               value={gameKey}
               onChange={(e) => onChange(e)}
               required
             />
           </div>
           <div style={{ marginTop: "15%" }}>
-            <button type="submit" color="primary">
+            <button type='submit' color='primary'>
               היכנס/י
             </button>
           </div>
