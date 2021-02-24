@@ -20,12 +20,14 @@ class WebcamCapture extends React.Component {
       audio: false,
       disabledPictue: true,
       notAllowed: false,
+      alreadyScreen: false,
     };
     this.start = this.start.bind(this);
     this.allow = this.allow.bind(this);
   }
 
   start() {
+    this.setStatePromise({alreadyScreen: true});
     this.setStatePromise({
       ImgExist: false,
       ShowText: true,
@@ -44,7 +46,10 @@ class WebcamCapture extends React.Component {
           ImgExist: true,
           CaptureImage: this.webcamRef.getScreenshot(),
         })
+      .then(() => this.setStatePromise({ alreadyScreen: false }))
       );
+      
+
   }
 
   sleep(ms) {
@@ -122,7 +127,7 @@ class WebcamCapture extends React.Component {
 			          <button
                 className="myButton"
                 onClick={this.start}
-                disabled={this.state.disabledPictue}
+                disabled={this.state.alreadyScreen || this.props.flag}
               >
             	{this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
               </button>}
@@ -152,9 +157,13 @@ class WebcamCapture extends React.Component {
 WebcamCapture.propTypes = {
   sendPicture: PropTypes.func.isRequired,
   CameraNotAllowed: PropTypes.func.isRequired,
+  flag: PropTypes.bool.isRequired,
+
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  flag: state.user.userState.phaseProp.flag,
+});
 
 export default connect(mapStateToProps, { sendPicture, CameraNotAllowed })(
   WebcamCapture
