@@ -28,7 +28,6 @@ export default function PlayersTable(props) {
         <TableHead>
           <TableRow>
             <TableCell align="right">Number</TableCell>
-            <TableCell align="right">Name</TableCell>
             <TableCell align="right">game_key</TableCell>
             <TableCell align="right">Group</TableCell>
             <TableCell align="right">Score</TableCell>
@@ -36,9 +35,8 @@ export default function PlayersTable(props) {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.user_name}>
+            <TableRow key={row.userNumber}>
               <TableCell align="right">{row.userNumber}</TableCell>
-              <TableCell align="right">{row.user_name}</TableCell>
               <TableCell align="right">{row.game_key}</TableCell>
               <TableCell align="right">{row.group_num}</TableCell>
               <TableCell align="right">{row.curr_score}</TableCell>

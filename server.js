@@ -74,6 +74,7 @@ const [
   RESUME,
   IMG,
   CAMERA_NOT_ALLOWED,
+  USER_RECONNECT,
 ] = [
   40,
   "USER_ANSWER",
@@ -87,6 +88,7 @@ const [
   "RESUME",
   "IMG",
   "CAMERA_NOT_ALLOWED",
+  "USER_RECONNECT",
 ];
 const User = require("./serverClasses/user");
 const Admin = require("./serverClasses/admin");
@@ -325,18 +327,19 @@ wsServer.on("connection", (request) => {
     log_print_structure_head("Server: Connection Request");
     const connection = request;
     var gameKey;
-    var userName;
+    var adminName;
     // const userID = production ? request._socket.remoteAddress : getUniqueID();
     const userID = getUniqueID();
 
     connection.on("message", function (message) {
+      console.log(message);
       try {
         const userlog = JSON.parse(message);
 
         // first message
-        if (undefined === (userName || gameKey)) {
-          userName = userlog.name;
-          gameKey = userlog.keygame;
+        if (undefined === (adminName || gameKey)) {
+          adminName = userlog.name;
+          gameKey = userlog.gameKey;
         }
 
         switch (userlog.type) {
@@ -345,7 +348,7 @@ wsServer.on("connection", (request) => {
               userID,
               connection,
               userlog.numOfPlayers,
-              userlog.name
+              adminName
             );
             break;
 
@@ -353,8 +356,17 @@ wsServer.on("connection", (request) => {
             if (gameKey in d_activeGames) {
               d_activeGames[gameKey].handle_req_user_login(
                 userID,
-                userName,
                 connection,
+                gameKey
+              );
+            } else handle_bad_req_user_login(connection, gameKey);
+            break;
+          case USER_RECONNECT:
+            if (gameKey in d_activeGames) {
+              d_activeGames[gameKey].handle_user_reconnect(
+                userID,
+                connection,
+                userlog.playerNumber,
                 gameKey
               );
             } else handle_bad_req_user_login(connection, gameKey);

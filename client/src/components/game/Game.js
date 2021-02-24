@@ -14,12 +14,14 @@ import { BrandingWatermark } from "@material-ui/icons";
 // import { Question } from "./Question";
 // document.body.style.backgroundColor = "#2d4059";
 
-const Game = ({ score, name, group, login, isAuthenticated }) => {
-  // if (!isAuthenticated) {
-  //   return <Redirect to="/loginUser" />;
-  // }
+const Game = ({ score, name, group, gameKey, login, isAuthenticated }) => {
+  if (!isAuthenticated) {
+    return <Redirect to="/loginUser" />;
+  }
 
-  // saveState({ name: "barak", keygame: 1, isAuthenticated: true });
+  // saveState({ name: "barak", gameKey: 1, isAuthenticated: true });
+
+  saveState({ number: name, gameKey: gameKey });
 
   return (
     <Fragment>
@@ -44,11 +46,13 @@ Game.propTypes = {
   name: PropTypes.number,
   group: PropTypes.string,
   login: PropTypes.func,
+  gameKey: PropTypes.number,
 };
 const mapStateToProps = (state) => ({
   score: state.user.userState.score,
   name: state.user.name,
   group: state.user.group,
+  gameKey: state.user.gameKey,
   isAuthenticated: state.user.isAuthenticated,
 });
 
