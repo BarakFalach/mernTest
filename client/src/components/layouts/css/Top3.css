@@ -58,7 +58,7 @@
   font-weight: bold;
   font-size: 4vh;
   line-height: 4vh;
-  margin-bottom: 4%;
+  margin-bottom: 10%;
   color: #ffffff;
 }
 
@@ -74,19 +74,105 @@
 
 .icon-crown-top3 {
   width: 30%;
-  height: 20%;
+  height: 15%;
+  margin-bottom: 5%;
 }
 
-.icon-star-winner {
-  width: 60%;
-  height: 30%;
-  margin-bottom: 15%;
-  /* border: 3px solid rgb(150, 216, 18); */
+.cube-third {
+  width: 20vmin;
+  height: 5vmin;
+  position: relative;
+  margin-top: 15%;
+  margin-bottom: 0%;
+  background: #fdbd27;
 }
 
-.icon-star-normal {
-  width: 45%;
-  height: 20%;
-  margin-bottom: 1%;
-  /* border: 3px solid rgb(150, 216, 18); */
+.cube-third::before {
+  content: "";
+  display: inline-block;
+  background: #bd8f24;
+  width: 20vmin;
+  height: 20px;
+  transform: skewX(-40deg);
+  position: absolute;
+  top: -20px;
+  left: 8px;
+}
+
+.cube-third::after {
+  content: "";
+  display: inline-block;
+  background: #6f5619;
+  width: 16px;
+  height: 5vmin;
+  transform: skewY(-50deg);
+  position: absolute;
+  top: -10px;
+  left: 100%;
+}
+
+.cube-second {
+  width: 20vmin;
+  height: 10vmin;
+  position: relative;
+  margin-top: 15%;
+  margin-bottom: 0%;
+  background: #0ead69;
+}
+
+.cube-second::before {
+  content: "";
+  display: inline-block;
+  background: #0f9058;
+  width: 20vmin;
+  height: 20px;
+  transform: skewX(-40deg);
+  position: absolute;
+  top: -20px;
+  left: 8px;
+}
+
+.cube-second::after {
+  content: "";
+  display: inline-block;
+  background: #0d633e;
+  width: 16px;
+  height: 10vmin;
+  transform: skewY(-50deg);
+  position: absolute;
+  top: -10px;
+  left: 100%;
+}
+
+.cube-winner {
+  width: 20vmin;
+  height: 20vmin;
+  position: relative;
+  margin-top: 15%;
+  margin-bottom: 0%;
+  background: #2599e7;
+}
+
+.cube-winner::before {
+  content: "";
+  display: inline-block;
+  background: #216b9d;
+  width: 20vmin;
+  height: 20px;
+  transform: skewX(-40deg);
+  position: absolute;
+  top: -20px;
+  left: 8px;
+}
+
+.cube-winner::after {
+  content: "";
+  display: inline-block;
+  background: #1a5378;
+  width: 16px;
+  height: 19vh;
+  transform: skewY(-50deg);
+  position: absolute;
+  top: -10px;
+  left: 100%;
 }
