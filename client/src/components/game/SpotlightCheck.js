@@ -1,8 +1,7 @@
 import React from "react";
-import Spotlight from 'react-spotlight';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import Confetti from 'react-dom-confetti';
-
+import Spotlight from "react-spotlight";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import Confetti from "react-dom-confetti";
 
 export default class SpotlightCheck extends React.Component {
   constructor(props) {
@@ -82,11 +81,33 @@ export default class SpotlightCheck extends React.Component {
       placeText: ".playr-third",
     })
       .then(() => this.sleep(5000))
-      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-third'), text:'במקום השלישי', radius: this.state.radiusNormal, color: '#273043', starting: true } ))
+      .then(() =>
+        this.setStatePromise({
+          ...this.getCoordinates(".playr-third"),
+          text: "במקום השלישי",
+          radius: this.state.radiusNormal,
+          color: "#273043",
+          starting: true,
+        })
+      )
       .then(() => this.sleep(6000))
-      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-second'), text:'במקום השני',  placeText:'.playr-second' }))
+      .then(() =>
+        this.setStatePromise({
+          ...this.getCoordinates(".playr-second"),
+          text: "במקום השני",
+          placeText: ".playr-second",
+        })
+      )
       .then(() => this.sleep(6000))
-      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-first'), text:'במקום הראשון', radius: this.state.radiusWinner, winner: true,  placeText:'.playr-first'}))
+      .then(() =>
+        this.setStatePromise({
+          ...this.getCoordinates(".playr-first"),
+          text: "במקום הראשון",
+          radius: this.state.radiusWinner,
+          winner: true,
+          placeText: ".playr-first",
+        })
+      )
       .then(() => this.sleep(3000))
       .then(() =>
         this.setStatePromise({
@@ -117,33 +138,32 @@ export default class SpotlightCheck extends React.Component {
     return Promise.resolve();
   }
 
-  getCoordinates = (selector) => {
+  getCoordinates(selector) {
     return this.props.coor(selector);
-}
-  
+  }
 
   render() {
     return (
       <div>
-        <div dir='rtl'>
+        <div dir="rtl">
           <Confetti
             active={this.state.confetti_now}
             config={this.state.config}
           />
         </div>
-        <div dir='ltr'>
+        <div dir="ltr">
           <Confetti
             active={this.state.confetti_now}
             config={this.state.config}
           />
         </div>
         <ReactCSSTransitionGroup
-          transitionName='fade'
+          transitionName="fade"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}
         >
           {this.state.playing && (
-            <div key='1'>
+            <div key="1">
               <Spotlight
                 x={this.state.x}
                 y={this.state.y}

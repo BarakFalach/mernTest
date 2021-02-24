@@ -93,15 +93,15 @@ const Bars = ({
     ],
   };
   return (
-    <div className='flex-container-main-bars'>
-      <h1 className='header-bars'>{sentence}</h1>
-      <h1 className='header-bars' style={{ marginTop: "0%" }}>
+    <div className="flex-container-main-bars">
+      <h1 className="header-bars">{sentence}</h1>
+      <h1 className="header-bars" style={{ marginTop: "0%" }}>
         {correctAns}
       </h1>
       <audio autoPlay>
         <source src={"assets/bars/" + audioKey + ".m4a"} />
       </audio>
-      <div dir='ltr' className='bottom-bars'>
+      <div dir="ltr" className="bottom-bars">
         <Bar
           data={data}
           options={{
