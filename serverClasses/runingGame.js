@@ -267,7 +267,7 @@ class RuningGame {
             distribution: this.knowledge_question_dist,
             correctAnswer: questionPhase.correct_answer,
             correctTerm:
-              questionPhase.phaseProp.answers[questionPhase.correct_answer],
+              questionPhase.phaseProp.answers[questionPhase.correct_answer - 1],
             userAnswer: this.d_users[key].last_answer,
             key: questionPhase.phaseProp.key,
           },
