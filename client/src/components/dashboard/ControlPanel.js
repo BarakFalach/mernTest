@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
-import { initGame } from "../../actions/dashboard";
+import { initGame, startGame } from "../../actions/dashboard";
 import GameDashboard from "./GameDashboard";
 
 const ControlPanel = ({ name, logout, initGame }) => {
@@ -27,7 +27,7 @@ const ControlPanel = ({ name, logout, initGame }) => {
   // 	initGame();
   // };
 
-  if (gameStarted) return <GameDashboard />;
+  if (gameStarted) return <GameDashboard controlpanel={setGameStarted} />;
 
   return (
     <span>

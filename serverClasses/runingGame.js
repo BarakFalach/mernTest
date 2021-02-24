@@ -482,7 +482,7 @@ class RuningGame {
   }
   startGame() {
     for (key in this.d_users) {
-      if (this.d_users[key].webCam) {
+      if (!this.d_users[key].webCam) {
         this.d_users[key].connection.send(
           JSON.stringify({
             type: PHASE,
@@ -495,6 +495,7 @@ class RuningGame {
         );
       }
     }
+    var that = this;
     this.timer = setTimeout(function () {
       that.handle_change_screen();
     }, 5000);
