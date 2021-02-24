@@ -113,10 +113,12 @@ class Top3 extends React.Component {
 
   getCoordinatesTop(selector) {
     const domEl = document.getElementsByClassName(selector);
-    if (!domEl) return {};
+    if (!domEl) return {x: 0, y: 0};
 
-    const rect = document.querySelector(selector).getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    if(document.querySelector(selector)!==null){
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
   }
 
   render() {
@@ -166,7 +168,7 @@ class Top3 extends React.Component {
           <div className="header-top3">השחקנים המובילים במשחק</div>
           <div className="flex-container-row-top3" style={{ marginTop: "3%" }}>
             {/* Third (3) Place */}
-            <div className="flex-container-col-top3 playr-third">
+            <div className="flex-container-col-top3 playr-third" id="playr-third">
               <div className="item-not-flex">
                 <ReactRoundedImage
                   image={this.userPic(3)}
