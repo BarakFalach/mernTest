@@ -21,7 +21,7 @@ export default class SpotlightCheck extends React.Component {
         angle: 90,
         spread: 360,
         startVelocity: 40,
-        elementCount: "500",
+        elementCount: "350",
         dragFriction: 0.15,
         duration: 4500,
         stagger: 4,
@@ -64,8 +64,7 @@ export default class SpotlightCheck extends React.Component {
     this.setStatePromise({ radiusNormal: Math.min(window.innerWidth, window.innerHeight)*0.25 });
     this.setStatePromise({ radiusWinner: Math.min(window.innerWidth, window.innerHeight)*0.30 });
     this.setStatePromise({ radius: this.getRadius()});
-    if (this.state.placeText!="")
-      this.setStatePromise({ ...this.getCoordinates(this.state.placeText)});
+    this.setStatePromise({ ...this.getCoordinates(this.state.placeText)});
   }
 
   getRadius() {

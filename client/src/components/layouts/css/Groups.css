@@ -1,19 +1,29 @@
 .flex-container-groups {
-  /* position: fixed; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: calc(100vh- (1%));
-  width: calc(100vw- (1%));
-  border: 3px solid rgb(231, 12, 12);
+  height: 100%;
+  width: 100vw;
   text-align: center;
+  /* border: 3px solid rgb(231, 12, 12); */
 }
 
 .bottom-bars-groups {
   text-align: center;
-  /* position: fixed; */
-  /* height: 80%; */
-  /* margin-bottom: 1000px; */
-  /* width: 80%; */
+  height: 80%;
+  width: 80%;
+  margin-top: 1.5%;
+  margin-bottom: 5%;
+  /* border: 3px solid rgb(22, 174, 182); */
+}
+
+.header-groups {
+  font-size: calc(12px + 3.5vh);
+  color: #273043;
+}
+
+.header-sentence-groups {
+  font-size: calc(5px + 2vh);
+  /* color: green; */
 }
