@@ -5,7 +5,7 @@
   text-align: center;
   height: 100%;
   width: 100vw;
-  border: 3px solid rgb(231, 12, 12);
+  /* border: 3px solid rgb(231, 12, 12); */
 }
 
 .flex-container-row-top3 {
@@ -15,7 +15,7 @@
   align-items: flex-end;
   margin-top: 1.5%;
   height: 80%;
-  border: 3px solid rgb(12, 59, 231);
+  /* border: 3px solid rgb(12, 59, 231); */
 }
 
 .flex-container-col-top3 {
@@ -26,8 +26,7 @@
   padding: 1%;
   height: 100%;
   width: 20%;
-
-  border: 3px solid rgb(18, 216, 64);
+  /* border: 3px solid rgb(18, 216, 64); */
 }
 
 .header-top3 {
@@ -67,19 +66,6 @@
   display: inline-block;
 }
 
-/* .text-place {
-  position: relative;
-  left: 42%;
-  font-size: 30px;
-  transform: translate(-50%, -50%);
-
-  text-transform: uppercase;
-  transform: rotate(-5deg);
-  text-shadow: 1px 1px hsl(50, 50%, 45%), 2px 2px hsl(50, 50%, 40%),
-    3px 3px hsl(50, 50%, 35%), 4px 4px hsl(50, 50%, 34%),
-    5px 5px hsl(50, 50%, 33%), 6px 6px hsl(50, 50%, 32%);
-} */
-
 .img-top3 {
   width: 20%;
   height: 20%;
@@ -95,14 +81,12 @@
   width: 60%;
   height: 30%;
   margin-bottom: 15%;
-  border: 3px solid rgb(150, 216, 18);
+  /* border: 3px solid rgb(150, 216, 18); */
 }
 
 .icon-star-normal {
   width: 45%;
   height: 20%;
   margin-bottom: 1%;
-  border: 3px solid rgb(150, 216, 18);
-
-  /* margin-bottom: -30%; */
+  /* border: 3px solid rgb(150, 216, 18); */
 }
