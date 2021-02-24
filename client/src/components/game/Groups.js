@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import React from "react";
-import Typography from "@material-ui/core/Typography";
+import React, { useState, useEffect } from 'react';
 import { HorizontalBar } from "react-chartjs-2";
 import correctSvg from "../../assets/rabbit.png";
 import incorrectSvg from "../../assets/turtle.png";
@@ -11,32 +10,40 @@ import "../layouts/css/Groups.css";
 
 const Groups = ({
   my_groups = {1:{curr_score:60},
-               2:{curr_score:20}},
+               2:{curr_score:90}},
   answers = ["1", "2"],
   winning = my_groups[1].curr_score>my_groups[2].curr_score? 1: my_groups[1].curr_score===my_groups[2].curr_score? 0 : 2,
   correctAnswer = winning === 1? 1: winning === 2? 2 : 0, 
 }) => {
+  const windowSize = useWindowSize();
   let sentence;
   if (winning === 0) {
-    sentence = "jrt";//"תיקו בין הקבוצות";
+    sentence = <h7 style={{ display: "inline-block", color: '#273043'}}>תיקו בין הקבוצות</h7>;
   } else {
-    sentence = "קבוצה " + winning + " היא הקבוצה המובילה";
+    sentence = 
+    <h7 style={{ display: "inline-block", color: '#273043' }}>
+        קבוצה מספר :{" "}
+      <h7 style={{ display: "inline-block", color: "green", bold: true }}>{winning}</h7>
+      {" "} היא הקבוצה המובילה
+    </h7>;
   }
-  console.log(my_groups);
   let total = getTotalScores(my_groups)
   let groups_score = castToScores(my_groups, total);
   let imagesByResult = imagesSetter(answers, correctAnswer);
   let colorSet = [
-    "#48C000",
-    "#F0A800",
+    "#2599E7",
+    "#EA3546",
+  ];
+  let colorSetBorder = [
+    "#276678",
+    "#951B26",
   ];
   const data = {
     labels: answers,
     datasets: [
       {
         backgroundColor: colorSet,
-        borderColor: colorSet,
-        hoverBorderColor: "rgba(255,99,132,1)",
+        hoverBorderColor: "rgba(255,99,132,0)",
         data: Object.values(groups_score),
         datalabels: {
           anchor: "center",
@@ -44,11 +51,12 @@ const Groups = ({
             return null;
           },
           borderColor: function (ctx) {
-            return null;
+            var value = ctx.dataset.data[ctx.dataIndex];
+            return colorSetBorder[0];
           },
           font: {
             weight: "bold",
-            size: 45,
+            size: Math.min(windowSize.height, windowSize.width)*0.06,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -56,7 +64,6 @@ const Groups = ({
           },
           formatter: function (value, ctx) {
             if (!ctx.active) {
-              console.log("not active");
               return Math.round((value * total) / 100);
             } else if (ctx.dataIndex == correctAnswer - 1) {
               return "בהובלה" ;
@@ -70,27 +77,12 @@ const Groups = ({
   };
   return (
     <div className='flex-container-groups'>
-      <Typography style={{marginTop:"1.5%"}} variant='h4' font='Montserrat'>מצב הקבוצות (פלח, תגיד איזה שם אתה רוצה)</Typography>
-      <Typography style={{marginTop:"0.5%"}} variant='h5' font='Montserrat'>
-        {sentence}
-        {/* {icon} */}
-      </Typography>
-      <div className='bottom-bars-groups'>
+      <div className='header-groups' style={{marginTop:"2%"}}>מצב הקבוצות</div>
+      <div className='header-sentence-groups' style={{marginTop:"0.5%"}}>{sentence}</div>
+      <div dir='ltr' className='bottom-bars-groups'>
         <HorizontalBar
           data={data}
           options={{
-            layout: {
-              padding: {
-                top: 50,
-                right: 50,
-                bottom: 50,
-                left: 50
-              },
-              margin: {
-                // left: 30,
-                // right: 50
-              },
-            },
             animation: {
               duration: 2500,
             },
@@ -144,9 +136,6 @@ const Groups = ({
 };
 
 function imagesSetter(answers, winning){
-  console.log("answers: " + answers);
-  console.log("winning: " + winning);
-
   let imagesByResult = [];
   let correctA = {
     src: correctSvg,
@@ -168,7 +157,6 @@ function imagesSetter(answers, winning){
         imagesByResult[index] = wrongA;
     }
   }
-  console.log(imagesByResult);
   return imagesByResult;
 }
 
@@ -190,10 +178,32 @@ function castToScores(my_groups, total) {
 
 Groups.propTypes = {
   my_groups: PropTypes.object.isRequired,
+  term: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    //my_groups: state.user.userState.phaseProp,
+    my_groups: state.user.userState.phaseProp.groups,
+    term: state.user.userState.phaseProp.term,
 });
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return windowSize;
+}
 
 export default connect(mapStateToProps, {})(Groups);

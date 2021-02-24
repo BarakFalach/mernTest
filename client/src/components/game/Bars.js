@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { Bar } from "react-chartjs-2";
 import correctSvg from "../../assets/success-green-check-mark.svg";
 import incorrectSvg from "../../assets/wrong.svg";
@@ -14,6 +14,7 @@ const Bars = ({
   userAnswer,
   audioKey,
 }) => {
+  const windowSize = useWindowSize();
   let sentence;
   if (correctAnswer == userAnswer) {
     sentence = "כל הכבוד ! תשובתך נכונה.";
@@ -66,7 +67,7 @@ const Bars = ({
           // borderRadius: 4,
           font: {
             weight: "bold",
-            size: 30,
+            size: Math.min(windowSize.height, windowSize.width)*0.05,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -74,7 +75,6 @@ const Bars = ({
             // return "white";
           },
           formatter: function (value, ctx) {
-            console.log("user answer is " + userAnswer);
             if (!ctx.active) {
               return value + "%";
             } else if (ctx.dataIndex == correctAnswer - 1) {
@@ -157,11 +157,8 @@ const Bars = ({
 function imagesSetter(numOfAnswers, correctAnswer, userAnswer) {
   let imagesByResult = [];
   for (let index = 0; index < numOfAnswers; index++) {
-    console.log(index);
     if (index + 1 === userAnswer || index + 1 === correctAnswer) {
       if (userAnswer === index + 1) {
-        console.log("incorrect is at index " + index);
-
         imagesByResult[index] = {
           //Wrong Answer
           src: incorrectSvg,
@@ -199,6 +196,26 @@ function castToPercent(distribution) {
     tmp++;
   });
   return distributionPercent;
+}
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return windowSize;
 }
 
 const mapStateToProps = (state) => ({
