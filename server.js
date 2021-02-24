@@ -321,7 +321,7 @@ const delete_game_instance = (gameKey) => {
   for (let user in d_activeGames[gameKey].d_users)
     d_activeGames[gameKey].handle_delete_user(user, gameKey);
   delete d_activeGames[gameKey];
-  log_activeGames();
+  // log_activeGames();
 };
 
 wsServer.on("connection", (request) => {
@@ -407,7 +407,7 @@ wsServer.on("connection", (request) => {
             d_activeGames[gameKey].handle_user_img(userID, "");
             break;
           case END_GAME:
-            delete d_activeGames[gameKey];
+            delete_game_instance(gameKey);
             break;
         }
       } catch (err) {

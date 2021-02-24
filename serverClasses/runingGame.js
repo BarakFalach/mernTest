@@ -71,9 +71,10 @@ class RuningGame {
       this.d_users[item].last_answer = 0;
     }
     this.d_users_answers = [];
-    this.knowledge_question_dist[0] =
-      this.curr_connected_users - this.sumValues(this.knowledge_question_dist);
     if (questionPhase) {
+      this.knowledge_question_dist[0] =
+        this.curr_connected_users -
+        this.sumValues(this.knowledge_question_dist);
       const curQuestionDist = {
         questionName: questionPhase.key,
         distrebution: this.knowledge_question_dist,
@@ -169,6 +170,7 @@ class RuningGame {
    * bars lock, knowloedge_question_answers, knowloedge_question_dist
    */
   clean_arguments_for_question() {
+    this.cleanUsersLastAnswer();
     const cur_answers_dict = {};
     const len = this.curr_phase.phaseProp.answers.length;
     for (var i = 0; i < len; i++) {
@@ -239,12 +241,16 @@ class RuningGame {
   }
 
   handle_user_img(userID, img) {
-    this.d_users[userID].webCam = false;
+    this.d_users[userID].webCam = true;
     if (img != "") this.d_users[userID].img = img;
     this.d_users[userID].connection.send(
       JSON.stringify({
         type: PHASE,
-        phase: "defult",
+        phase: "default",
+        phaseProp: {
+          ratio: this.curr_connected_users / this.num_of_participates,
+        },
+        score: this.d_users[key].curr_score,
       })
     );
   }

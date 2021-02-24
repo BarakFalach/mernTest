@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
-import { ChangePhase, resumePause, startGame } from "../../actions/dashboard";
+import {
+  ChangePhase,
+  resumePause,
+  startGame,
+  endGame,
+} from "../../actions/dashboard";
 import PlayersTable from "./PlayersTable";
 import "./GameDashboard.css";
 //comme
@@ -16,6 +21,7 @@ const Gamedashboard = ({
   numOfPlayers,
   startGame,
   controlpanel,
+  endGame,
 }) => {
   const [pause, setPause] = useState(false);
   const [started, setStarted] = useState(false);
@@ -30,7 +36,8 @@ const Gamedashboard = ({
     startGame();
   };
 
-  const endGame = (e) => {
+  const endGameButton = (e) => {
+    endGame();
     controlpanel(false);
   };
 
@@ -62,7 +69,7 @@ const Gamedashboard = ({
         >
           Start Game
         </button>
-        <button name="endGame" onClick={(e) => endGame(e)}>
+        <button name="endGame" onClick={(e) => endGameButton(e)}>
           End Game
         </button>
       </div>
@@ -72,6 +79,7 @@ const Gamedashboard = ({
           <button
             key={Phase}
             name={Phase}
+            disabled={!started}
             // color={index === curPhase ? 'blue' : 'green'}
             style={index === curPhase ? { color: "blue" } : {}}
             onClick={(e) => ScreenButton(e)}
@@ -88,6 +96,7 @@ Gamedashboard.propTypes = {
   ChangePhase: PropTypes.func.isRequired,
   resumePause: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
+  endGame: PropTypes.func.isRequired,
   phaseList: PropTypes.array,
   GameKey: PropTypes.string,
   usersData: PropTypes.object,
@@ -105,4 +114,5 @@ export default connect(mapStateToProps, {
   resumePause,
   ChangePhase,
   startGame,
+  endGame,
 })(Gamedashboard);
