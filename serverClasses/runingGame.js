@@ -5,6 +5,7 @@ const PHASE = "PHASE";
 const USER = "USER";
 const converter = require("json-2-csv");
 const { json } = require("express");
+const { Socket } = require("dgram");
 fs = require("fs");
 
 class RuningGame {
@@ -126,21 +127,10 @@ class RuningGame {
    * @param {*} connection - the webScoket connection of this user
    * @param {*} gameKey
    */
-  handle_req_user_login(userID, userName, connection, gameKey) {
+  handle_req_user_login(userID, connection, gameKey) {
     var phase = "default";
-    var curUser = this.checkIfDisconnected(userID, userName);
-    if (curUser == undefined) {
-      curUser = new User(
-        userName,
-        gameKey,
-        this.getGroupNum(),
-        this.numberStack.pop()
-      );
-      // phase = 'webCam';
-    }
-
+    var curUser = new User(gameKey, this.getGroupNum(), this.numberStack.pop());
     curUser.setConnection(connection);
-
     this.d_users[userID] = curUser;
     this.curr_connected_users++;
     this.groups[curUser.group].participants++;
@@ -151,7 +141,7 @@ class RuningGame {
         id: userID,
         name: curUser.userNumber,
         score: curUser.curr_score,
-        keygame: gameKey, //TODO:::  change this veriable in client
+        gameKey: gameKey, //TODO:::  change this veriable in client
         group: curUser.group,
         phase: phase,
         phaseProp: {
@@ -295,7 +285,8 @@ class RuningGame {
   handle_delete_user(userID, gameKey) {
     try {
       const groupNumber = this.d_users[userID].group;
-      delete this.groups[groupNumber].participants--;
+      this.d_users[userID].setConnection();
+      this.groups[groupNumber].participants--;
       this.archive_user_dict[userID] = this.d_users[userID];
       delete this.d_users[userID];
       this.curr_connected_users--;
@@ -410,11 +401,11 @@ class RuningGame {
    * @param {string} name - user name to search
    * @returns {string} return the user id object or undifined if false
    */
-  findUserByName(user_dic, _name) {
+  findUserByNumber(user_dic, _nmber) {
     var curUser;
     for (var user in user_dic) {
       if (user_dic[user] != undefined) {
-        if (user_dic[user].name == _name) {
+        if (user_dic[user].userNumber == _nmber) {
           curUser = user;
           break;
         }
@@ -423,21 +414,41 @@ class RuningGame {
     return curUser;
   }
   /**
-   * find if the user appears in the arcive, in production find by id (ip) in develop find by name
-   * @param {*} userID - the user id
-   * @param {*} userName - the user name
-   * @retrn curUser - if exist ? userObject : undifiend
+   * find if the user appears in the arcive, create user, send user to default screen, send admin info.
+   * @param {String} userID - the user id
+   * @param {Number} userNumber - the user number from the local user storgae
+   * @param {Socket} connection - the new user connection
+   * @retrn void
    */
-  checkIfDisconnected(userID, userName) {
-    userID =
-      process.env.NODE_ENV === "production"
-        ? userID
-        : this.findUserByName(this.archive_user_dict, userName);
-    const curUser = this.archive_user_dict[userID];
-    if (curUser != undefined) {
-      delete this.archive_user_dict[userID];
+  handle_user_reconnect(userID, connection, userNumber, gameKey) {
+    //TODO:: mvoe to number production and dev
+    const fatchedUser = this.findUserByNumber(
+      this.archive_user_dict,
+      userNumber
+    );
+    if (fatchedUser) {
+      const curUser = this.archive_user_dict[fatchedUser];
+      this.d_users[userID] = curUser;
+      this.d_users[userID].setConnection(connection);
+      delete this.archive_user_dict[fatchedUser];
+      this.curr_connected_users++;
+      this.groups[curUser.group].participants++;
+      connection.send(
+        JSON.stringify({
+          type: GAME_KEY_SUCCESS,
+          id: userID,
+          name: curUser.userNumber,
+          score: curUser.curr_score,
+          gameKey: gameKey,
+          group: curUser.group,
+          phase: "default", //TODO create screen re connect
+          phaseProp: {
+            ratio: this.curr_connected_users / this.num_of_participates,
+          },
+        })
+      );
+      this.sendUserTable();
     }
-    return curUser;
   }
   writeResultCsv() {
     converter.json2csv(this.gameResult, (err, csv) => {

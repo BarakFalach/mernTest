@@ -8,71 +8,52 @@ import { Redirect } from "react-router-dom";
 import "../layouts/css/LoginUser.css";
 const LoginUser = ({ login, isAuthenticated, questions }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    keygame: "",
+    gameKey: "",
   });
 
-  // useEffect(() => {
-  //   var load = loadState();
-  //   console.log(load);
+  useEffect(() => {
+    var load = loadState();
+    console.log(load);
 
-  //   if (load != undefined) {
-  //     login({ name: load.name, keygame: load.keygame });
-  //   }
-  // });
+    if (load != undefined) {
+      login({ number: load.number, gameKey: load.gameKey });
+    }
+  }, []);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("key game is " + keygame);
-    login({ name, keygame });
+    console.log("key game is " + gameKey);
+    login({ gameKey });
   };
 
   if (isAuthenticated) {
     return <Redirect to="/game" />;
   }
 
-  const { name, keygame } = formData;
+  const { name, gameKey } = formData;
   return (
     <Fragment>
       <div className="flex-container-user-main ">
         <Typography variant="h2">ברוכים הבאים </Typography>
         <Typography style={{ marginTop: "2%" }} variant="h8">
-          בשלב הראשון, אנא מלאו את שמכם המלא ואת קוד המשחק הניתן לכם על ידי
-          המנחה{" "}
+          בשלב הראשון, אנא מלאו את קוד המשחק הניתן לכם על ידי המנחה{" "}
         </Typography>
 
-        {/* <div className='flex-container-user-row'>
-          <div className='flex-container-user-form'>
-            <div className='flex-container-user-row'>
-              <div className='flex-container-user-form'> */}
         <form onSubmit={(e) => onSubmit(e)}>
           <div style={{ marginTop: "10%" }}>
             <TextField
               className="formField"
               type="text"
-              placeholder="שם מלא"
-              name="name"
-              value={name}
-              onChange={(e) => onChange(e)}
-              required
-            />
-          </div>
-
-          <div style={{ marginTop: "10%" }}>
-            <TextField
-              className="formField"
-              type="text"
               placeholder="קוד משחק"
-              name="keygame"
+              name="gameKey"
               textAlign="middle"
-              value={keygame}
+              value={gameKey}
               onChange={(e) => onChange(e)}
               required
             />
           </div>
-
           <div style={{ marginTop: "15%" }}>
             <Button id="testbutton" type="submit" color="primary">
               היכנס/י
@@ -80,10 +61,6 @@ const LoginUser = ({ login, isAuthenticated, questions }) => {
           </div>
         </form>
       </div>
-      {/* </div>
-          </div>
-        </div>
-      </div> */}
     </Fragment>
   );
 };
