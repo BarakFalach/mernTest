@@ -1,5 +1,4 @@
 import {
-  CHANGE_SCREEN,
   KEYGAME_FAIL,
   GAME_KEY_SUCCESS,
   SERVER_FEEDBACK_TO_ANSWER,
@@ -9,7 +8,6 @@ const initialState = {
   name: "",
   isAuthenticated: false,
   userState: { phaseProp: {} },
-  // score: "0",
   group: "",
   gameKey: 0,
 };

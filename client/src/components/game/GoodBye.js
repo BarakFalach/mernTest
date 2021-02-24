@@ -1,12 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import "../layouts/css/Welcome.css";
 // import Chart from "./assets/Chart.js";
 
 export default class Goodbye extends React.Component {
-  constructor() {
-    super();
-  }
-
   render() {
     const goodbye = (
       <div className='wholescreen'>
