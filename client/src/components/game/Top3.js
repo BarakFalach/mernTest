@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import StarShape from "../../assets/second-icon.svg";
-import IconPerson from "../../assets/person.jpg";
+import IconPerson from "../../assets/avocado.jpeg";
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
 import { connect } from "react-redux";
