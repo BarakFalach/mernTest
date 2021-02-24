@@ -132,7 +132,7 @@ class Top3 extends React.Component {
         {/* Users */}
         <div className="flex-container-main-top3">
           <div className="header-top3">השחקנים המובילים במשחק</div>
-          <div className="flex-container-row-top3">
+          <div className="flex-container-row-top3" style={{marginTop: "3%"}}>
               {/* Third (3) Place */}
               <div className="flex-container-col-top3 playr-third">
                 <div className="item-not-flex">
