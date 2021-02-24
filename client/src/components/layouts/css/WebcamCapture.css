@@ -62,11 +62,12 @@
   display: block;
   position: absolute;
   left: calc(50% - 50vmin / 2);
-  top: calc(43% - 50vmin / 2);
-  height: 50vmin;
-  width: 50vmin;
+  top: calc(49.5% - 50vmin / 2);
+  height: 48vmin;
+  width: 48vmin;
   border-radius: 50%;
   border: 3px solid rgb(255, 255, 255);
+  z-index: 4;
 }
 /* 
 .counter-text {

@@ -175,7 +175,7 @@ class Top3 extends React.Component {
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div class="ellipse">
+                <div className="ellipse">
                   {this.state.place <= 3 ? this.userName(3) : "#"}
                 </div>
               </div>
@@ -205,7 +205,7 @@ class Top3 extends React.Component {
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div class="ellipse">
+                <div className="ellipse">
                   {this.state.place <= 1 ? this.userName(1) : "#"}
                 </div>
               </div>
@@ -228,7 +228,7 @@ class Top3 extends React.Component {
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div class="ellipse">
+                <div className="ellipse">
                   {this.state.place <= 2 ? this.userName(2) : "#"}
                 </div>
               </div>

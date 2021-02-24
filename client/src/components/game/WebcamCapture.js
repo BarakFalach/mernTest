@@ -89,13 +89,13 @@ class WebcamCapture extends React.Component {
             <source type='audio/mp3' src={ScreenshotAudio} />
           </audio>
         )}
-        {!this.state.ImgExist && <div className="mark" />}
           <div className="flex-container-webcam-col">
             <div className="header-web">צילום תמונת משתתף</div>
             <div className="header-web-instruction" style={{ marginTop: 5 }}>
               אנא נסו למקם את הפנים במרכז האזור המסומן בעיגול
             </div>
             <div className="item">
+            {!this.state.ImgExist && <div className="mark" />}
               {this.state.ImgExist ? (
                   <ReactRoundedImage
                     image={this.state.CaptureImage}
@@ -130,7 +130,6 @@ class WebcamCapture extends React.Component {
                 <button
                   className="myButton"
 				          onClick={sendPicture(this.state.CaptureImage)}
-
                 >
                   אשר/י תמונה
                 </button>
