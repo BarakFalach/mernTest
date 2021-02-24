@@ -18,7 +18,7 @@ export default class SpotlightCheck extends React.Component {
         angle: 90,
         spread: 360,
         startVelocity: 40,
-        elementCount: "350",
+        elementCount: "250",
         dragFriction: 0.15,
         duration: 4500,
         stagger: 4,
@@ -81,35 +81,11 @@ export default class SpotlightCheck extends React.Component {
       placeText: ".playr-third",
     })
       .then(() => this.sleep(5000))
-      .then(() =>
-        this.setStatePromise({
-          ...this.getCoordinates(".playr-third"),
-          text: "במקום השלישי",
-          radius: this.state.radiusNormal,
-          color: "rgb(216, 49, 25)",
-          starting: true,
-        })
-      )
+      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-third'), text:'במקום השלישי', radius: this.state.radiusNormal, color: '#273043', starting: true } ))
       .then(() => this.sleep(6000))
-      .then(() =>
-        this.setStatePromise({
-          ...this.getCoordinates(".playr-second"),
-          text: "במקום השני",
-          color: "rgb(192, 192, 192)",
-          placeText: ".playr-second",
-        })
-      )
+      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-second'), text:'במקום השני',  placeText:'.playr-second' }))
       .then(() => this.sleep(6000))
-      .then(() =>
-        this.setStatePromise({
-          ...this.getCoordinates(".playr-first"),
-          text: "במקום הראשון",
-          color: "rgb(249, 194, 35)",
-          radius: this.state.radiusWinner,
-          winner: true,
-          placeText: ".playr-first",
-        })
-      )
+      .then(() => this.setStatePromise({ ...this.getCoordinates('.playr-first'), text:'במקום הראשון', radius: this.state.radiusWinner, winner: true,  placeText:'.playr-first'}))
       .then(() => this.sleep(3000))
       .then(() =>
         this.setStatePromise({

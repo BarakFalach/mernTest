@@ -1,11 +1,9 @@
 import React from "react";
-import StarShape from "../../assets/winner_Shape.svg";
-import IconPerson from "../../assets/person.jpg";
+import IconPerson from "../../assets/avocado.jpeg";
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
-
 import "../layouts/css/Top3.css";
 
 class Top3 extends React.Component {
@@ -39,7 +37,8 @@ class Top3 extends React.Component {
       thirdAudio: "assets/top3/third.m4a",
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-  }
+
+  }  
 
   componentDidMount() {
     this.updateWindowDimensions();
@@ -47,10 +46,7 @@ class Top3 extends React.Component {
     this.start();
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
-  }
-
+  
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
@@ -108,7 +104,8 @@ class Top3 extends React.Component {
   };
 
   userPic = (place) => {
-    if (this.props.users.length < place || this.state.place > place)
+
+    if(this.props.users.length<place || this.state.place>place || this.props.users[place-1].img==="0") 
       return IconPerson;
     return this.props.users[place - 1].img;
   };
@@ -117,42 +114,15 @@ class Top3 extends React.Component {
     return (
       <div>
         <div>
-          <SpotlightCheck />
-          {this.state.third && (
-            <audio autoPlay>
-              <source src={this.state.audio3} />
-            </audio>
-          )}
-          {this.state.second && (
-            <audio autoPlay>
-              <source src={this.state.audio2} />
-            </audio>
-          )}
-          {this.state.first && (
-            <audio autoPlay>
-              <source src={this.state.audio1} />
-            </audio>
-          )}
-          {this.state.thirdPlace && (
-            <audio autoPlay>
-              <source src={this.state.thirdAudio} />
-            </audio>
-          )}
-          {this.state.secondPlace && (
-            <audio autoPlay>
-              <source src={this.state.secondAudio} />
-            </audio>
-          )}
-          {this.state.firstPlace && (
-            <audio autoPlay>
-              <source src={this.state.firstAudio} />
-            </audio>
-          )}
-          {this.state.winner && (
-            <audio autoPlay>
-              <source src={this.state.Applause} />
-            </audio>
-          )}
+
+          <SpotlightCheck /> 
+          {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
+          {this.state.second && (<audio autoPlay><source src={this.state.audio2}/></audio>)}
+          {this.state.first && (<audio autoPlay><source src={this.state.audio1}/></audio>)}
+          {this.state.thirdPlace && (<audio autoPlay><source src={this.state.thirdAudio}/></audio>)}
+          {this.state.secondPlace && (<audio autoPlay><source src={this.state.secondAudio}/></audio>)}
+          {this.state.firstPlace && (<audio autoPlay><source src={this.state.firstAudio}/></audio>)}
+          {this.state.winner && (<audio autoPlay><source src={this.state.Applause} /></audio>)}
         </div>
 
         {/* Users */}
@@ -245,6 +215,7 @@ class Top3 extends React.Component {
                 alt='icon place 2'
                 src={StarShape}
               />
+
             </div>
           </div>
         </div>

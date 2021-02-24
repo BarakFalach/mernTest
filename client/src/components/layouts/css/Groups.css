@@ -3,19 +3,18 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100%;
-  width: 100vw;
   text-align: center;
-  /* border: 3px solid rgb(231, 12, 12); */
+  border: 3px solid rgb(231, 12, 12);
 }
 
 .bottom-bars-groups {
   text-align: center;
+  min-height: 100px;
   height: 80%;
-  width: 80%;
+  width: 90vw;
   margin-top: 1.5%;
   margin-bottom: 5%;
-  /* border: 3px solid rgb(22, 174, 182); */
+  border: 3px solid rgb(22, 174, 182);
 }
 
 .header-groups {

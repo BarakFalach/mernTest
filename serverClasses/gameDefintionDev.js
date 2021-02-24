@@ -40,6 +40,7 @@ gameDefenition["top3_1"] = {
 };
 gameDefenition["groups1"] = {
   key: "groups1",
+  phaseProp: { term: "ולסיום - מי ענו ביחד יותר תשובות נכונות?" },
   type: "Groups",
   duration: 5,
 };

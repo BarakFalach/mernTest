@@ -6,6 +6,7 @@ const USER = "USER";
 const converter = require("json-2-csv");
 const { json } = require("express");
 const { Socket } = require("dgram");
+const { runInThisContext } = require("vm");
 fs = require("fs");
 
 class RuningGame {
@@ -134,7 +135,7 @@ class RuningGame {
    * @param {*} gameKey
    */
   handle_req_user_login(userID, connection, gameKey) {
-    var phase = "default";
+    var phase = "webCam";
     var curUser = new User(gameKey, this.getGroupNum(), this.numberStack.pop());
     curUser.setConnection(connection);
     this.d_users[userID] = curUser;
@@ -151,7 +152,7 @@ class RuningGame {
         group: curUser.group,
         phase: phase,
         phaseProp: {
-          ratio: this.curr_connected_users / this.num_of_participates,
+          flag: false,
         },
       })
     );
@@ -233,16 +234,12 @@ class RuningGame {
     console.log(key);
     if (key != this.curr_phase.key) return; //TODO: change to cur_phase.key
     if (time <= 0) time = 0;
-    const answerProp = {
-      userID: userID,
-      answer: answer,
-      time: time,
-    };
     this.d_users[userID].last_answer = answer;
     this.d_users[userID].last_time = time;
   }
 
   handle_user_img(userID, img) {
+    this.d_users[userID].webCam = false;
     if (img != "") this.d_users[userID].img = img;
     this.d_users[userID].connection.send(
       JSON.stringify({
@@ -336,7 +333,7 @@ class RuningGame {
    */
   top3Users() {
     const usersByScore = this.sortByScore();
-    const topUsers = usersByScore.slice(0, 3);
+    const topUsers = this.userJsonTop3(usersByScore);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
@@ -344,12 +341,19 @@ class RuningGame {
           phase: "top3",
           phaseProp: {
             users: topUsers,
-            audio: this.curr_phase.phaseProp.audioArr,
           },
           score: this.d_users[key].curr_score,
         })
       );
     }
+  }
+  userJsonTop3(topUsers) {
+    topUsers = topUsers.slice(0, 3);
+    const users = [];
+    for (key in topUsers) {
+      users.push(topUsers[key].topToJSON());
+    }
+    return users;
   }
   topGroups() {
     for (key in this.d_users) {
@@ -357,7 +361,10 @@ class RuningGame {
         JSON.stringify({
           type: PHASE,
           phase: "Group",
-          phaseProp: this.groups,
+          phaseProp: {
+            groups: this.groups,
+            term: this.curr_phase.phaseProp.term,
+          },
           score: this.d_users[key].curr_score,
         })
       );
@@ -381,16 +388,19 @@ class RuningGame {
   }
   sendProgressBar() {
     for (key in this.d_users) {
-      this.d_users[key].connection.send(
-        JSON.stringify({
-          type: PHASE,
-          phase: "default",
-          phaseProp: {
-            ratio: this.curr_connected_users / this.num_of_participates,
-          },
-          score: this.d_users[key].curr_score,
-        })
-      );
+      if (this.d_users[key].webCam) {
+        console.log("here");
+        this.d_users[key].connection.send(
+          JSON.stringify({
+            type: PHASE,
+            phase: "default",
+            phaseProp: {
+              ratio: this.curr_connected_users / this.num_of_participates,
+            },
+            score: this.d_users[key].curr_score,
+          })
+        );
+      }
     }
   }
   sendPhaseStatus() {
@@ -469,6 +479,26 @@ class RuningGame {
   admin_re_enter() {
     this.sendUserTable();
     this.sendPhaseStatus();
+  }
+  startGame() {
+    for (key in this.d_users) {
+      if (!this.d_users[key].webCam) {
+        this.d_users[key].connection.send(
+          JSON.stringify({
+            type: PHASE,
+            phase: "webCam",
+            phaseProp: {
+              flag: true,
+            },
+            score: this.d_users[key].curr_score,
+          })
+        );
+      }
+    }
+    var that = this;
+    this.timer = setTimeout(function () {
+      that.handle_change_screen();
+    }, 5000);
   }
 }
 module.exports = RuningGame;
