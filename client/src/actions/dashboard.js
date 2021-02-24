@@ -76,3 +76,14 @@ export const startGame = () => async () => {
     console.log(err);
   }
 };
+export const endGame = () => async () => {
+  try {
+    client.send(
+      JSON.stringify({
+        type: "END_GAME",
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
