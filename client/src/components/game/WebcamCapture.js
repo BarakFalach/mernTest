@@ -90,26 +90,23 @@ class WebcamCapture extends React.Component {
           </audio>
         )}
         {!this.state.ImgExist && <div className="mark" />}
-        <div className="flex-container-webcam-main">
           <div className="flex-container-webcam-col">
-            <Typography variant="h2">צילום תמונת משתתף</Typography>
-            <Typography variant="h9" style={{ marginTop: 5 }}>
+            <div className="header-web">צילום תמונת משתתף</div>
+            <div className="header-web-instruction" style={{ marginTop: 5 }}>
               אנא נסו למקם את הפנים במרכז האזור המסומן בעיגול
-            </Typography>
-            {/* </div> */}
+            </div>
             <div className="item">
               {this.state.ImgExist ? (
-                <ReactRoundedImage
-                  className="img"
-                  image={this.state.CaptureImage}
-                  roundedSize="1"
-                  imageWidth="350"
-                  imageHeight="350"
-                />
+                  <ReactRoundedImage
+                    image={this.state.CaptureImage}
+                    roundedSize="1"
+                    imageWidth="350"
+                    imageHeight="350"
+                  />
               ) : (
-                <div>
-                  {/* <div className="mark" /> */}
+                <div className="camera-before">
                   <Webcam
+                    className="camera-before"
                     ref={this.setRef}
                     audio={false}
                     height="350"
@@ -121,9 +118,8 @@ class WebcamCapture extends React.Component {
             </div>
             <div className="item">
               {!this.state.disabledPictue &&
-			  <button
+			          <button
                 className="myButton"
-                // disabled={this.state.ShowText}
                 onClick={this.start}
                 disabled={this.state.disabledPictue}
               >
@@ -132,14 +128,13 @@ class WebcamCapture extends React.Component {
               {this.state.ImgExist && (
                 <button
                   className="myButton"
-				  onClick={sendPicture(this.state.CaptureImage)}
+				          onClick={sendPicture(this.state.CaptureImage)}
                 >
                   אשר/י תמונה
                 </button>
               )}
             </div>
           </div>
-        </div>
         {this.state.ShowText && (
           <div className="counter-text">{this.state.Seconds}</div>
         )}

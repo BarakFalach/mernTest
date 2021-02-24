@@ -3,8 +3,6 @@ import Spotlight from 'react-spotlight';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Confetti from 'react-dom-confetti';
 
-
-
 export default class SpotlightCheck extends React.Component {
 
   constructor(props) {
@@ -99,13 +97,9 @@ export default class SpotlightCheck extends React.Component {
     return Promise.resolve();
   }
 
-  getCoordinates(selector) {
-    const domEl = document.querySelector(selector);
-    if (!domEl) return {};
-
-    const rect = document.querySelector(selector).getBoundingClientRect();
-    return { x: rect.left + (rect.width / 2), y: rect.top + (rect.height / 2) };
-  }
+  getCoordinates = (selector) => {
+    return this.props.coor(selector);
+}
   
   render() {
     return(
