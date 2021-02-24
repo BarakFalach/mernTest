@@ -9,6 +9,7 @@ class User {
     this.connection;
     this.userNumber = userNumber;
     this.img = "0";
+    this.webCam = false;
   }
   setConnection(connection) {
     this.connection = connection;

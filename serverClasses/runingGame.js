@@ -6,6 +6,7 @@ const USER = "USER";
 const converter = require("json-2-csv");
 const { json } = require("express");
 const { Socket } = require("dgram");
+const { runInThisContext } = require("vm");
 fs = require("fs");
 
 class RuningGame {
@@ -151,7 +152,7 @@ class RuningGame {
         group: curUser.group,
         phase: phase,
         phaseProp: {
-          ratio: this.curr_connected_users / this.num_of_participates,
+          flag: false,
         },
       })
     );
@@ -238,6 +239,7 @@ class RuningGame {
   }
 
   handle_user_img(userID, img) {
+    this.d_users[userID].webCam = false;
     if (img != "") this.d_users[userID].img = img;
     this.d_users[userID].connection.send(
       JSON.stringify({
@@ -359,7 +361,10 @@ class RuningGame {
         JSON.stringify({
           type: PHASE,
           phase: "Group",
-          phaseProp: this.groups,
+          phaseProp: {
+            groups: this.groups,
+            term: this.curr_phase.phaseProp.term,
+          },
           score: this.d_users[key].curr_score,
         })
       );
@@ -383,16 +388,19 @@ class RuningGame {
   }
   sendProgressBar() {
     for (key in this.d_users) {
-      this.d_users[key].connection.send(
-        JSON.stringify({
-          type: PHASE,
-          phase: "default",
-          phaseProp: {
-            ratio: this.curr_connected_users / this.num_of_participates,
-          },
-          score: this.d_users[key].curr_score,
-        })
-      );
+      if (this.d_users[key].webCam) {
+        console.log("here");
+        this.d_users[key].connection.send(
+          JSON.stringify({
+            type: PHASE,
+            phase: "default",
+            phaseProp: {
+              ratio: this.curr_connected_users / this.num_of_participates,
+            },
+            score: this.d_users[key].curr_score,
+          })
+        );
+      }
     }
   }
   sendPhaseStatus() {
@@ -474,22 +482,22 @@ class RuningGame {
   }
   startGame() {
     for (key in this.d_users) {
-      this.d_users[key].connection.send(
-        JSON.stringify({
-          type: PHASE,
-          phase: "bars",
-          phaseProp: {
-            distribution: this.knowledge_question_dist,
-            correctAnswer: questionPhase.correct_answer,
-            correctTerm:
-              questionPhase.phaseProp.answers[questionPhase.correct_answer - 1],
-            userAnswer: this.d_users[key].last_answer,
-            key: questionPhase.phaseProp.key,
-          },
-          score: this.d_users[key].curr_score,
-        })
-      );
+      if (this.d_users[key].webCam) {
+        this.d_users[key].connection.send(
+          JSON.stringify({
+            type: PHASE,
+            phase: "webCam",
+            phaseProp: {
+              flag: true,
+            },
+            score: this.d_users[key].curr_score,
+          })
+        );
+      }
     }
+    this.timer = setTimeout(function () {
+      that.handle_change_screen();
+    }, 5000);
   }
 }
 module.exports = RuningGame;

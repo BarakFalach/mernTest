@@ -373,6 +373,8 @@ wsServer.on("connection", (request) => {
           case PHASE:
             d_activeGames[gameKey].handle_change_screen(userlog.phaseName);
             break;
+          case START_GAME:
+            d_activeGames[gameKey].startGame();
 
           case USER_ANSWER:
             d_activeGames[gameKey].handle_user_answer(
