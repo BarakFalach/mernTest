@@ -31,7 +31,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
     return <Redirect to="/game" />;
   }
 
-  const { name, gameKey } = formData;
+  const { gameKey } = formData;
   return (
     <Fragment>
       <div className="flex-container-user-main ">
@@ -44,18 +44,8 @@ const LoginUser = ({ login, isAuthenticated }) => {
           <div style={{ marginTop: "10%" }}>
             <input
               type="text"
-              placeholder="שם מלא"
-              name="name"
-              value={name}
-              onChange={(e) => onChange(e)}
-              required
-            />
-          </div>
-          <div style={{ marginTop: "10%" }}>
-            <input
-              type="text"
               placeholder="קוד משחק"
-              name="keygame"
+              name="gameKey"
               textAlign="middle"
               value={gameKey}
               onChange={(e) => onChange(e)}
