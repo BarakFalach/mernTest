@@ -11,6 +11,7 @@ const initialState = {
   userState: { phaseProp: {} },
   // score: "0",
   group: "",
+  gameKey: 0,
 };
 //func name Changed from login to userReducer
 export default function userReducer(state = initialState, action) {
@@ -24,6 +25,7 @@ export default function userReducer(state = initialState, action) {
         group: payload.group,
         isAuthenticated: true,
         userState: payload,
+        gameKey: payload.gameKey,
       };
     case KEYGAME_FAIL:
       return {

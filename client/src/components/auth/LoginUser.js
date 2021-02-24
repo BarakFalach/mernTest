@@ -6,23 +6,32 @@ import { Redirect } from "react-router-dom";
 import "../layouts/css/LoginUser.css";
 const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    keygame: "",
+    gameKey: "",
   });
+
+
+  useEffect(() => {
+    var load = loadState();
+    console.log(load);
+
+    if (load != undefined) {
+      login({ number: load.number, gameKey: load.gameKey });
+    }
+  }, []);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("key game is " + keygame);
-    login({ name, keygame });
+    console.log("key game is " + gameKey);
+    login({ gameKey });
   };
 
   if (isAuthenticated) {
     return <Redirect to='/game' />;
   }
 
-  const { name, keygame } = formData;
+  const { name, gameKey } = formData;
   return (
     <Fragment>
       <div className='flex-container-user-main '>
@@ -49,6 +58,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
               name='keygame'
               textAlign='middle'
               value={keygame}
+
               onChange={(e) => onChange(e)}
               required
             />

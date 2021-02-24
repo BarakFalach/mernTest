@@ -11,7 +11,6 @@ import { Poll } from "./Poll";
 import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
-import EdenTesting from "./EdenTesting";
 import Goodbye from "./GoodBye";
 
 const Phase = ({ phase }) => {
@@ -33,8 +32,7 @@ const Phase = ({ phase }) => {
     case "webCam":
       return <WebcamCapture />;
     default:
-      //   return <Bars />;
-      return <EdenTesting />;
+      return <Welcome />;
   }
 };
 
