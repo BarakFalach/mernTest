@@ -57,22 +57,28 @@ class RuningGame {
   }
 
   /**
-   *  change last_answer_corecntess to false
-   *  add current distrebution to gameResult
+   *  @update - User, clean answers field for connected and archive users
+   *  @write - write the result for the csv
    */
-  cleanUsersLastAnswer(questionPhase) {
+  async cleanUsersLastAnswer(questionPhase) {
     for (var item in this.d_users) {
+      this.d_users[item].last_answer_correctness = false;
+      this.d_users[item].last_answer = 0;
+    }
+    for (var item in this.archive_user_dict) {
       this.d_users[item].last_answer_correctness = false;
       this.d_users[item].last_answer = 0;
     }
     this.d_users_answers = [];
     this.knowledge_question_dist[0] =
       this.curr_connected_users - this.sumValues(this.knowledge_question_dist);
-    const curQuestionDist = {
-      questionName: questionPhase.key,
-      distrebution: this.knowledge_question_dist,
-    };
-    this.gameResult.push(curQuestionDist);
+    if (questionPhase) {
+      const curQuestionDist = {
+        questionName: questionPhase.key,
+        distrebution: this.knowledge_question_dist,
+      };
+      this.gameResult.push(curQuestionDist);
+    }
   }
 
   /** this function sum the values of a given dict */
@@ -81,24 +87,24 @@ class RuningGame {
   }
 
   /** This function clean the last_answer_correctness to all game's users to false
-   *  update dicts: d_users_answers - clean, d_users- clean last_answer_correctness
+   * @update dicts: knowledge_question_answers
+   * @update User : last_asnwer, last_time, curr_score
+   * @update Group : Group Score.
    *  return: null
    */
   updateScoreForUsers(questionPhase) {
     var user = {};
-    const timeInMs = questionPhase.phaseProp.time * 1000;
-    for (var index in this.d_users_answers) {
-      user = this.d_users_answers[index];
-      this.knowledge_question_answers[user.answer] += 1;
-      if (user.answer == questionPhase.correct_answer) {
-        this.d_users[user.userID].curr_score += Math.round(user.time / 10);
-        this.d_users[user.userID].last_answer_correctness = true;
-        this.updateScoreForGroup(
-          this.d_users[user.userID].group,
-          Math.round(user.time / 10)
-        );
+    for (var index in this.d_users) {
+      user = this.d_users[index];
+      user.last_answer !== 0
+        ? (this.knowledge_question_answers[user.last_answer] += 1)
+        : "";
+      if (user.last_answer == questionPhase.correct_answer) {
+        user.curr_score += Math.round(user.last_time / 10);
+        user.last_answer_correctness = true;
+        this.updateScoreForGroup(user.group, Math.round(user.time / 10));
       } else {
-        this.d_users[user.userID].last_answer_correctness = false;
+        user.last_answer_correctness = false;
       }
     }
   }
@@ -220,7 +226,7 @@ class RuningGame {
     this.sendPhaseStatus();
   }
   /** This function update the user answer and score
-   *  @updated dicts: d_users_answers, d_activeGames
+   *  @updated dicts: User last_asnwer, last_time
    *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
    */
   handle_user_answer(userID, answer, time, key) {
@@ -233,7 +239,7 @@ class RuningGame {
       time: time,
     };
     this.d_users[userID].last_answer = answer;
-    this.d_users_answers.push(answerProp);
+    this.d_users[userID].last_time = time;
   }
 
   handle_user_img(userID, img) {
