@@ -14,6 +14,7 @@ class Question extends React.Component {
       calledTime: new Date(),
       selected: -1, // start from 0 . for present the currect answer
       key: 0,
+      interval: props.interval,
     };
     this.quesDuration = 0;
     this.classNames = null;
@@ -126,6 +127,7 @@ class Question extends React.Component {
   }
 
   render() {
+    console.log("interval is " + this.state.interval);
     let allQuestDivs = [];
     const part = this.state.part;
     if (part === "listening q") {
@@ -334,6 +336,7 @@ Question.propTypes = {
   time: PropTypes.number,
   UserAnswer: PropTypes.func.isRequired,
   quesNum: PropTypes.string.isRequired,
+  interval: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
@@ -341,6 +344,7 @@ const mapStateToProps = (state) => ({
   answers: state.user.userState.phaseProp.answers,
   time: state.user.userState.phaseProp.time,
   quesNum: state.user.userState.phaseProp.key,
+  interval: state.user.userState.phaseProp.interval,
 });
 
 export default connect(mapStateToProps, { UserAnswer })(Question);
