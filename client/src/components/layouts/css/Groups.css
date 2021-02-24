@@ -4,7 +4,7 @@
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  border: 3px solid rgb(231, 12, 12);
+  /* border: 3px solid rgb(231, 12, 12); */
 }
 
 .bottom-bars-groups {
@@ -14,7 +14,7 @@
   width: 90vw;
   margin-top: 1.5%;
   margin-bottom: 5%;
-  border: 3px solid rgb(22, 174, 182);
+  /* border: 3px solid rgb(22, 174, 182); */
 }
 
 .header-groups {

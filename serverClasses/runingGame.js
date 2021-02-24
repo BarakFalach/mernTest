@@ -104,7 +104,7 @@ class RuningGame {
       if (user.last_answer == questionPhase.correct_answer) {
         user.curr_score += Math.round(user.last_time / 10);
         user.last_answer_correctness = true;
-        this.updateScoreForGroup(user.group, Math.round(user.time / 10));
+        this.updateScoreForGroup(user.group, Math.round(user.last_time / 10));
       } else {
         user.last_answer_correctness = false;
       }
@@ -115,7 +115,10 @@ class RuningGame {
    *  return: null
    */
   updateScoreForGroup(group, score) {
-    this.groups[group].curr_score += score / this.groups[group].participants;
+    if (this.groups[group].participants !== 0) {
+      console.log(score);
+      this.groups[group].curr_score += score / this.groups[group].participants;
+    }
   }
 
   /** this function create json object that contatins the users Data.
