@@ -1,12 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
-import StarShape from "../../assets/winner_Shape.svg";
-import IconPerson from "../../assets/person.jpg";
-// import Applause from '../../assets/Applause.mp3';
+import IconPerson from "../../assets/avocado.jpeg";
 import Crown from "../../assets/crown.svg";
 import SpotlightCheck from "./SpotlightCheck";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
-
 import "../layouts/css/Top3.css";
 
 
@@ -42,17 +39,12 @@ class Top3 extends React.Component {
       
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-
   }  
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
     this.start();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
   }
   
   updateWindowDimensions() {
@@ -109,7 +101,7 @@ class Top3 extends React.Component {
   };
 
   userPic = (place) => {
-    if(this.props.users.length<place || this.state.place>place) 
+    if(this.props.users.length<place || this.state.place>place || this.props.users[place-1].img==="0") 
       return IconPerson;
     return this.props.users[place-1].img;
   }
@@ -126,7 +118,6 @@ class Top3 extends React.Component {
           {this.state.secondPlace && (<audio autoPlay><source src={this.state.secondAudio}/></audio>)}
           {this.state.firstPlace && (<audio autoPlay><source src={this.state.firstAudio}/></audio>)}
           {this.state.winner && (<audio autoPlay><source src={this.state.Applause} /></audio>)}
-
         </div>
          
         {/* Users */}
@@ -146,7 +137,7 @@ class Top3 extends React.Component {
                 </div>
 
                 <div className="score-text inline-block" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=3? this.userScore(3): "#"}</div> 
-                <img className="icon-star-normal" alt="icon place 3" src={StarShape}/>
+                <div className="cube-third"/> 
               </div> 
 
               {/* First (1) Place */}
@@ -162,7 +153,7 @@ class Top3 extends React.Component {
                   <div class="ellipse">{this.state.place<=1? this.userName(1): "#"}</div>
                 </div>
                 <div className="score-text" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=1? this.userScore(1): "#"}</div> 
-                <img className="icon-star-winner" alt="icon place 1" src={StarShape}/>     
+                <div className="cube-winner"/> 
               </div> 
 
               {/* Second Place */}
@@ -178,7 +169,7 @@ class Top3 extends React.Component {
                   <div class="ellipse">{this.state.place<=2? this.userName(2): "#"}</div>
                 </div>
                 <div className="score-text" style={{fontSize: this.minHeightWidth()*0.04}}>{this.state.place<=2? this.userScore(2): "#"}</div> 
-                <img className="icon-star-normal" alt="icon place 2" src={StarShape}/>
+                <div className="cube-second"/> 
               </div> 
             </div>
           </div>
