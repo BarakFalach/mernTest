@@ -239,12 +239,16 @@ class RuningGame {
   }
 
   handle_user_img(userID, img) {
-    this.d_users[userID].webCam = false;
+    this.d_users[userID].webCam = true;
     if (img != "") this.d_users[userID].img = img;
     this.d_users[userID].connection.send(
       JSON.stringify({
         type: PHASE,
-        phase: "defult",
+        phase: "default",
+        phaseProp: {
+          ratio: this.curr_connected_users / this.num_of_participates,
+        },
+        score: this.d_users[key].curr_score,
       })
     );
   }
