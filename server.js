@@ -5,8 +5,6 @@ const http = require("http");
 const https = require("https");
 const WebSocket = require("ws");
 const production = process.env.NODE_ENV === "production";
-
-console.log(production);
 const ws_PORT = 8000;
 const INDEX = "/index.html";
 const fs = require("fs");
