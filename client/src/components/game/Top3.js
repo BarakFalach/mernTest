@@ -107,15 +107,24 @@ class Top3 extends React.Component {
 
     if(this.props.users.length<place || this.state.place>place || this.props.users[place-1].img==="0") 
       return IconPerson;
-    return this.props.users[place - 1].img;
-  };
+    return this.props.users[place-1].img;
+  }
+
+  getCoordinatesTop(selector) {
+    const domEl  = document.getElementsByClassName(selector);
+    if (!domEl) return {};
+
+    const rect = document.querySelector(selector).getBoundingClientRect();
+    return { x: rect.left + (rect.width / 2), y: rect.top + (rect.height / 2) };
+  }
+  
 
   render() {
     return (
       <div>
         <div>
+          <SpotlightCheck coor={this.getCoordinatesTop} /> 
 
-          <SpotlightCheck /> 
           {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
           {this.state.second && (<audio autoPlay><source src={this.state.audio2}/></audio>)}
           {this.state.first && (<audio autoPlay><source src={this.state.audio1}/></audio>)}

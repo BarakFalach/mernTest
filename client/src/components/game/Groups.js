@@ -9,7 +9,8 @@ import "chartjs-plugin-labels";
 import "../layouts/css/Groups.css";
 
 const Groups = ({
-  my_groups = { 1: { curr_score: 60 }, 2: { curr_score: 90 } },
+  my_groups,
+
   answers = ["1", "2"],
   winning = my_groups[1].curr_score > my_groups[2].curr_score
     ? 1
