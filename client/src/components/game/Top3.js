@@ -37,8 +37,7 @@ class Top3 extends React.Component {
       thirdAudio: "assets/top3/third.m4a",
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-
-  }  
+  }
 
   componentDidMount() {
     this.updateWindowDimensions();
@@ -46,7 +45,6 @@ class Top3 extends React.Component {
     this.start();
   }
 
-  
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
@@ -104,127 +102,143 @@ class Top3 extends React.Component {
   };
 
   userPic = (place) => {
-
-    if(this.props.users.length<place || this.state.place>place || this.props.users[place-1].img==="0") 
+    if (
+      this.props.users.length < place ||
+      this.state.place > place ||
+      this.props.users[place - 1].img === "0"
+    )
       return IconPerson;
-    return this.props.users[place-1].img;
-  }
+    return this.props.users[place - 1].img;
+  };
 
   getCoordinatesTop(selector) {
-    const domEl  = document.getElementsByClassName(selector);
+    const domEl = document.getElementsByClassName(selector);
     if (!domEl) return {};
 
     const rect = document.querySelector(selector).getBoundingClientRect();
-    return { x: rect.left + (rect.width / 2), y: rect.top + (rect.height / 2) };
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
   }
-  
 
   render() {
     return (
       <div>
         <div>
-          <SpotlightCheck coor={this.getCoordinatesTop} /> 
-
-          {this.state.third && (<audio autoPlay><source src={this.state.audio3}/></audio>)}
-          {this.state.second && (<audio autoPlay><source src={this.state.audio2}/></audio>)}
-          {this.state.first && (<audio autoPlay><source src={this.state.audio1}/></audio>)}
-          {this.state.thirdPlace && (<audio autoPlay><source src={this.state.thirdAudio}/></audio>)}
-          {this.state.secondPlace && (<audio autoPlay><source src={this.state.secondAudio}/></audio>)}
-          {this.state.firstPlace && (<audio autoPlay><source src={this.state.firstAudio}/></audio>)}
-          {this.state.winner && (<audio autoPlay><source src={this.state.Applause} /></audio>)}
+          <SpotlightCheck coor={this.getCoordinatesTop} />
+          {this.state.third && (
+            <audio autoPlay>
+              <source src={this.state.audio3} />
+            </audio>
+          )}
+          {this.state.second && (
+            <audio autoPlay>
+              <source src={this.state.audio2} />
+            </audio>
+          )}
+          {this.state.first && (
+            <audio autoPlay>
+              <source src={this.state.audio1} />
+            </audio>
+          )}
+          {this.state.thirdPlace && (
+            <audio autoPlay>
+              <source src={this.state.thirdAudio} />
+            </audio>
+          )}
+          {this.state.secondPlace && (
+            <audio autoPlay>
+              <source src={this.state.secondAudio} />
+            </audio>
+          )}
+          {this.state.firstPlace && (
+            <audio autoPlay>
+              <source src={this.state.firstAudio} />
+            </audio>
+          )}
+          {this.state.winner && (
+            <audio autoPlay>
+              <source src={this.state.Applause} />
+            </audio>
+          )}
         </div>
 
         {/* Users */}
-        <div className='flex-container-main-top3'>
-          <div className='header-top3'>השחקנים המובילים במשחק</div>
-          <div className='flex-container-row-top3' style={{ marginTop: "3%" }}>
+        <div className="flex-container-main-top3">
+          <div className="header-top3">השחקנים המובילים במשחק</div>
+          <div className="flex-container-row-top3" style={{ marginTop: "3%" }}>
             {/* Third (3) Place */}
-            <div className='flex-container-col-top3 playr-third'>
-              <div className='item-not-flex'>
+            <div className="flex-container-col-top3 playr-third">
+              <div className="item-not-flex">
                 <ReactRoundedImage
                   image={this.userPic(3)}
-                  roundedColor='#00000'
-                  roundedSize='0'
+                  roundedColor="#00000"
+                  roundedSize="0"
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div className='ellipse'>
+                <div class="ellipse">
                   {this.state.place <= 3 ? this.userName(3) : "#"}
                 </div>
               </div>
 
               <div
-                className='score-text inline-block'
+                className="score-text inline-block"
                 style={{ fontSize: this.minHeightWidth() * 0.04 }}
               >
                 {this.state.place <= 3 ? this.userScore(3) : "#"}
               </div>
-              <img
-                className='icon-star-normal'
-                alt='icon place 3'
-                src={StarShape}
-              />
+              <div className="cube-third" />
             </div>
 
             {/* First (1) Place */}
-            <div className='flex-container-col-top3 playr-first'>
+            <div className="flex-container-col-top3 playr-first">
               <img
-                className='icon-crown-top3'
-                alt='playerIcon'
+                className="icon-crown-top3"
+                alt="playerIcon"
                 src={Crown}
                 style={{ transform: "rotate(10deg)" }}
               />
-              <div className='item-not-flex'>
+              <div className="item-not-flex">
                 <ReactRoundedImage
-                  roundedColor='#00000'
+                  roundedColor="#00000"
                   image={this.userPic(1)}
-                  roundedSize='0'
+                  roundedSize="0"
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div className='ellipse'>
+                <div class="ellipse">
                   {this.state.place <= 1 ? this.userName(1) : "#"}
                 </div>
               </div>
               <div
-                className='score-text'
+                className="score-text"
                 style={{ fontSize: this.minHeightWidth() * 0.04 }}
               >
                 {this.state.place <= 1 ? this.userScore(1) : "#"}
               </div>
-              <img
-                className='icon-star-winner'
-                alt='icon place 1'
-                src={StarShape}
-              />
+              <div className="cube-winner" />
             </div>
 
             {/* Second Place */}
-            <div className='flex-container-col-top3 playr-second'>
-              <div className='item-not-flex'>
+            <div className="flex-container-col-top3 playr-second">
+              <div className="item-not-flex">
                 <ReactRoundedImage
-                  roundedColor='#00000'
+                  roundedColor="#00000"
                   image={this.userPic(2)}
-                  roundedSize='0'
+                  roundedSize="0"
                   imageWidth={this.minHeightWidth() * 0.2}
                   imageHeight={this.minHeightWidth() * 0.2}
                 />
-                <div className='ellipse'>
+                <div class="ellipse">
                   {this.state.place <= 2 ? this.userName(2) : "#"}
                 </div>
               </div>
               <div
-                className='score-text'
+                className="score-text"
                 style={{ fontSize: this.minHeightWidth() * 0.04 }}
               >
                 {this.state.place <= 2 ? this.userScore(2) : "#"}
               </div>
-              <img
-                className='icon-star-normal'
-                alt='icon place 2'
-                src={StarShape}
-              />
-
+              <div className="cube-second" />
             </div>
           </div>
         </div>
