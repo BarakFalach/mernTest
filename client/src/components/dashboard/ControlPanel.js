@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "../../App.css";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
-import { initGame, startGame } from "../../actions/dashboard";
+import { initGame } from "../../actions/dashboard";
 import GameDashboard from "./GameDashboard";
 const ControlPanel = ({ name, logout, initGame }) => {
   const [gameStarted, setGameStarted] = useState(false);

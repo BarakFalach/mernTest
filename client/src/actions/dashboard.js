@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;
 //Start Game Admin
-export const startGame = (numOfPlayers = 40, name) => async (dispatch) => {
+export const initGame = (numOfPlayers = 40, name) => async (dispatch) => {
   try {
     client = new W3CWebSocket(PATH + ":" + ServerPORT);
     client.onopen = () => {
@@ -64,7 +64,6 @@ export const resumePause = (resumeOrPause) => async (dispatch) => {
       type: KEYGAME_FAIL, //TODO:: change to more reasonable Error
     });
   }
-
 };
 export const startGame = () => async () => {
   try {
