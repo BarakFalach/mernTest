@@ -410,6 +410,7 @@ wsServer.on("connection", (request) => {
         }
       } catch (err) {
         console.log(err.message);
+        console.log(err.stack);
       }
     });
 
@@ -422,5 +423,6 @@ wsServer.on("connection", (request) => {
     });
   } catch (err) {
     console.log(err.message);
+    console.log(err.stack);
   }
 });

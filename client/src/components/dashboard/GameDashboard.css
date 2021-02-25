@@ -1,10 +1,10 @@
-/* .container {
-  background: blue;
-  width: 200px;
+.flex-container-col-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1%;
+  height: 100%;
+  width: 100vw;
+  /* border: 3px solid rgb(18, 216, 64); */
 }
-.out {
-  background-color: brown;
-}
-button {
-  color: cornflowerblue;
-} */
