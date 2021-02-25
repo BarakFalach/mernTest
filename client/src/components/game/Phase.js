@@ -26,7 +26,7 @@ const Phase = ({ phase, keyOfPhase }) => {
       return <Poll />;
     case "top3":
       return <Top3 />;
-    case "Group":
+    case "groups":
       return <Groups />;
     case "bars":
       return <Bars />;

@@ -352,6 +352,7 @@ class RuningGame {
           phase: "top3",
           phaseProp: {
             users: topUsers,
+            key: this.curr_phase.key,
           },
           score: this.d_users[key].curr_score,
         })
@@ -371,10 +372,11 @@ class RuningGame {
       this.d_users[key].connection.send(
         JSON.stringify({
           type: PHASE,
-          phase: "Group",
+          phase: "groups",
           phaseProp: {
             groups: this.groups,
             term: this.curr_phase.phaseProp.term,
+            key: this.curr_phase.key,
           },
           score: this.d_users[key].curr_score,
         })
