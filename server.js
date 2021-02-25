@@ -8,17 +8,27 @@ const production = process.env.NODE_ENV === "production";
 const ws_PORT = 8000;
 const INDEX = "/index.html";
 const fs = require("fs");
-var sshKey = production
-  ? fs.readFileSync("/etc/ssl/private/apache-selfsigned.key")
-  : "";
+var sshKey = production ? fs.readFileSync("/etc/ssl/certs/server.key") : "";
 var cert = production
-  ? fs.readFileSync("/etc/ssl/certs/apache-selfsigned.crt")
+  ? fs.readFileSync("/etc/ssl/certs/7ab46dfad7973999.crt")
+  : "";
+var ca = production
+  ? fs.readFileSync("/etc/ssl/certs/gd_bundle-g2-g1.crt")
   : "";
 var options = {
   key: sshKey,
   cert: cert,
 };
 const app = express();
+
+if (production) {
+  var redirect = express();
+
+  redirect.get("*", function (req, res) {
+    res.redirect("https://" + req.headers.host + req.url);
+    redirect.listen(80, () => console.log("Server Started at: 80"));
+  });
+}
 
 //  Connect Database
 connectDB();
@@ -55,6 +65,7 @@ production
   ? SSserver.listen(PORT, () => console.log("Server Started at: " + PORT))
   : app.listen(PORT, () => console.log("Server Started at: " + PORT));
 server_ws.listen(ws_PORT, () => console.log("Server Started at: " + ws_PORT));
+
 //#################################################################################################################################################################################################################
 
 // Const enums
