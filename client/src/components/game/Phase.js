@@ -10,13 +10,15 @@ import { Poll } from "./Poll";
 import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
+import GoodBye from "./GoodBye";
 import DefaultScreen from "./DefaultScreen";
+import GenericTrack from "./GenericTrack";
 // import Goodbye from "./GoodBye";
 
 const Phase = ({ phase, keyOfPhase }) => {
   console.log(keyOfPhase);
   switch (phase) {
-    case "Question":
+    case "question":
       return <Question key={keyOfPhase} />; // Fix the problem of
     case "answer":
       return <Answer />;
@@ -32,6 +34,12 @@ const Phase = ({ phase, keyOfPhase }) => {
       return <Bars />;
     case "webCam":
       return <WebcamCapture />;
+    case "generic":
+      return <GenericTrack />;
+    case "goodBye":
+      return <GoodBye />;
+    case "welcome":
+      return <Welcome />;
     default:
       return <DefaultScreen />;
   }

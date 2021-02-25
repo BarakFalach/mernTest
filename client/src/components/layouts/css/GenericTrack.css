@@ -1,0 +1,29 @@
+.generic-flexbox {
+  display: flex;
+  flex-direction: column;
+  font-size: 6vmin;
+  justify-content: start;
+  align-items: center;
+}
+.generic-image {
+  margin-top: 5%;
+  height: 30vh;
+  width: 30vh;
+}
+
+.generic-paragraph {
+  text-align: center;
+  margin-top: 2%;
+  animation: opac 2s ease-in 1 forwards;
+}
+@keyframes opac {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
