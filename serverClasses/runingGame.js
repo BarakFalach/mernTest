@@ -138,11 +138,18 @@ class RuningGame {
    * @param {*} gameKey
    */
   handle_req_user_login(userID, connection, gameKey) {
-    var phase = "webCam";
-    var curUser = new User(gameKey, this.getGroupNum(), this.numberStack.pop());
+    const phase = this.gameStarted ? "welcome" : "webCam";
+    this.curr_connected_users++;
+    const phaseProp = this.gameStarted
+      ? { ratio: this.curr_connected_users / this.num_of_participates }
+      : { flag: false };
+    const curUser = new User(
+      gameKey,
+      this.getGroupNum(),
+      this.numberStack.pop()
+    );
     curUser.setConnection(connection);
     this.d_users[userID] = curUser;
-    this.curr_connected_users++;
     this.groups[curUser.group].participants++;
 
     connection.send(
@@ -154,16 +161,14 @@ class RuningGame {
         gameKey: gameKey, //TODO:::  change this veriable in client
         group: curUser.group,
         phase: phase,
-        phaseProp: {
-          flag: false,
-        },
+        phaseProp: phaseProp,
       })
     );
 
     // update users connecting
 
     // update the admin on the number of users that get in
-    if (this.nextPhase == 0) this.sendProgressBar();
+    if (!this.gameStarted) this.sendProgressBar();
     this.sendUserTable();
   }
 
@@ -387,7 +392,7 @@ class RuningGame {
         this.d_users[key].connection.send(
           JSON.stringify({
             type: PHASE,
-            phase: "default",
+            phase: "welcome",
             phaseProp: {
               ratio: this.curr_connected_users / this.num_of_participates,
             },
@@ -451,7 +456,7 @@ class RuningGame {
           score: curUser.curr_score,
           gameKey: gameKey,
           group: curUser.group,
-          phase: "default",
+          phase: "welcome",
           phaseProp: {
             ratio: this.curr_connected_users / this.num_of_participates,
           },
