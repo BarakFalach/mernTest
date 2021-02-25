@@ -146,6 +146,7 @@ const Bars = ({
                   },
                   ticks: {
                     display: false,
+                    beginAtZero: true,
                   },
                 },
               ],
