@@ -251,7 +251,7 @@ class RuningGame {
     this.d_users[userID].connection.send(
       JSON.stringify({
         type: PHASE,
-        phase: "default",
+        phase: "welcome",
         phaseProp: {
           ratio: this.curr_connected_users / this.num_of_participates,
         },
