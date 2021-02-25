@@ -14,7 +14,7 @@ const LoginUser = ({ login, isAuthenticated }) => {
     var load = loadState();
     console.log(load);
 
-    if (load !== null) {
+    if (load != null) {
       login({ number: load.number, gameKey: load.gameKey });
     }
   }, []);
