@@ -62,7 +62,7 @@ const Gamedashboard = ({
         >
           Pause
         </button>
-        
+
         <button name="endGame" onClick={(e) => endGameButton(e)}>
           End Game
         </button>
@@ -81,7 +81,7 @@ const Gamedashboard = ({
           <button
             key={Phase}
             name={Phase}
-            disabled={!started || Phase.substring(0, 4) == "bars"}
+            disabled={!started || Phase.substring(0, 4) === "bars"}
             // color={index === curPhase ? 'blue' : 'green'}
             style={index === curPhase ? { color: "blue" } : {}}
             onClick={(e) => ScreenButton(e)}
