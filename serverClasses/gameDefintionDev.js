@@ -77,6 +77,7 @@ gameDefenition["generic1"] = {
     key: "generic1",
     paragraph: "hi berdugo this is the generic track",
   },
+  duration: 10,
 };
 gameDefenition["question3"] = {
   key: "question3",
