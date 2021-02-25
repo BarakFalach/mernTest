@@ -1,7 +1,7 @@
 import React from "react";
 import IconPerson from "../../assets/avocado.jpeg";
 import Crown from "../../assets/crown.svg";
-import SpotlightCheck from "./SpotlightCheck";
+import SpotlightTop from "./SpotlightTop";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
 import "../layouts/css/Top3.css";
@@ -36,13 +36,17 @@ class Top3 extends React.Component {
       secondAudio: "assets/top3/second.m4a",
       thirdAudio: "assets/top3/third.m4a",
     };
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.upWinDim = this.updateWindowDimensions.bind(this);
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
+    window.addEventListener("resize", this.upWinDim);
     this.start();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.upWinDim);
   }
 
   updateWindowDimensions() {
@@ -125,7 +129,7 @@ class Top3 extends React.Component {
     return (
       <div>
         <div>
-          <SpotlightCheck coor={this.getCoordinatesTop} />
+          <SpotlightTop coor={this.getCoordinatesTop} />
           {this.state.third && (
             <audio autoPlay>
               <source src={this.state.audio3} />

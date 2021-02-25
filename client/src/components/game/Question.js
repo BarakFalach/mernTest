@@ -19,6 +19,8 @@ class Question extends React.Component {
     this.classNames = null;
     this.indexes = [props.answers.length];
     this.clocktimer = null;
+    this.clockSize = null;
+    this.strokeClockWidth = null;
     this.remainTime = null;
     this.createIndexes(props.answers.length);
     this.audioPathQuestion = "assets/question/" + this.props.quesNum + "_1.m4a";
@@ -29,7 +31,13 @@ class Question extends React.Component {
     this.secondL = this.secondAudioListener.bind(this);
     this.windowL = this.windowListener.bind(this);
     this.ansL = this.ansAudioListener.bind(this);
+    this.upWinDim = this.updateWindowDimensions.bind(this);
   }
+
+  updateWindowDimensions() {
+    this.setState({ clockSize: Math.min(window.innerWidth, window.innerHeight) * 0.17,
+                    strokeClockWidth: Math.min(window.innerWidth, window.innerHeight) * 0.01});
+  };
 
   createIndexes = (numOfAnswers) => {
     let tmp = 0;
@@ -97,6 +105,20 @@ class Question extends React.Component {
     }
   }
 
+  componentDidMount() {
+    console.log("enterd did mount...");
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.upWinDim);
+    if (this.state.part === "listening q") {
+      this.audioElement = document.getElementById("myAudioQues");
+      if (this.audioElement != null) {
+        this.audioElement.addEventListener("ended", this.firstL);
+      }
+      this.audioElement.addEventListener("loadedmetadata", this.secondL);
+      window.addEventListener("focus", this.windowL);
+    }
+  }
+
   componentWillUnmount() {
     console.log("enterd unmount");
     this.audioElement.removeEventListener("ended", this.firstL);
@@ -111,18 +133,7 @@ class Question extends React.Component {
       console.log("answers audio stopped in the middle");
     }
     window.removeEventListener("focus", this.windowL);
-  }
-
-  componentDidMount() {
-    console.log("enterd did mount");
-    if (this.state.part === "listening q") {
-      this.audioElement = document.getElementById("myAudioQues");
-      if (this.audioElement != null) {
-        this.audioElement.addEventListener("ended", this.firstL);
-      }
-      this.audioElement.addEventListener("loadedmetadata", this.secondL);
-      window.addEventListener("focus", this.windowL);
-    }
+    window.removeEventListener("resize", this.upWinDim);
   }
 
   render() {
@@ -159,11 +170,10 @@ class Question extends React.Component {
         allQuestDivs.push(questDiv);
       }
       this.clocktimer = (
-        <div className='clockCenter'>
           <CountdownCircleTimer
             isPlaying={false}
-            size={80}
-            // duration={() => getRemainTime()}
+            size={this.state.clockSize}
+            strokeWidth={this.state.strokeClockWidth}
             duration={this.props.time}
             colors={[
               ["#004777", 0.33],
@@ -176,7 +186,6 @@ class Question extends React.Component {
           >
             {({ remainingTime }) => remainingTime}
           </CountdownCircleTimer>
-        </div>
       );
     } else if (part === "choosing") {
       const classNames = [
@@ -207,10 +216,10 @@ class Question extends React.Component {
       let remainTime = this.remainTimeFunc();
       remainTime = remainTime > 500 ? remainTime : 0;
       this.clocktimer = (
-        <div className='clockCenter'>
           <CountdownCircleTimer
             key={this.state.key}
-            size={80}
+            size={this.state.clockSize}
+            strokeWidth={this.state.strokeClockWidth}
             isPlaying={true}
             duration={this.props.time} // should be Time Left !
             initialRemainingTime={remainTime / 1000}
@@ -222,7 +231,6 @@ class Question extends React.Component {
           >
             {(remainingTime) => this.renderTime(remainingTime)}
           </CountdownCircleTimer>
-        </div>
       );
     } else if (part === "answered") {
       const classNames = [
@@ -254,9 +262,9 @@ class Question extends React.Component {
       remainTime = remainTime > 500 ? remainTime : 0;
 
       this.clocktimer = (
-        <div className='clockCenter'>
           <CountdownCircleTimer
-            size={80}
+            size={this.state.clockSize}
+            strokeWidth={this.state.strokeClockWidth}
             isPlaying
             duration={this.props.time} // should be Time Left !
             initialRemainingTime={remainTime / 1000}
@@ -268,7 +276,6 @@ class Question extends React.Component {
           >
             {(remainingTime) => this.renderTime(remainingTime)}
           </CountdownCircleTimer>
-        </div>
       );
     }
 
