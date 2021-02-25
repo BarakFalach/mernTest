@@ -36,18 +36,17 @@ export default class SpotlightTop extends React.Component {
       placeText: ".playr-third",
     };
     this.start = this.start.bind(this);
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.getRadius = this.getRadius.bind(this);
+    this.upWinDim = this.updateWindowDimensions.bind(this);
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
+    window.addEventListener("resize", this.upWinDim);
     this.start();
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
+    window.removeEventListener("resize", this.upWinDim);
   }
 
   updateWindowDimensions() {
@@ -61,7 +60,7 @@ export default class SpotlightTop extends React.Component {
     this.setStatePromise({
       radiusWinner: Math.min(window.innerWidth, window.innerHeight) * 0.3,
     });
-    this.setStatePromise({ radius: this.getRadius() });
+    this.setStatePromise({ radius: this.getRadius()});
     this.setStatePromise({ ...this.getCoordinates(this.state.placeText) });
   }
 
