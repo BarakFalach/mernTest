@@ -8,7 +8,7 @@ const Welcome = ({ ratio }) => {
   console.log("ratio updated and " + ratio);
   if (ratio < 0) {
     return "Bad ratio from server";
-  } else if (ratio < 0.8) {
+  } else if (ratio < 0.6) {
     return (
       <div className='wholescreen'>
         <div dir='rtl' style={{ width: "60%" }} className='welcome-label'>

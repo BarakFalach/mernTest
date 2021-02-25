@@ -1,20 +1,10 @@
 .wholescreen {
   display: flex;
   flex-direction: column;
-  width: 100%; /* including!!! bar height*/
   align-items: center;
   justify-content: center;
-  height: 100vh;
   /* border: 2px solid black; */
-  margin-top: -25px;
   text-align: center;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 223, 223, 0.979) 0%,
-    rgb(184, 197, 255) 20%,
-    #b7e8eb 100%
-  );
-  overflow: hidden;
 }
 .welcome-label {
   font-size: 50px;

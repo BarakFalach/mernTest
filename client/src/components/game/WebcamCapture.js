@@ -2,7 +2,6 @@ import Webcam from "react-webcam";
 import { sendPicture, CameraNotAllowed } from "../../actions/user";
 import PropTypes from "prop-types";
 import React from "react";
-import { Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
 import ScreenshotAudio from "../../assets/Screenshot.mp3";
@@ -33,11 +32,13 @@ class WebcamCapture extends React.Component {
   }
 
   updateWindowDimensions() {
-    this.setState({ windowVmin: Math.min(window.innerWidth, window.innerHeight) * 0.5 });
+    this.setState({
+      windowVmin: Math.min(window.innerWidth, window.innerHeight) * 0.5,
+    });
   }
 
   start() {
-    this.setStatePromise({alreadyScreen: true});
+    this.setStatePromise({ alreadyScreen: true });
     this.setStatePromise({
       ImgExist: false,
       ShowText: true,
@@ -55,8 +56,7 @@ class WebcamCapture extends React.Component {
         this.setStatePromise({
           ImgExist: true,
           CaptureImage: this.webcamRef.getScreenshot(),
-        })
-      .then(() => this.setStatePromise({ alreadyScreen: false }))
+        }).then(() => this.setStatePromise({ alreadyScreen: false }))
       );
   }
 
@@ -104,53 +104,53 @@ class WebcamCapture extends React.Component {
             <source type='audio/mp3' src={ScreenshotAudio} />
           </audio>
         )}
-          <div className="flex-container-webcam-col">
-            <div className="header-web">צילום תמונת משתתף</div>
-            <div className="header-web-instruction" style={{ marginTop: 5 }}>
-              אנא נסו למקם את הפנים במרכז אזור הצילום
-            </div>
-            <div className="item">
-            {!this.state.ImgExist && <div className="mark" />}
-              {this.state.ImgExist ? (
-                  <ReactRoundedImage
-                    image={this.state.CaptureImage}
-                    roundedSize="1"
-                    imageHeight={this.state.windowVmin}
-                    imageWidth={this.state.windowVmin}
-                  />
-
-              ) : (
-                <div className="camera-before">
-                  <Webcam
-                    className="camera-before"
-                    ref={this.setRef}
-                    audio={false}
-                    height='350'
-                    onUserMedia={this.allow}
-                    screenshotFormat='image/jpeg'
-                  />
-                </div>
-              )}
-            </div>
-            <div className="item">
-              {!this.state.disabledPictue &&
-			          <button
-                className="myButton"
+        <div className='flex-container-webcam-col'>
+          <div className='header-web'>צילום תמונת משתתף</div>
+          <div className='header-web-instruction' style={{ marginTop: 5 }}>
+            אנא נסו למקם את הפנים במרכז אזור הצילום
+          </div>
+          <div className='item'>
+            {!this.state.ImgExist && <div className='mark' />}
+            {this.state.ImgExist ? (
+              <ReactRoundedImage
+                image={this.state.CaptureImage}
+                roundedSize='1'
+                imageHeight={this.state.windowVmin}
+                imageWidth={this.state.windowVmin}
+              />
+            ) : (
+              <div className='camera-before'>
+                <Webcam
+                  className='camera-before'
+                  ref={this.setRef}
+                  audio={false}
+                  height='350'
+                  onUserMedia={this.allow}
+                  screenshotFormat='image/jpeg'
+                />
+              </div>
+            )}
+          </div>
+          <div className='item'>
+            {!this.state.disabledPictue && (
+              <button
+                className='myButton'
                 onClick={this.start}
                 disabled={this.state.alreadyScreen || this.props.flag}
               >
-            	{this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
-              </button>}
-              {this.state.ImgExist && (
-                <button
-                  className="myButton"
-				          onClick={sendPicture(this.state.CaptureImage)}
-                >
-                  אשר/י תמונה
-                </button>
-              )}
-            </div>
+                {this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
+              </button>
+            )}
+            {this.state.ImgExist && (
+              <button
+                className='myButton'
+                onClick={sendPicture(this.state.CaptureImage)}
+              >
+                אשר/י תמונה
+              </button>
+            )}
           </div>
+        </div>
         {this.state.ShowText && (
           <div className='counter-text'>{this.state.Seconds}</div>
         )}
@@ -168,7 +168,6 @@ WebcamCapture.propTypes = {
   sendPicture: PropTypes.func.isRequired,
   CameraNotAllowed: PropTypes.func.isRequired,
   flag: PropTypes.bool.isRequired,
-
 };
 
 const mapStateToProps = (state) => ({
