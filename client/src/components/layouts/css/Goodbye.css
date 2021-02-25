@@ -8,6 +8,13 @@
   /* border: 2px solid black; */
   margin-top: -25px;
   text-align: center;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 223, 223, 0.979) 0%,
+    rgb(184, 197, 255) 20%,
+    #b7e8eb 100%
+  );
+  overflow: hidden;
 }
 .welcome-label {
   font-size: 50px;
@@ -22,20 +29,6 @@
 }
 .empty200 {
   margin-top: -10%;
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(206, 8, 8, 0.979) 0%,
-    rgb(224, 125, 68) 20%,
-    #b7e8eb 100%
-  );
-  overflow: hidden;
 }
 
 .ocean {
