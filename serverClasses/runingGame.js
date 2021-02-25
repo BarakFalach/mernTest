@@ -67,8 +67,8 @@ class RuningGame {
       this.d_users[item].last_answer = 0;
     }
     for (var item in this.archive_user_dict) {
-      this.d_users[item].last_answer_correctness = false;
-      this.d_users[item].last_answer = 0;
+      this.archive_user_dict[item].last_answer_correctness = false;
+      this.archive_user_dict[item].last_answer = 0;
     }
     this.d_users_answers = [];
     if (questionPhase) {
@@ -116,7 +116,6 @@ class RuningGame {
    */
   updateScoreForGroup(group, score) {
     if (this.groups[group].participants !== 0) {
-      console.log(score);
       this.groups[group].curr_score += score / this.groups[group].participants;
     }
   }
@@ -216,21 +215,19 @@ class RuningGame {
       }
     }
     //TODO:: only for devoloping , after last phase the game Restart.
-    if (this.phaseList.indexOf(phaseName) == this.phaseList.length - 1) {
+    if (phaseName == "goodbye") {
       this.writeResultCsv();
       //TODO:: handle end Game
       this.setPause();
-      this.sendPhaseStatus();
-      return;
     }
     this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
+    this.sendPhaseStatus();
   }
   /** This function update the user answer and score
    *  @updated dicts: User last_asnwer, last_time
    *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
    */
   handle_user_answer(userID, answer, time, key) {
-    console.log(key);
     if (key != this.curr_phase.key) return; //TODO: change to cur_phase.key
     if (time <= 0) time = 0;
     this.d_users[userID].last_answer = answer;
@@ -287,6 +284,7 @@ class RuningGame {
       this.groups[groupNumber].participants--;
       this.archive_user_dict[userID] = this.d_users[userID];
       delete this.d_users[userID];
+
       this.curr_connected_users--;
       this.sendUserTable();
       console.log("SERVER : Player conenction closed (userID: " + userID + ")");
@@ -386,7 +384,6 @@ class RuningGame {
   sendProgressBar() {
     for (key in this.d_users) {
       if (this.d_users[key].webCam) {
-        console.log("here");
         this.d_users[key].connection.send(
           JSON.stringify({
             type: PHASE,
@@ -454,7 +451,7 @@ class RuningGame {
           score: curUser.curr_score,
           gameKey: gameKey,
           group: curUser.group,
-          phase: "default", //TODO create screen re connect
+          phase: "default",
           phaseProp: {
             ratio: this.curr_connected_users / this.num_of_participates,
           },
@@ -499,8 +496,14 @@ class RuningGame {
   scheduler(phaseName) {
     if (this.pause) return;
     this.handle_change_screen(phaseName);
-
+    if (phaseName == "goodbye") {
+      this.controller.clear();
+      return;
+    }
     this.controller.changePhase(this.curr_phase.duration);
+  }
+  endGame() {
+    this.scheduler("goodbye");
   }
 }
 module.exports = RuningGame;
