@@ -19,7 +19,7 @@ gameDefenition["question1"] = {
     key: "question1",
   },
   correct_answer: 1,
-  duration: 18,
+  duration: 19,
 };
 gameDefenition["bars1"] = {
   key: "bars1",
@@ -55,7 +55,7 @@ gameDefenition["question2"] = {
     key: "question2",
   },
   correct_answer: 1,
-  duration: 15,
+  duration: 19,
 };
 gameDefenition["bars2"] = {
   key: "bars2",
@@ -85,7 +85,7 @@ gameDefenition["question3"] = {
     key: "question3",
   },
   correct_answer: 1,
-  duration: 15,
+  duration: 19,
 };
 gameDefenition["bars3"] = {
   key: "bars3",
@@ -102,7 +102,7 @@ gameDefenition["question4"] = {
     key: "question4",
   },
   correct_answer: 1,
-  duration: 15,
+  duration: 19,
 };
 gameDefenition["bars4"] = {
   key: "bars3",
