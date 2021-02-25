@@ -228,7 +228,7 @@ class RuningGame {
    *  @return: if all users answerd (or time is over) send to all users if they right (true) and the updated score
    */
   handle_user_answer(userID, answer, time, key) {
-    if (key != this.curr_phase.key) return; //TODO: change to cur_phase.key
+    if (key != this.curr_phase.key) return;
     if (time <= 0) time = 0;
     this.d_users[userID].last_answer = answer;
     this.d_users[userID].last_time = time;
