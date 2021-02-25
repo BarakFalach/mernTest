@@ -10,12 +10,14 @@ import { Poll } from "./Poll";
 import Groups from "./Groups";
 import WebcamCapture from "./WebcamCapture";
 import Welcome from "./Welcome";
+import DefaultScreen from "./DefaultScreen";
 // import Goodbye from "./GoodBye";
 
-const Phase = ({ phase }) => {
+const Phase = ({ phase, keyOfPhase }) => {
+  console.log(keyOfPhase);
   switch (phase) {
-    case "question":
-      return <Question />;
+    case "Question":
+      return <Question key={keyOfPhase} />; // Fix the problem of
     case "answer":
       return <Answer />;
     case "video":
@@ -31,15 +33,17 @@ const Phase = ({ phase }) => {
     case "webCam":
       return <WebcamCapture />;
     default:
-      return <Welcome />;
+      return <DefaultScreen />;
   }
 };
 
 Phase.propTypes = {
   phase: PropTypes.string,
+  keyOfPhase: PropTypes.string,
 };
 const mapStateToProps = (state) => ({
   phase: state.user.userState.phase,
+  keyOfPhase: state.user.userState.phaseProp.key,
 });
 
 export default connect(mapStateToProps, {})(Phase);

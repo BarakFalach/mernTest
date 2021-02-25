@@ -1,7 +1,7 @@
 import React from "react";
 import IconPerson from "../../assets/avocado.jpeg";
 import Crown from "../../assets/crown.svg";
-import SpotlightCheck from "./SpotlightCheck";
+import SpotlightTop from "./SpotlightTop";
 import { connect } from "react-redux";
 import ReactRoundedImage from "react-rounded-image";
 import "../layouts/css/Top3.css";
@@ -36,13 +36,17 @@ class Top3 extends React.Component {
       secondAudio: "assets/top3/second.m4a",
       thirdAudio: "assets/top3/third.m4a",
     };
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.upWinDim = this.updateWindowDimensions.bind(this);
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
+    window.addEventListener("resize", this.upWinDim);
     this.start();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.upWinDim);
   }
 
   updateWindowDimensions() {
@@ -113,17 +117,19 @@ class Top3 extends React.Component {
 
   getCoordinatesTop(selector) {
     const domEl = document.getElementsByClassName(selector);
-    if (!domEl) return {};
+    if (!domEl) return {x: 0, y: 0};
 
-    const rect = document.querySelector(selector).getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    if(document.querySelector(selector)!==null){
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
   }
 
   render() {
     return (
       <div>
         <div>
-          <SpotlightCheck coor={this.getCoordinatesTop} />
+          <SpotlightTop coor={this.getCoordinatesTop} />
           {this.state.third && (
             <audio autoPlay>
               <source src={this.state.audio3} />
@@ -166,7 +172,7 @@ class Top3 extends React.Component {
           <div className="header-top3">השחקנים המובילים במשחק</div>
           <div className="flex-container-row-top3" style={{ marginTop: "3%" }}>
             {/* Third (3) Place */}
-            <div className="flex-container-col-top3 playr-third">
+            <div className="flex-container-col-top3 playr-third" id="playr-third">
               <div className="item-not-flex">
                 <ReactRoundedImage
                   image={this.userPic(3)}

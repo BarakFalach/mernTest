@@ -3,7 +3,7 @@ import Spotlight from "react-spotlight";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Confetti from "react-dom-confetti";
 
-export default class SpotlightCheck extends React.Component {
+export default class SpotlightTop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

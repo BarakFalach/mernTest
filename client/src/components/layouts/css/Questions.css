@@ -140,10 +140,11 @@
 }
 
 .clockCenter {
-  font-size: 40px;
-  margin-top: 3%;
-  height: 80px;
-  width: 80px;
+  font-size: 8vmin;
+  margin-top: 2%;
+  height: 15vmin;
+  width: 15vmin;
+  /* border: 3px solid rgb(18, 216, 64); */
 }
 
 .clock-animation {
