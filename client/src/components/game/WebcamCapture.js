@@ -21,9 +21,19 @@ class WebcamCapture extends React.Component {
       disabledPictue: true,
       notAllowed: false,
       alreadyScreen: false,
+      windowVmin: 0,
     };
     this.start = this.start.bind(this);
     this.allow = this.allow.bind(this);
+    this.upWinDim = this.updateWindowDimensions.bind(this);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.upWinDim);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ windowVmin: Math.min(window.innerWidth, window.innerHeight) * 0.5 });
   }
 
   start() {
@@ -48,8 +58,6 @@ class WebcamCapture extends React.Component {
         })
       .then(() => this.setStatePromise({ alreadyScreen: false }))
       );
-      
-
   }
 
   sleep(ms) {
@@ -78,6 +86,8 @@ class WebcamCapture extends React.Component {
   }
 
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.upWinDim);
     navigator.permissions.query({ name: "camera" }).then((result) => {
       this.updateAllow(result.state);
       result.addEventListener("change", () => {
@@ -97,7 +107,7 @@ class WebcamCapture extends React.Component {
           <div className="flex-container-webcam-col">
             <div className="header-web">צילום תמונת משתתף</div>
             <div className="header-web-instruction" style={{ marginTop: 5 }}>
-              אנא נסו למקם את הפנים במרכז האזור המסומן בעיגול
+              אנא נסו למקם את הפנים במרכז אזור הצילום
             </div>
             <div className="item">
             {!this.state.ImgExist && <div className="mark" />}
@@ -105,8 +115,8 @@ class WebcamCapture extends React.Component {
                   <ReactRoundedImage
                     image={this.state.CaptureImage}
                     roundedSize="1"
-                    imageWidth="350"
-                    imageHeight="350"
+                    imageHeight={this.state.windowVmin}
+                    imageWidth={this.state.windowVmin}
                   />
 
               ) : (
