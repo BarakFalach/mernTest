@@ -1,5 +1,4 @@
 const User = require("./user");
-const Admin = require("./admin");
 const GAME_KEY_SUCCESS = "GAME_KEY_SUCCESS";
 const PHASE = "PHASE";
 const USER = "USER";
@@ -7,6 +6,7 @@ const converter = require("json-2-csv");
 const { json } = require("express");
 const { Socket } = require("dgram");
 const { runInThisContext } = require("vm");
+const Controller = require("./controller");
 fs = require("fs");
 
 class RuningGame {
@@ -41,7 +41,7 @@ class RuningGame {
     this.pause = false;
     this.gameResult = [];
     this.numberStack = [];
-    this.timer;
+    this.controller = new Controller();
     for (var i = 30; i > 0; i--) {
       this.numberStack.push(i);
     }
@@ -186,14 +186,11 @@ class RuningGame {
 
   /** time the next phase to be loaded to the uswers */
   handle_change_screen(phaseName = null) {
-    if (this.pause) return;
-    this.gameStarted = true;
     if (phaseName == null) {
       this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
       phaseName = this.curr_phase.key;
     } else {
       this.curr_phase = this.gameDefenition[phaseName];
-      clearTimeout(this.timer);
     }
     if (this.curr_phase.type == "question") {
       this.clean_arguments_for_question();
@@ -218,20 +215,15 @@ class RuningGame {
         );
       }
     }
-    var that = this;
-    this.timer = setTimeout(function () {
-      that.handle_change_screen();
-    }, this.curr_phase.duration * 1000);
     //TODO:: only for devoloping , after last phase the game Restart.
     if (this.phaseList.indexOf(phaseName) == this.phaseList.length - 1) {
-      clearTimeout(this.timer);
       this.writeResultCsv();
+      //TODO:: handle end Game
       this.setPause();
-      // this.nextPhase = 0;
+      this.sendPhaseStatus();
       return;
     }
     this.nextPhase = this.phaseList.indexOf(phaseName) + 1;
-    this.sendPhaseStatus();
   }
   /** This function update the user answer and score
    *  @updated dicts: User last_asnwer, last_time
@@ -281,14 +273,6 @@ class RuningGame {
     }
     this.sendUserTable();
     this.cleanUsersLastAnswer(questionPhase);
-  }
-
-  handler_user_video_end() {
-    this.user_semaphore++;
-    if (this.user_semaphore == Object.keys(this.d_users).length) {
-      this.user_semaphore = 0;
-      this.handle_change_screen();
-    }
   }
 
   /** This function delete the user from server (and his connections) and remove it to the archive dict
@@ -386,10 +370,10 @@ class RuningGame {
 
   setPause() {
     this.pause = true;
-    clearTimeout(this.timer);
   }
   setResume() {
     this.pause = false;
+    this.scheduler();
   }
   sendUserTable() {
     this.admin.connection.send(
@@ -494,6 +478,8 @@ class RuningGame {
     this.sendPhaseStatus();
   }
   startGame() {
+    this.controller.runingGame = this;
+    this.gameStarted = true;
     for (key in this.d_users) {
       if (!this.d_users[key].webCam) {
         this.d_users[key].connection.send(
@@ -508,10 +494,13 @@ class RuningGame {
         );
       }
     }
-    var that = this;
-    this.timer = setTimeout(function () {
-      that.handle_change_screen();
-    }, 5000);
+    this.controller.changePhase(5);
+  }
+  scheduler(phaseName) {
+    if (this.pause) return;
+    this.handle_change_screen(phaseName);
+
+    this.controller.changePhase(this.curr_phase.duration);
   }
 }
 module.exports = RuningGame;
