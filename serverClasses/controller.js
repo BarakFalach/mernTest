@@ -11,5 +11,8 @@ class Controller {
       that.runingGame.scheduler();
     }, time * 1000);
   }
+  clear() {
+    clearTimeout(this.timer);
+  }
 }
 module.exports = Controller;

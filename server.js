@@ -259,7 +259,7 @@ const handle_new_game_instance = (
   gameType = 1
 ) => {
   var new_admin;
-  if (name in d_admins) {
+  if (name in d_admins && d_activeGames[d_admins[name].gameKey]) {
     new_admin = d_admins[name];
     new_admin.setConnection(connection);
     d_activeGames[new_admin.gameKey].admin = new_admin;
@@ -320,6 +320,8 @@ const handle_delete_admin = (userID, gameKey) => {
 const delete_game_instance = (gameKey) => {
   for (let user in d_activeGames[gameKey].d_users)
     d_activeGames[gameKey].handle_delete_user(user, gameKey);
+  for (let user in d_activeGames[gameKey].archive_user_dict)
+    delete d_activeGames[gameKey].archive_user_dict[user];
   delete d_activeGames[gameKey];
   // log_activeGames();
 };
@@ -394,7 +396,6 @@ wsServer.on("connection", (request) => {
             break;
           case RESUME:
             d_activeGames[gameKey].setResume();
-            d_activeGames[gameKey].handle_change_screen();
             break;
           case IMG:
             d_activeGames[gameKey].handle_user_img(userID, userlog.img);
@@ -403,6 +404,7 @@ wsServer.on("connection", (request) => {
             d_activeGames[gameKey].handle_user_img(userID, "");
             break;
           case END_GAME:
+            d_activeGames[gameKey].endGame();
             delete_game_instance(gameKey);
             break;
         }
