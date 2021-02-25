@@ -24,9 +24,9 @@ class Top3 extends React.Component {
       second: false,
       third: false,
 
-      audio1: "assets/top3/1.m4a",
-      audio2: "assets/top3/2.m4a",
-      audio3: "assets/top3/3.m4a",
+      audio1: "assets/top3/" + (this.props.users[0]!=null? this.props.users[0].userNumber: "") + ".m4a",
+      audio2: "assets/top3/" + (this.props.users[1]!=null? this.props.users[1].userNumber: "") + ".m4a",
+      audio3: "assets/top3/" + (this.props.users[2]!=null? this.props.users[2].userNumber: "") + ".m4a",
 
       firstPlace: false,
       secondPlace: false,
