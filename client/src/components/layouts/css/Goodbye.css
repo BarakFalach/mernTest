@@ -1,0 +1,85 @@
+.wholescreen {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* including!!! bar height*/
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /* border: 2px solid black; */
+  margin-top: -25px;
+  text-align: center;
+}
+.welcome-label {
+  font-size: 50px;
+  margin-top: -200px;
+}
+.goodbye-label {
+  width: 70%;
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+}
+.empty200 {
+  margin-top: -10%;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(206, 8, 8, 0.979) 0%,
+    rgb(224, 125, 68) 20%,
+    #b7e8eb 100%
+  );
+  overflow: hidden;
+}
+
+.ocean {
+  height: 0%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #015871;
+}
+
+.wave {
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg)
+    repeat-x;
+  position: absolute;
+  top: -198px;
+  width: 6400px;
+  height: 198px;
+  animation: wave 0.2s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.wave:nth-of-type(2) {
+  top: -175px;
+  animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite,
+    swell 7s ease -1.25s infinite;
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% {
+    margin-left: 0;
+  }
+  100% {
+    margin-left: -1600px;
+  }
+}
+
+@keyframes swell {
+  0%,
+  100% {
+    transform: translate3d(0, -25px, 0);
+  }
+  50% {
+    transform: translate3d(0, 5px, 0);
+  }
+}
