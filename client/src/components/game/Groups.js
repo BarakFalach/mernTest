@@ -10,7 +10,7 @@ import "../layouts/css/Groups.css";
 
 const Groups = ({
   my_groups,
-
+  term,
   answers = ["1", "2"],
   winning = my_groups[1].curr_score > my_groups[2].curr_score
     ? 1
@@ -60,7 +60,7 @@ const Groups = ({
           },
           font: {
             weight: "bold",
-            size: Math.min(windowSize.height, windowSize.width) * 0.06,
+            size: Math.min(windowSize.height, windowSize.width) * 0.04,
           },
           color: function (ctx) {
             var value = ctx.dataset.data[ctx.dataIndex];
@@ -68,11 +68,12 @@ const Groups = ({
           },
           formatter: function (value, ctx) {
             if (!ctx.active) {
-              return Math.round((value * total) / 100);
+              console.log(ctx.dataIndex);
+              return my_groups[ctx.dataIndex + 1].curr_score;
             } else if (ctx.dataIndex === correctAnswer - 1) {
-              return "בהובלה";
+              return "במקום הראשון";
             } else {
-              return "מאחורה";
+              return "במקום השני";
             }
           },
         },
@@ -82,8 +83,8 @@ const Groups = ({
   return (
     <div className='flex-container-groups'>
       <div className='header-groups' style={{ marginTop: "2%" }}>
-        מצב הקבוצות
-      </div>
+        {term? term: "מצב הקבוצות"}
+     </div>
       <div className='header-sentence-groups' style={{ marginTop: "0.5%" }}>
         {sentence}
       </div>
