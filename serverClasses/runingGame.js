@@ -195,7 +195,7 @@ class RuningGame {
       this.curr_phase = this.gameDefenition[phaseName];
       clearTimeout(this.timer);
     }
-    if (this.curr_phase.type == "Question") {
+    if (this.curr_phase.type == "question") {
       this.clean_arguments_for_question();
     }
     if (this.curr_phase.type == "Bars") {
@@ -205,7 +205,7 @@ class RuningGame {
       this.send_bars(questionPhase);
     } else if (this.curr_phase.type == "Top3") {
       this.top3Users();
-    } else if (this.curr_phase.type == "Groups") this.topGroups();
+    } else if (this.curr_phase.type == "groups") this.topGroups();
     else {
       for (key in this.d_users) {
         this.d_users[key].connection.send(
@@ -224,8 +224,10 @@ class RuningGame {
     }, this.curr_phase.duration * 1000);
     //TODO:: only for devoloping , after last phase the game Restart.
     if (this.phaseList.indexOf(phaseName) == this.phaseList.length - 1) {
+      clearTimeout(this.timer);
       this.writeResultCsv();
-      this.nextPhase = 0;
+      this.setPause();
+      // this.nextPhase = 0;
       return;
     }
     this.nextPhase = this.phaseList.indexOf(phaseName) + 1;

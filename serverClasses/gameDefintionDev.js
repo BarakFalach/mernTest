@@ -7,11 +7,11 @@ gameDefenition["video1"] = {
   phaseProp: {
     videoUrl: "https://vimeo.com/204414561",
   },
-  duration: 32,
+  duration: 34,
 };
 gameDefenition["question1"] = {
   key: "question1",
-  type: "Question",
+  type: "question",
   phaseProp: {
     question: "מה גילכם?",
     answers: ["חטיבת ביניים", "חטיבה עליונה", "אחר"],
@@ -24,12 +24,12 @@ gameDefenition["question1"] = {
 gameDefenition["bars1"] = {
   key: "bars1",
   type: "Bars",
-  duration: 10,
+  duration: 8,
 };
 gameDefenition["top3_1"] = {
   key: "top3_1",
   type: "Top3",
-  duration: 20,
+  duration: 24,
   phaseProp: {
     audioArr: [
       "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
@@ -41,13 +41,13 @@ gameDefenition["top3_1"] = {
 gameDefenition["groups1"] = {
   key: "groups1",
   phaseProp: { term: "ולסיום - מי ענו ביחד יותר תשובות נכונות?" },
-  type: "Groups",
-  duration: 5,
+  type: "groups",
+  duration: 10,
 };
 gameDefenition["question2"] = {
   key: "question2",
 
-  type: "Question",
+  type: "question",
   phaseProp: {
     question: "האם אי פעם השתמשתם במריחואנה או גראס?",
     answers: ["מעולם לא", "פעם בודדת", "פעמים בודדות (3-5)"],
@@ -60,7 +60,7 @@ gameDefenition["question2"] = {
 gameDefenition["bars2"] = {
   key: "bars2",
   type: "Bars",
-  duration: 5,
+  duration: 8,
 };
 gameDefenition["video2"] = {
   key: "video2",
@@ -68,11 +68,19 @@ gameDefenition["video2"] = {
   phaseProp: {
     videoUrl: "https://vimeo.com/494218419/fc3e5c2cf6",
   },
-  duration: 33,
+  duration: 35,
+};
+gameDefenition["generic1"] = {
+  key: "generic1",
+  type: "generic",
+  phaseProp: {
+    key: "generic1",
+    paragraph: "hi berdugo this is the generic track",
+  },
 };
 gameDefenition["question3"] = {
   key: "question3",
-  type: "Question",
+  type: "question",
   phaseProp: {
     question: "במעבדות הסמים הלא חוקיות",
     answers: [
@@ -90,11 +98,11 @@ gameDefenition["question3"] = {
 gameDefenition["bars3"] = {
   key: "bars3",
   type: "Bars",
-  duration: 5,
+  duration: 8,
 };
 gameDefenition["question4"] = {
   key: "question4",
-  type: "Question",
+  type: "question",
   phaseProp: {
     question: "במעבדות הסמים הלא חוקיות",
     answers: ["נכון", "לא נכון"],
@@ -105,8 +113,13 @@ gameDefenition["question4"] = {
   duration: 19,
 };
 gameDefenition["bars4"] = {
-  key: "bars3",
+  key: "bars4",
   type: "Bars",
-  duration: 5,
+  duration: 8,
+};
+gameDefenition["goodbye"] = {
+  key: "goodbye",
+  type: "goodBye",
+  phaseProp: {},
 };
 exports.gameDefenition = gameDefenition;
