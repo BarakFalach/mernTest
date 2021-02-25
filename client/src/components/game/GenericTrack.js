@@ -20,7 +20,7 @@ const GenericTrack = ({ mediaKey, paragraph }) => {
       <img
         src={imagePath}
         style={{ fontSize: "10px" }}
-        className='generic-image'
+        className='generic-image '
         alt='Image not found'
       />
       <div className='generic-paragraph'>{paragraph}</div>
