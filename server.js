@@ -375,7 +375,7 @@ wsServer.on("connection", (request) => {
             break;
 
           case PHASE:
-            d_activeGames[gameKey].handle_change_screen(userlog.phaseName);
+            d_activeGames[gameKey].scheduler(userlog.phaseName);
             break;
           case START_GAME:
             d_activeGames[gameKey].startGame();
@@ -388,10 +388,6 @@ wsServer.on("connection", (request) => {
               userlog.time,
               userlog.key
             );
-            break;
-          case VIDEO_END:
-            d_activeGames[gameKey].handler_user_video_end();
-            // handle_user_answer(gameKey, userID, userlog.answer, userlog.time);
             break;
           case PAUSE:
             d_activeGames[gameKey].setPause();
