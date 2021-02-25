@@ -42,7 +42,7 @@ const Gamedashboard = ({
   };
 
   return (
-    <div className="out">
+    <div className="flex-container-col-dashboard">
       <h1> Welcome to Game </h1>
       <h1> Game key: {GameKey} </h1>
       <h1>Total Players: {numOfPlayers}</h1>
@@ -62,15 +62,17 @@ const Gamedashboard = ({
         >
           Pause
         </button>
+        
+        <button name="endGame" onClick={(e) => endGameButton(e)}>
+          End Game
+        </button>
+
         <button
           name="StartGame"
           disabled={started}
           onClick={(e) => startGameButton(e)}
         >
           Start Game
-        </button>
-        <button name="endGame" onClick={(e) => endGameButton(e)}>
-          End Game
         </button>
       </div>
 
