@@ -14,7 +14,7 @@ import Welcome from "./Welcome";
 
 const Phase = ({ phase }) => {
   switch (phase) {
-    case "Question":
+    case "question":
       return <Question />;
     case "answer":
       return <Answer />;
@@ -24,7 +24,7 @@ const Phase = ({ phase }) => {
       return <Poll />;
     case "top3":
       return <Top3 />;
-    case "Group":
+    case "groups":
       return <Groups />;
     case "bars":
       return <Bars />;

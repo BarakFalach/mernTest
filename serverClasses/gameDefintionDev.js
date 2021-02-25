@@ -6,6 +6,7 @@ gameDefenition["video1"] = {
   type: "video",
   phaseProp: {
     videoUrl: "https://vimeo.com/204414561",
+    key: "video1",
   },
   duration: 34,
 };
@@ -31,11 +32,7 @@ gameDefenition["top3_1"] = {
   type: "Top3",
   duration: 24,
   phaseProp: {
-    audioArr: [
-      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
-      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
-      "https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1",
-    ],
+    key: "top3_1",
   },
 };
 gameDefenition["groups1"] = {

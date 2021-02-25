@@ -40,7 +40,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = production ? 443 : 5000;
 
 var server_ws = production
   ? https.createServer(options, app)

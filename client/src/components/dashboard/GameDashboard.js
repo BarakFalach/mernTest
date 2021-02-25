@@ -79,7 +79,7 @@ const Gamedashboard = ({
           <button
             key={Phase}
             name={Phase}
-            disabled={!started}
+            disabled={!started || Phase.substring(0, 4) == "bars"}
             // color={index === curPhase ? 'blue' : 'green'}
             style={index === curPhase ? { color: "blue" } : {}}
             onClick={(e) => ScreenButton(e)}
