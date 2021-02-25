@@ -9,7 +9,6 @@
 body {
   font-family: "Secular One", sans-serif;
   background-image: url("./assets/giftly.png");
-  overflow-y: hidden;
   overflow-x: hidden;
   background-color: #dfd5fd;
   color: #273043;

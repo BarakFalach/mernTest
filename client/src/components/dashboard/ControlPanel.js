@@ -28,17 +28,17 @@ const ControlPanel = ({ name, logout, initGame }) => {
   if (gameStarted) return <GameDashboard controlpanel={setGameStarted} />;
 
   return (
-    <span>
-      <h1 className="aaa"> Welcome to the Control Panel {name} </h1>
+    <span style={{ overflow: "auto", height: "inherit" }}>
+      <h1 className='aaa'> Welcome to the Control Panel {name} </h1>
       <button onClick={logout}>LogOut</button>
-      <form className="form" onSubmit={(e) => onSubmit(e)}>
-        <div className="flex-container-user-col">
+      <form className='form' onSubmit={(e) => onSubmit(e)}>
+        <div className='flex-container-user-col'>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <h4>Enter Num of Players:</h4>
             <TextField
-              type="number"
-              placeholder="num of players"
-              name="numOfPlayers"
+              type='number'
+              placeholder='num of players'
+              name='numOfPlayers'
               style={{ padding: 20 }}
               value={numOfPlayers}
               onChange={(e) => onChange(e)}
