@@ -16,8 +16,6 @@ const initialState = {
 
 export default function authReducer(state = initialState, action) {
   const { type, payload } = action;
-  console.log("authReduce" + type);
-
   switch (type) {
     case ADMIN_LOADED:
       return {

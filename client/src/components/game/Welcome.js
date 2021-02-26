@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 const Welcome = ({ ratio }) => {
-  console.log("ratio updated and " + ratio);
   if (ratio < 0) {
     return "Bad ratio from server";
   } else if (ratio < 0.6) {

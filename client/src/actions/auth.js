@@ -19,7 +19,6 @@ export const loadAdmin = () => async (dispatch) => {
   }
 
   try {
-    console.log("1");
     const res = await axios.get("/api/auth");
     dispatch({
       type: ADMIN_LOADED,

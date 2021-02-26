@@ -35,9 +35,11 @@ class Question extends React.Component {
   }
 
   updateWindowDimensions() {
-    this.setState({ clockSize: Math.min(window.innerWidth, window.innerHeight) * 0.17,
-                    strokeClockWidth: Math.min(window.innerWidth, window.innerHeight) * 0.01});
-  };
+    this.setState({
+      clockSize: Math.min(window.innerWidth, window.innerHeight) * 0.17,
+      strokeClockWidth: Math.min(window.innerWidth, window.innerHeight) * 0.01,
+    });
+  }
 
   createIndexes = (numOfAnswers) => {
     let tmp = 0;
@@ -106,7 +108,6 @@ class Question extends React.Component {
   }
 
   componentDidMount() {
-    console.log("enterd did mount...");
     this.updateWindowDimensions();
     window.addEventListener("resize", this.upWinDim);
     if (this.state.part === "listening q") {
@@ -120,17 +121,14 @@ class Question extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("enterd unmount");
     this.audioElement.removeEventListener("ended", this.firstL);
     this.audioElement.removeEventListener("loadedmetadata", this.secondL);
     this.ansAudio.removeEventListener("ended", this.ansL);
     if (!this.audioElement.ended) {
-      console.log("questions audio stopped in the middle");
       this.audioElement.pause();
     }
     if (!this.ansAudio.ended) {
       this.ansAudio.pause();
-      console.log("answers audio stopped in the middle");
     }
     window.removeEventListener("focus", this.windowL);
     window.removeEventListener("resize", this.upWinDim);
@@ -170,22 +168,22 @@ class Question extends React.Component {
         allQuestDivs.push(questDiv);
       }
       this.clocktimer = (
-          <CountdownCircleTimer
-            isPlaying={false}
-            size={this.state.clockSize}
-            strokeWidth={this.state.strokeClockWidth}
-            duration={this.props.time}
-            colors={[
-              ["#004777", 0.33],
-              ["#F7B801", 0.33],
-              ["#A30000", 0.33],
-            ]}
-            onComplete={() => {
-              this.setState({ part: "answered" });
-            }}
-          >
-            {({ remainingTime }) => remainingTime}
-          </CountdownCircleTimer>
+        <CountdownCircleTimer
+          isPlaying={false}
+          size={this.state.clockSize}
+          strokeWidth={this.state.strokeClockWidth}
+          duration={this.props.time}
+          colors={[
+            ["#004777", 0.33],
+            ["#F7B801", 0.33],
+            ["#A30000", 0.33],
+          ]}
+          onComplete={() => {
+            this.setState({ part: "answered" });
+          }}
+        >
+          {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
       );
     } else if (part === "choosing") {
       const classNames = [
@@ -216,21 +214,21 @@ class Question extends React.Component {
       let remainTime = this.remainTimeFunc();
       remainTime = remainTime > 500 ? remainTime : 0;
       this.clocktimer = (
-          <CountdownCircleTimer
-            key={this.state.key}
-            size={this.state.clockSize}
-            strokeWidth={this.state.strokeClockWidth}
-            isPlaying={true}
-            duration={this.props.time} // should be Time Left !
-            initialRemainingTime={remainTime / 1000}
-            colors={[
-              ["#004777", 0.33],
-              ["#F7B801", 0.33],
-              ["#A30000", 0.33],
-            ]}
-          >
-            {(remainingTime) => this.renderTime(remainingTime)}
-          </CountdownCircleTimer>
+        <CountdownCircleTimer
+          key={this.state.key}
+          size={this.state.clockSize}
+          strokeWidth={this.state.strokeClockWidth}
+          isPlaying={true}
+          duration={this.props.time} // should be Time Left !
+          initialRemainingTime={remainTime / 1000}
+          colors={[
+            ["#004777", 0.33],
+            ["#F7B801", 0.33],
+            ["#A30000", 0.33],
+          ]}
+        >
+          {(remainingTime) => this.renderTime(remainingTime)}
+        </CountdownCircleTimer>
       );
     } else if (part === "answered") {
       const classNames = [
@@ -262,20 +260,20 @@ class Question extends React.Component {
       remainTime = remainTime > 500 ? remainTime : 0;
 
       this.clocktimer = (
-          <CountdownCircleTimer
-            size={this.state.clockSize}
-            strokeWidth={this.state.strokeClockWidth}
-            isPlaying
-            duration={this.props.time} // should be Time Left !
-            initialRemainingTime={remainTime / 1000}
-            colors={[
-              ["#004777", 0.33],
-              ["#F7B801", 0.33],
-              ["#A30000", 0.33],
-            ]}
-          >
-            {(remainingTime) => this.renderTime(remainingTime)}
-          </CountdownCircleTimer>
+        <CountdownCircleTimer
+          size={this.state.clockSize}
+          strokeWidth={this.state.strokeClockWidth}
+          isPlaying
+          duration={this.props.time} // should be Time Left !
+          initialRemainingTime={remainTime / 1000}
+          colors={[
+            ["#004777", 0.33],
+            ["#F7B801", 0.33],
+            ["#A30000", 0.33],
+          ]}
+        >
+          {(remainingTime) => this.renderTime(remainingTime)}
+        </CountdownCircleTimer>
       );
     }
 

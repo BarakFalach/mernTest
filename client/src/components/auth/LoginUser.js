@@ -9,11 +9,8 @@ const LoginUser = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     gameKey: "",
   });
-  //TODO: Falach need to fix ->empty array.
   useEffect(() => {
     var load = loadState();
-    console.log(load);
-
     if (load != null) {
       login({ number: load.number, gameKey: load.gameKey });
     }
@@ -23,7 +20,6 @@ const LoginUser = ({ login, isAuthenticated }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("key game is " + gameKey);
     login({ gameKey });
   };
 
