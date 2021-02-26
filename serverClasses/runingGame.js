@@ -61,7 +61,7 @@ class RuningGame {
 	 *  @update - User, clean answers field for connected and archive users
 	 *  @write - write the result for the csv
 	 */
-	async cleanUsersLastAnswer(questionPhase) {
+	cleanUsersLastAnswer(questionPhase) {
 		for (var item in this.d_users) {
 			this.d_users[item].last_answer_correctness = false;
 			this.d_users[item].last_answer = 0;
