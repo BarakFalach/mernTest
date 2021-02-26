@@ -10,7 +10,6 @@ const GenericTrack = ({ mediaKey, paragraph }) => {
   React.useEffect(() => {
     return () => {
       if (!audio.paused || !audio.currentTime) {
-        console.log("General audio still playing");
         audio.pause();
       }
     };

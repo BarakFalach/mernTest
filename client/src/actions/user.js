@@ -8,7 +8,6 @@ export const login = ({ number, gameKey }) => async (dispatch) => {
     client = new W3CWebSocket(PATH + ":" + ServerPORT);
 
     client.onopen = () => {
-      console.log(gameKey);
       client.send(
         JSON.stringify({
           type: number ? "USER_RECONNECT" : "REQ_USER_LOGIN",
@@ -20,7 +19,7 @@ export const login = ({ number, gameKey }) => async (dispatch) => {
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
       const type = dataFromServer.type;
-      console.log("got reply! ", dataFromServer);
+      // console.log("got reply! ", dataFromServer);
       if (dataFromServer) {
         dispatch({
           type: type,
@@ -71,7 +70,6 @@ export const sendPicture = (imgSrc) => async () => {
 };
 
 export const CameraNotAllowed = () => async () => {
-  console.log("Falah is wrong");
   client.send(
     JSON.stringify({
       type: "CAMERA_NOT_ALLOWED",

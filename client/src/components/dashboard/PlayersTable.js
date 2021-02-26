@@ -18,28 +18,27 @@ const useStyles = makeStyles({
 export default function PlayersTable(props) {
   const classes = useStyles();
   const rows = [];
-  console.log(props.data);
   Object.keys(props.data).forEach(function (key) {
     rows.push(props.data[key]);
   });
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table className={classes.table} aria-label='simple table'>
         <TableHead>
           <TableRow>
-            <TableCell align="right">Number</TableCell>
-            <TableCell align="right">game_key</TableCell>
-            <TableCell align="right">Group</TableCell>
-            <TableCell align="right">Score</TableCell>
+            <TableCell align='right'>Number</TableCell>
+            <TableCell align='right'>game_key</TableCell>
+            <TableCell align='right'>Group</TableCell>
+            <TableCell align='right'>Score</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.userNumber}>
-              <TableCell align="right">{row.userNumber}</TableCell>
-              <TableCell align="right">{row.game_key}</TableCell>
-              <TableCell align="right">{row.group_num}</TableCell>
-              <TableCell align="right">{row.curr_score}</TableCell>
+              <TableCell align='right'>{row.userNumber}</TableCell>
+              <TableCell align='right'>{row.game_key}</TableCell>
+              <TableCell align='right'>{row.group_num}</TableCell>
+              <TableCell align='right'>{row.curr_score}</TableCell>
             </TableRow>
           ))}
         </TableBody>

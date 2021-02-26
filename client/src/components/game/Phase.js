@@ -16,7 +16,6 @@ import GenericTrack from "./GenericTrack";
 // import Goodbye from "./GoodBye";
 
 const Phase = ({ phase, keyOfPhase }) => {
-  console.log(keyOfPhase);
   switch (phase) {
     case "question":
       return <Question key={keyOfPhase} />; // Fix the problem of
