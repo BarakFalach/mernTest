@@ -73,13 +73,9 @@
 .flex-container-webcam-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   height: 10vh;
   width: calc(100px + 30vw);
   /* border: 3px solid rgb(235, 12, 68); */
-}
-
-a:only-child {
-  margin: 0 auto;
 }
