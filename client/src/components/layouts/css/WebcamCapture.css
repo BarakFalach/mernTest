@@ -21,41 +21,13 @@
 }
 
 .item {
-  margin-top: 2%;
+  margin-top: 1vh;
   /* border: 3px solid rgb(34, 216, 18); */
 }
 
 .camera-before {
   height: 49vmin;
   width: 65vmin;
-}
-
-.myButton {
-  display: block;
-  cursor: pointer;
-  background-color: var(--light);
-  width: calc(20px + 15vw);
-  height: calc(20px + 3vh);
-  border-radius: 30px;
-  line-height: calc(20px + 3vh);
-  font-size: 2vmin;
-  color: var(--text);
-  background-size: 100% 100%;
-  box-shadow: 0 0 0 7px var(--light) inset;
-  margin-bottom: 5%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --background: #e5ffb3;
-  --background-accent: #dbf8a3;
-  --background-accent-2: #bde66e;
-  --light: #000000;
-  --dark: #605e5e;
-  --text: #ffffff;
 }
 
 .counter-text {
@@ -70,4 +42,44 @@
   align-items: center;
   text-align: center;
   color: #ffffff;
+}
+
+.e1-web {
+  border: 0.8vmin solid #b7940e;
+  background-color: #c0c0c0;
+}
+.e2-web {
+  border: 0.8vmin solid #0c6740;
+  background-color: #c0c0c0;
+}
+.e3-web {
+  border: 0.8vmin solid #951b26;
+  background-color: #c0c0c0;
+}
+
+.singleAnswer-web {
+  height: 6vh;
+  width: calc(40px + 15vw);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6vmin;
+  text-align: center;
+  justify-content: center;
+  color: white;
+  font-size: calc(5px + 1.5vmin);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0);
+  line-height: 10px;
+}
+
+.flex-container-webcam-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  width: calc(100px + 30vw);
+  /* border: 3px solid rgb(235, 12, 68); */
+}
+
+a:only-child {
+  margin: 0 auto;
 }
