@@ -46,14 +46,14 @@ gameDefenition['question2'] = {
 // 	type: 'Bars',
 // 	duration: 8,
 // };
-gameDefenition['video2'] = {
-	key: 'video2',
-	type: 'video',
-	phaseProp: {
-		videoUrl: 'https://vimeo.com/494218419/fc3e5c2cf6',
-	},
-	duration: 35,
-};
+// gameDefenition['video2'] = {
+// 	key: 'video2',
+// 	type: 'video',
+// 	phaseProp: {
+// 		videoUrl: 'https://vimeo.com/494218419/fc3e5c2cf6',
+// 	},
+// 	duration: 35,
+// };
 // gameDefenition['generic1'] = {
 // 	key: 'generic1',
 // 	type: 'generic',
