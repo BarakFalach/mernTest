@@ -79,7 +79,7 @@ export default class SpotlightTop extends React.Component {
       ...this.getCoordinates(".playr-third"),
       placeText: ".playr-third",
     })
-      .then(() => this.sleep(5000))
+      .then(() => this.sleep(5900))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-third"),
@@ -89,7 +89,7 @@ export default class SpotlightTop extends React.Component {
           starting: true,
         })
       )
-      .then(() => this.sleep(6000))
+      .then(() => this.sleep(3800))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-second"),
@@ -97,7 +97,7 @@ export default class SpotlightTop extends React.Component {
           placeText: ".playr-second",
         })
       )
-      .then(() => this.sleep(6000))
+      .then(() => this.sleep(4000))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-first"),

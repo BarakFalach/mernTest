@@ -70,19 +70,19 @@ class Top3 extends React.Component {
 		this.setStatePromise({ third: false })
 			.then(() => this.sleep(1000))
 			.then(() => this.setStatePromise({ thirdPlace: true }))
-			.then(() => this.sleep(4000))
+			.then(() => this.sleep(4900))
 			.then(() =>
 				this.setStatePromise({ thirdPlace: false, third: true, place: 3 })
 			)
 			.then(() => this.sleep(2000))
 			.then(() => this.setStatePromise({ third: false, secondPlace: true }))
-			.then(() => this.sleep(4000))
+			.then(() => this.sleep(1800))
 			.then(() =>
 				this.setStatePromise({ secondPlace: false, second: true, place: 2 })
 			)
 			.then(() => this.sleep(2000))
 			.then(() => this.setStatePromise({ second: false, firstPlace: true }))
-			.then(() => this.sleep(4000))
+			.then(() => this.sleep(2000))
 			.then(() =>
 				this.setStatePromise({ firstPlace: false, first: true, place: 1 })
 			)
@@ -136,7 +136,7 @@ class Top3 extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="unscroll-y">
 				<div>
 					<SpotlightTop coor={this.getCoordinatesTop} />
 					{this.state.third && (

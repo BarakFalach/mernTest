@@ -105,3 +105,9 @@ button {
   color: #333;
   border: #ccc solid 1px;
 }
+
+.unscroll-y {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+}
