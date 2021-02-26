@@ -338,11 +338,7 @@ class RuningGame {
 					type: PHASE,
 					phase: 'top3',
 					phaseProp: {
-						users: [
-							{ curr_score: 120, userNumber: 12, img: 0 },
-							{ curr_score: 14, userNumber: 3, img: 0 },
-							{ curr_score: 100, userNumber: 100, img: 0 },
-						],
+						users: topUsers,
 						key: this.curr_phase.key,
 					},
 					score: this.d_users[key].curr_score,

@@ -35,7 +35,6 @@ class Question extends React.Component {
   }
 
   updateWindowDimensions() {
-    console.log("called");
     this.setState({
       clockSize: Math.min(window.innerWidth, window.innerHeight) * 0.17,
       strokeClockWidth: Math.min(window.innerWidth, window.innerHeight) * 0.01,
@@ -109,7 +108,6 @@ class Question extends React.Component {
   }
 
   componentDidMount() {
-    console.log("enterd did mount...");
     this.updateWindowDimensions();
     window.addEventListener("resize", this.upWinDim);
     if (this.state.part === "listening q") {
@@ -123,17 +121,14 @@ class Question extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("enterd unmount");
     this.audioElement.removeEventListener("ended", this.firstL);
     this.audioElement.removeEventListener("loadedmetadata", this.secondL);
     this.ansAudio.removeEventListener("ended", this.ansL);
     if (!this.audioElement.ended) {
-      console.log("questions audio stopped in the middle");
       this.audioElement.pause();
     }
     if (!this.ansAudio.ended) {
       this.ansAudio.pause();
-      console.log("answers audio stopped in the middle");
     }
     window.removeEventListener("focus", this.windowL);
     window.removeEventListener("resize", this.upWinDim);

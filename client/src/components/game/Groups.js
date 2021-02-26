@@ -68,7 +68,6 @@ const Groups = ({
           },
           formatter: function (value, ctx) {
             if (!ctx.active) {
-              console.log(ctx.dataIndex);
               return my_groups[ctx.dataIndex + 1].curr_score;
             } else if (ctx.dataIndex === correctAnswer - 1) {
               return "במקום הראשון";
@@ -83,8 +82,8 @@ const Groups = ({
   return (
     <div className='flex-container-groups'>
       <div className='header-groups' style={{ marginTop: "2%" }}>
-        {term? term: "מצב הקבוצות"}
-     </div>
+        {term ? term : "מצב הקבוצות"}
+      </div>
       <div className='header-sentence-groups' style={{ marginTop: "0.5%" }}>
         {sentence}
       </div>

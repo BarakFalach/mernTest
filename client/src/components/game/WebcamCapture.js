@@ -142,14 +142,13 @@ class WebcamCapture extends React.Component {
                     {this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
                   </button>
                 )}
-                <a><button
+                  <button
                     className='singleAnswer-web e3-web'
                     onClick={CameraNotAllowed()}
                     disabled={this.state.alreadyScreen || this.props.flag}
                   >
                     מעדיפ/ה לוותר
                   </button>
-                </a>
               </div>
               {this.state.ImgExist && (
               <button
