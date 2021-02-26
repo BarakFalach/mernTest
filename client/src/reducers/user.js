@@ -14,7 +14,6 @@ const initialState = {
 //func name Changed from login to userReducer
 export default function userReducer(state = initialState, action) {
   const { type, payload } = action;
-  console.log(payload);
   switch (type) {
     case GAME_KEY_SUCCESS:
       return {
