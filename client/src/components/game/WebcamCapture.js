@@ -131,25 +131,35 @@ class WebcamCapture extends React.Component {
               </div>
             )}
           </div>
-          <div className='item'>
-            {!this.state.disabledPictue && (
+          {/* <div className='item'> */}
+            <div className='flex-container-webcam-row im-alone'>
+                {!this.state.disabledPictue && (
+                  <button
+                    className='singleAnswer-web e1-web'
+                    onClick={this.start}
+                    disabled={this.state.alreadyScreen || this.props.flag}
+                  >
+                    {this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
+                  </button>
+                )}
+                <a><button
+                    className='singleAnswer-web e3-web'
+                    onClick={CameraNotAllowed()}
+                    disabled={this.state.alreadyScreen || this.props.flag}
+                  >
+                    מעדיפ/ה לוותר
+                  </button>
+                </a>
+              </div>
+              {this.state.ImgExist && (
               <button
-                className='myButton'
-                onClick={this.start}
-                disabled={this.state.alreadyScreen || this.props.flag}
-              >
-                {this.state.ImgExist ? "צלמ/י שוב" : "צלמ/י תמונה"}
-              </button>
-            )}
-            {this.state.ImgExist && (
-              <button
-                className='myButton'
+                className='singleAnswer-web e2-web'
                 onClick={sendPicture(this.state.CaptureImage)}
               >
                 אשר/י תמונה
               </button>
             )}
-          </div>
+          {/* </div> */}
         </div>
         {this.state.ShowText && (
           <div className='counter-text'>{this.state.Seconds}</div>
