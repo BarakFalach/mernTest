@@ -8,9 +8,9 @@ const production = process.env.NODE_ENV === "production";
 const ws_PORT = 8000;
 const INDEX = "/index.html";
 const fs = require("fs");
-var sshKey = production ? fs.readFileSync("/etc/ssl/certs/server.key") : "";
+var sshKey = production ? fs.readFileSync("/etc/ssl/server.key") : "";
 var cert = production
-  ? fs.readFileSync("/etc/ssl/certs/7ab46dfad7973999.crt")
+  ? fs.readFileSync("/etc/ssl/certs/96d0cc124b8a4230.crt")
   : "";
 var ca = production
   ? fs.readFileSync("/etc/ssl/certs/gd_bundle-g2-g1.crt")
@@ -18,6 +18,7 @@ var ca = production
 var options = {
   key: sshKey,
   cert: cert,
+  ca: ca,
 };
 const app = express();
 
