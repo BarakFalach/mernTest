@@ -28,7 +28,7 @@ const ControlPanel = ({ name, logout, initGame }) => {
   if (gameStarted) return <GameDashboard controlpanel={setGameStarted} />;
 
   return (
-    <span style={{ overflow: "auto", height: "inherit" }}>
+    <span style={{ overflow: "scroll", height: "inherit" }}>
       <h1 className='aaa'> Welcome to the Control Panel {name} </h1>
       <button onClick={logout}>LogOut</button>
       <form className='form' onSubmit={(e) => onSubmit(e)}>
