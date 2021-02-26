@@ -23,14 +23,20 @@ var options = {
 const app = express();
 
 if (production) {
-  var redirect = express();
+  // set up plain http server
+  var http1 = express();
 
-  redirect.get("*", function (req, res) {
+  // set up a route to redirect http to https
+  http1.get("*", function (req, res) {
     res.redirect("https://" + req.headers.host + req.url);
-    redirect.listen(80, () => console.log("Server Started at: 80"));
-  });
-}
 
+    // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+    // res.redirect('https://example.com' + req.url);
+  });
+
+  // have it listen on 8080
+  http1.listen(80, () => console.log("Server Started at: " + 80));
+}
 //  Connect Database
 connectDB();
 
