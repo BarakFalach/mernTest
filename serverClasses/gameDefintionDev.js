@@ -8,7 +8,7 @@ gameDefenition['video1'] = {
 		videoUrl: 'https://vimeo.com/517074658/dfdc84a812',
 		key: 'video1',
 	},
-	duration: 43,
+	duration: 45,
 };
 gameDefenition['question1'] = {
 	key: 'question1',
