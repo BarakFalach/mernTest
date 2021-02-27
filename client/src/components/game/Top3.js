@@ -25,15 +25,15 @@ class Top3 extends React.Component {
 			third: false,
 
 			audio1:
-				'assets/top3/' +
+				'assets/top3/user_numbers/' +
 				(this.props.users[0] != null ? this.props.users[0].userNumber : '') +
 				'.wav',
 			audio2:
-				'assets/top3/' +
+				'assets/top3/user_numbers/' +
 				(this.props.users[1] != null ? this.props.users[1].userNumber : '') +
 				'.wav',
 			audio3:
-				'assets/top3/' +
+				'assets/top3/user_numbers/' +
 				(this.props.users[2] != null ? this.props.users[2].userNumber : '') +
 				'.wav',
 

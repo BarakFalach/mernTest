@@ -199,12 +199,12 @@ class RuningGame {
 		if (this.curr_phase.type == 'question') {
 			this.clean_arguments_for_question();
 		}
-		if (this.curr_phase.type == 'Bars') {
+		if (this.curr_phase.type == 'bars') {
 			const questionPhase = this.gameDefenition[
 				this.phaseList[this.phaseList.indexOf(phaseName) - 1]
 			];
 			this.send_bars(questionPhase);
-		} else if (this.curr_phase.type == 'Top3') {
+		} else if (this.curr_phase.type == 'top3') {
 			this.top3Users();
 		} else if (this.curr_phase.type == 'groups') this.topGroups();
 		else {

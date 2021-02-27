@@ -3,7 +3,7 @@ import "../layouts/css/GenericTrack.css";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 const GenericTrack = ({ mediaKey, paragraph }) => {
-  let audioPath = "assets/generic/" + mediaKey + ".m4a";
+  let audioPath = "assets/generic/" + mediaKey + ".wav";
   let imagePath = "assets/generic/" + mediaKey + ".png";
   let audio = new Audio(audioPath);
   audio.play();

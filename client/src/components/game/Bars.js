@@ -101,6 +101,7 @@ const Bars = ({
 			<audio autoPlay>
 				<source src={'assets/bars/' + audioKey + '.wav'} />
 			</audio>
+			{console.log(audioKey)}
 			<div dir='ltr' className='bottom-bars'>
 				<Bar
 					data={data}
