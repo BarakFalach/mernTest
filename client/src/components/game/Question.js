@@ -23,8 +23,8 @@ class Question extends React.Component {
 		this.strokeClockWidth = null;
 		this.remainTime = null;
 		this.createIndexes(props.answers.length);
-		this.audioPathQuestion = 'assets/question/' + this.props.quesNum + '_1.wav';
-		this.audioPathAnswers = 'assets/question/' + this.props.quesNum + '_2.wav';
+		this.audioPathQuestion = 'assets/question/' + this.props.quesNum + '/1.wav';
+		this.audioPathAnswers = 'assets/question/' + this.props.quesNum + '/2.wav';
 		this.ansAudio = null;
 		this.audioElement = null;
 		this.firstL = this.firstAudioListener.bind(this);

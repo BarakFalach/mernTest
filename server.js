@@ -113,7 +113,8 @@ const [
 const User = require("./serverClasses/user");
 const Admin = require("./serverClasses/admin");
 const RuningGame = require("./serverClasses/runingGame");
-var gameDefenition = require("./serverClasses/gameDefintionDev");
+// var gameDefenition = require("./serverClasses/gameDefintionDev");
+var gameDefenition = require("./serverClasses/gameDefinitionAsaf");
 var gameDefenition = gameDefenition.gameDefenition;
 
 /**
