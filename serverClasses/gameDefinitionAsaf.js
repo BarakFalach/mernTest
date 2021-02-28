@@ -274,14 +274,14 @@ gameDefenition["60"] = {
 };
 
 //inserted bars no audio
-gameDefenition["61"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "61",
-  },
-  questionKey: "60",
-};
+// gameDefenition["61"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "61",
+//   },
+//   questionKey: "60",
+// };
 
 TODO: "add movie 5";
 // Movie 5 (phases 62)
@@ -338,15 +338,15 @@ gameDefenition["66"] = {
   },
 };
 
-//inserted bars no audio
-gameDefenition["67"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "67",
-  },
-  questionKey: "66",
-};
+// //inserted bars no audio
+// gameDefenition["67"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "67",
+//   },
+//   questionKey: "66",
+// };
 
 TODO: "add movie 6";
 // Movie 6 (phases 68)
@@ -418,14 +418,14 @@ gameDefenition["99"] = {
 };
 
 //inserted bars no audio
-gameDefenition["100"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "100",
-  },
-  questionKey: "99",
-};
+// gameDefenition["100"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "100",
+//   },
+//   questionKey: "99",
+// };
 
 TODO: "fix";
 // Movie 8 (phases 101)
@@ -511,14 +511,14 @@ gameDefenition["114"] = {
 };
 
 //inserted bars no audio
-gameDefenition["115"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "115",
-  },
-  questionKey: "114",
-};
+// gameDefenition["115"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "115",
+//   },
+//   questionKey: "114",
+// };
 
 // Movie 10 (phases 116)
 gameDefenition["116"] = {
@@ -544,14 +544,14 @@ gameDefenition["117"] = {
 };
 
 //inserted bars no audio
-gameDefenition["118"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "118",
-  },
-  questionKey: "117",
-};
+// gameDefenition["118"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "118",
+//   },
+//   questionKey: "117",
+// };
 
 // Movie 11 (phases 119)
 gameDefenition["119"] = {
@@ -653,14 +653,14 @@ gameDefenition["155"] = {
 };
 
 //inserted bars no audio
-gameDefenition["156"] = {
-  type: "bars",
-  duration: 3,
-  phaseProp: {
-    key: "156",
-  },
-  questionKey: "155",
-};
+// gameDefenition["156"] = {
+//   type: "bars",
+//   duration: 3,
+//   phaseProp: {
+//     key: "156",
+//   },
+//   questionKey: "155",
+// };
 
 // Movie 13 (phase 157)
 gameDefenition["157"] = {
