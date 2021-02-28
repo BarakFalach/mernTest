@@ -41,7 +41,7 @@ export const login = ({ number, gameKey }) => async (dispatch) => {
 
 //TODO MIGHT NEED =>async dispatch
 export const UserAnswer = (answerNum, time, quesNum) => async () => {
-  console.log(answerNum, time, quesNum);
+  // console.log(answerNum, time, quesNum);
   client.send(
     JSON.stringify({
       type: "USER_ANSWER",
