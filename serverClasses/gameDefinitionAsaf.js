@@ -47,7 +47,7 @@ gameDefenition["1"] = {
 gameDefenition["2"] = {
   type: "question",
   duration: 10.34 + clockTime + questionOffset,
-  correct_answer: 1,
+  correct_answer: -1,
   phaseProp: {
     key: "2",
     question: "מה שלומכם היום?",
@@ -61,6 +61,7 @@ gameDefenition["3"] = {
   duration: 4.24 + barsOffset,
   phaseProp: {
     key: "3",
+    knowledge: false,
   },
   questionKey: "2",
 };
@@ -315,6 +316,7 @@ gameDefenition["65"] = {
   duration: 9.42 + barsOffset,
   phaseProp: {
     key: "65",
+    knowledge: true,
   },
   questionKey: "63",
 };
@@ -352,7 +354,7 @@ gameDefenition["68"] = {
   type: "video",
   duration: videosDict[6].duration + videoOffset,
   phaseProp: {
-    key: "65",
+    key: "68",
     videoUrl: videosDict[6].link,
   },
 };
@@ -459,6 +461,7 @@ gameDefenition["104"] = {
   duration: 17.9 + barsOffset,
   phaseProp: {
     key: "104",
+    knowledge: true,
   },
   questionKey: "102",
 };
@@ -492,6 +495,7 @@ gameDefenition["113"] = {
   duration: 10.04 + barsOffset,
   phaseProp: {
     key: "113",
+    knowledge: true,
   },
   questionKey: "111",
 };
@@ -578,6 +582,7 @@ gameDefenition["121"] = {
   duration: 3,
   phaseProp: {
     key: "121",
+    knowledge: true,
   },
   questionKey: "120",
 };
@@ -599,6 +604,7 @@ gameDefenition["125"] = {
   duration: 7,
   phaseProp: {
     key: "125",
+    knowledge: true,
   },
   questionKey: "123",
 };
@@ -701,6 +707,7 @@ gameDefenition["159"] = {
   duration: 2.2 + barsOffset,
   phaseProp: {
     key: "159",
+    knowledge: true,
   },
   questionKey: "158",
 };
@@ -727,6 +734,7 @@ gameDefenition["163"] = {
   duration: 3,
   phaseProp: {
     key: "163",
+    knowledge: true,
   },
   questionKey: "161",
 };
@@ -874,6 +882,7 @@ gameDefenition["179"] = {
   duration: 3,
   phaseProp: {
     key: "179",
+    knowledge: true,
   },
   questionKey: "177",
 };
@@ -896,6 +905,7 @@ gameDefenition["182"] = {
   duration: 7,
   phaseProp: {
     key: "182",
+    knowledge: true,
   },
   questionKey: "180",
 };
