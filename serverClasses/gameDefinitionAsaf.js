@@ -2,9 +2,9 @@
 
 const gameDefenition = {};
 const clockTime = 6;
-const questionOffset = 1;
+const questionOffset = 1.5;
 const barsOffset = 1;
-const videoOffset = 2.5;
+const videoOffset = 5;
 const genericOffset = 1;
 const shortQuestionDuration = 7;
 const mediumQuestionDuration = 10;
