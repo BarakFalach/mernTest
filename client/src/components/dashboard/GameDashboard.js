@@ -26,6 +26,29 @@ const Gamedashboard = ({
   const [pause, setPause] = useState(false);
   const [started, setStarted] = useState(false);
 
+  const barsKey = [
+    "3",
+    "65",
+    "104",
+    "113",
+    "121",
+    "125",
+    "159",
+    "163",
+    "167",
+    "169",
+    "171",
+    "173",
+  ];
+
+  const phaseColor = {
+    question: "#264653",
+    generic: "#2a9d8f",
+    video: "#e9c46a",
+    top3: "#f4a261",
+    groups: "#e76f51",
+  };
+
   const ScreenButton = (e) => ChangePhase(e.target.name);
   const resumePauseButton = (e) => {
     setPause(!pause);
@@ -81,7 +104,7 @@ const Gamedashboard = ({
           <button
             key={Phase}
             name={Phase}
-            disabled={!started || Phase.substring(0, 4) === "bars"}
+            disabled={!started || barsKey.indexOf(Phase) > -1}
             // color={index === curPhase ? 'blue' : 'green'}
             style={index === curPhase ? { color: "blue" } : {}}
             onClick={(e) => ScreenButton(e)}

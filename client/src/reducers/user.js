@@ -33,6 +33,8 @@ export default function userReducer(state = initialState, action) {
       return {
         ...state,
         userState: payload,
+        group: payload.group,
+
         //TODO:: change the screen state to name of the screen and not bool
       };
     case "IMG":
