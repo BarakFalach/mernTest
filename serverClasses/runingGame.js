@@ -40,11 +40,8 @@ class RuningGame {
     this.curr_phase = {};
     this.pause = false;
     this.gameResult = [];
-    this.numberStack = [];
+    this.numberStack = 1;
     this.controller = new Controller();
-    for (var i = 30; i > 0; i--) {
-      this.numberStack.push(i);
-    }
     this.winners = [];
   }
 
@@ -144,11 +141,8 @@ class RuningGame {
     const phaseProp = this.gameStarted
       ? { ratio: this.curr_connected_users / this.num_of_participates }
       : { flag: false };
-    const curUser = new User(
-      gameKey,
-      this.getGroupNum(),
-      this.numberStack.pop()
-    );
+    const curUser = new User(gameKey, this.getGroupNum(), this.numberStack);
+    this.numberStack++;
     curUser.setConnection(connection);
     this.d_users[userID] = curUser;
     this.groups[curUser.group].participants++;
@@ -470,10 +464,8 @@ class RuningGame {
           score: curUser.curr_score,
           gameKey: gameKey,
           group: curUser.group,
-          phase: "welcome",
-          phaseProp: {
-            ratio: this.curr_connected_users / this.num_of_participates,
-          },
+          phase: "default",
+          phaseProp: {},
         })
       );
       this.sendUserTable();
