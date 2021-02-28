@@ -5,12 +5,13 @@ import PropTypes from "prop-types";
 const GenericTrack = ({ mediaKey, paragraph }) => {
   let audioPath = "assets/generic/" + mediaKey + ".wav";
   let imagePath = "assets/generic/" + mediaKey + ".png";
-  let audio = new Audio(audioPath);
-  audio.play();
+  let audio = React.useRef();
   React.useEffect(() => {
+    audio.current = new Audio(audioPath);
+    audio.current.play();
     return () => {
-      if (!audio.paused || !audio.currentTime) {
-        audio.pause();
+      if (!audio.paused) {
+        audio.current.pause();
       }
     };
   }, []);
