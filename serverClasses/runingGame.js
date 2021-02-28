@@ -45,6 +45,7 @@ class RuningGame {
     for (var i = 30; i > 0; i--) {
       this.numberStack.push(i);
     }
+    this.winners = [];
   }
 
   /** This function change the next group num
@@ -191,6 +192,8 @@ class RuningGame {
   /** time the next phase to be loaded to the uswers */
   handle_change_screen(phaseName = null) {
     if (phaseName == null) {
+      if (this.curr_phase.type === "question")
+        this.updateScoreForUsers(this.curr_phase);
       this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
       phaseName = this.curr_phase.phaseProp.key;
     } else {
@@ -213,11 +216,11 @@ class RuningGame {
             phase: this.curr_phase.type,
             phaseProp: this.curr_phase.phaseProp,
             score: this.d_users[key].curr_score,
+            group: this.d_users[key].group,
           })
         );
       }
     }
-    //TODO:: only for devoloping , after last phase the game Restart.
     if (phaseName == "goodbye") {
       this.writeResultCsv();
       //TODO:: handle end Game
@@ -232,6 +235,7 @@ class RuningGame {
    */
   handle_user_answer(userID, answer, time, key) {
     if (key != this.curr_phase.phaseProp.key) return;
+    if (key == "57") this.groupQuestion(userID, answer);
     if (time <= 0) time = 0;
     this.d_users[userID].last_answer = answer;
     this.d_users[userID].last_time = time;
@@ -252,8 +256,10 @@ class RuningGame {
     );
   }
 
-  send_bars(questionPhase) {
-    this.updateScoreForUsers(questionPhase);
+  send_bars() {
+    const questionPhase = this.gameDefenition[this.curr_phase.questionKey];
+    // this.updateScoreForUsers(questionPhase);
+
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
@@ -262,17 +268,21 @@ class RuningGame {
           phaseProp: {
             distribution: this.knowledge_question_dist,
             correctAnswer: questionPhase.correct_answer,
-            correctTerm:
-              questionPhase.phaseProp.answers[questionPhase.correct_answer - 1],
+            correctTerm: this.curr_phase.phaseProp.knowledge
+              ? questionPhase.phaseProp.answers[
+                  questionPhase.correct_answer - 1
+                ]
+              : "",
             userAnswer: this.d_users[key].last_answer,
             key: this.curr_phase.phaseProp.key,
+            knowledge: this.curr_phase.phaseProp.knowledge,
           },
           score: this.d_users[key].curr_score,
         })
       );
     }
     this.sendUserTable();
-    this.cleanUsersLastAnswer(questionPhase);
+    // this.cleanUsersLastAnswer(questionPhase);
   }
 
   /** This function delete the user from server (and his connections) and remove it to the archive dict
@@ -343,7 +353,12 @@ class RuningGame {
         })
       );
     }
+    this.winners = topUsers;
   }
+  /**
+   * @param {Array[User]} topUsers - 3 top users in arr
+   * @returns {Array[Json]} - return the same arr as json object for the top3 phaseProp.
+   */
   userJsonTop3(topUsers) {
     topUsers = topUsers.slice(0, 3);
     const users = [];
@@ -371,6 +386,7 @@ class RuningGame {
 
   setPause() {
     this.pause = true;
+    this.controller.clear();
   }
   setResume() {
     this.pause = false;
@@ -507,6 +523,11 @@ class RuningGame {
   }
   endGame() {
     this.scheduler("goodbye");
+  }
+  groupQuestion(userID, answer) {
+    this.groups[this.d_users[userID].group].participants--;
+    this.d_users[userID].group = answer;
+    this.groups[answer].participants++;
   }
 }
 module.exports = RuningGame;
