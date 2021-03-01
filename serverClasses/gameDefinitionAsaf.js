@@ -6,6 +6,7 @@ const questionOffset = 1.5;
 const barsOffset = 1;
 const videoOffset = 5;
 const genericOffset = 1;
+const groupsOffset = 1.5;
 const shortQuestionDuration = 7;
 const mediumQuestionDuration = 10;
 const longQuestionDuration = 13;
@@ -362,7 +363,7 @@ gameDefenition["68"] = {
 // Top 3
 gameDefenition["69"] = {
   type: "top3",
-  duration: 26,
+  duration: 23,
   phaseProp: {
     key: "69",
   },
@@ -383,7 +384,7 @@ gameDefenition["70"] = {
 // Groups
 gameDefenition["71"] = {
   type: "groups",
-  duration: 10,
+  duration: 7.8 + groupsOffset,
   phaseProp: {
     key: "71",
     term: "ובאשר לקבוצות הקבוצה המובילה היא",
@@ -622,7 +623,7 @@ gameDefenition["126"] = {
 // Top 3
 gameDefenition["152"] = {
   type: "top3",
-  duration: 26,
+  duration: 23,
   phaseProp: {
     key: "152",
   },
@@ -630,7 +631,7 @@ gameDefenition["152"] = {
 //Groups
 gameDefenition["153"] = {
   type: "groups",
-  duration: 10,
+  duration: 5.68 + groupsOffset,
   phaseProp: {
     key: "153",
     term: "ובאשר לקבוצות הקבוצה המובילה היא",
@@ -1043,7 +1044,7 @@ gameDefenition["206"] = {
 // Top 3
 gameDefenition["207"] = {
   type: "top3",
-  duration: 30,
+  duration: 23,
   phaseProp: {
     key: "207",
   },
@@ -1052,7 +1053,7 @@ gameDefenition["207"] = {
 // Groups
 gameDefenition["208"] = {
   type: "groups",
-  duration: 10,
+  duration: 11.12 + groupsOffset,
   phaseProp: {
     key: "208",
     term: "ולסיום - מי ענו ביחד יותר תשובות נכונות?",

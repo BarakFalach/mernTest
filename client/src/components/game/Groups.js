@@ -11,6 +11,7 @@ import "../layouts/css/Groups.css";
 const Groups = ({
   my_groups,
   term,
+  audioKey,
   answers = ["1", "2"],
   winning = my_groups[1].curr_score > my_groups[2].curr_score
     ? 1
@@ -43,6 +44,11 @@ const Groups = ({
   let imagesByResult = imagesSetter(answers, correctAnswer);
   let colorSet = ["#2599E7", "#EA3546"];
   let colorSetBorder = ["#276678", "#951B26"];
+  let audio =
+    winning === 1
+      ? "assets/groups/" + audioKey + "/1.wav"
+      : "assets/groups/" + audioKey + "/2.wav";
+  console.log(audio);
   const data = {
     labels: answers,
     datasets: [
@@ -80,14 +86,17 @@ const Groups = ({
     ],
   };
   return (
-    <div className='flex-container-groups'>
-      <div className='header-groups' style={{ marginTop: "2%" }}>
+    <div className="flex-container-groups">
+      <audio autoPlay>
+        <source src={audio} />
+      </audio>
+      <div className="header-groups" style={{ marginTop: "2%" }}>
         {term ? term : "מצב הקבוצות"}
       </div>
-      <div className='header-sentence-groups' style={{ marginTop: "0.5%" }}>
+      <div className="header-sentence-groups" style={{ marginTop: "0.5%" }}>
         {sentence}
       </div>
-      <div dir='ltr' className='bottom-bars-groups'>
+      <div dir="ltr" className="bottom-bars-groups">
         <HorizontalBar
           data={data}
           options={{
@@ -185,11 +194,13 @@ function castToScores(my_groups, total) {
 Groups.propTypes = {
   my_groups: PropTypes.array.isRequired,
   term: PropTypes.string.isRequired,
+  audioKey: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   my_groups: state.user.userState.phaseProp.groups,
   term: state.user.userState.phaseProp.term,
+  audioKey: state.user.userState.phaseProp.key,
 });
 
 function useWindowSize() {

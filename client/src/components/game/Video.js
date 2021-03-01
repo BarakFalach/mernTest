@@ -12,7 +12,7 @@ const Video = ({ videoUrl, videoEnd }) => {
   const onVideoEnd = () => videoEnd();
 
   return (
-    <div className='video'>
+    <div className="video">
       <Vimeo
         video={videoUrl}
         controls={false}

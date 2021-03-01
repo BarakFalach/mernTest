@@ -202,6 +202,7 @@ class RuningGame {
     } else if (this.curr_phase.type == "top3") {
       this.top3Users();
     } else if (this.curr_phase.type == "groups") this.topGroups();
+    else if (this.curr_phase.type === "goodBye") this.goodBye();
     else {
       for (key in this.d_users) {
         this.d_users[key].connection.send(
@@ -347,7 +348,9 @@ class RuningGame {
         })
       );
     }
-    this.winners = topUsers;
+    this.winners[0] = topUsers[0].userNumber;
+    this.winners[1] = topUsers[1].userNumber;
+    this.winners[2] = topUsers[2].userNumber;
   }
   /**
    * @param {Array[User]} topUsers - 3 top users in arr
@@ -362,6 +365,8 @@ class RuningGame {
     return users;
   }
   topGroups() {
+    this.groups[1].curr_score = Math.round(this.groups[1].curr_score);
+    this.groups[2].curr_score = Math.round(this.groups[2].curr_score);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
@@ -520,6 +525,25 @@ class RuningGame {
     this.groups[this.d_users[userID].group].participants--;
     this.d_users[userID].group = answer;
     this.groups[answer].participants++;
+  }
+  goodBye() {
+    var winner;
+    console.log(this.winners);
+    for (key in this.d_users) {
+      if (this.winners.indexOf(this.d_users[key].userNumber) > -1)
+        winner = true;
+      console.log(winner);
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: PHASE,
+          phase: this.curr_phase.type,
+          phaseProp: { key: this.curr_phase.phaseProp.key, winner: winner },
+          score: this.d_users[key].curr_score,
+          group: this.d_users[key].group,
+        })
+      );
+      winner = false;
+    }
   }
 }
 module.exports = RuningGame;
