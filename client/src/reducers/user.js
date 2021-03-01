@@ -46,6 +46,16 @@ export default function userReducer(state = initialState, action) {
       return {
         score: payload.score,
       };
+    case "GO_DEFUALT":
+      return {
+        ...state,
+        userState: {
+          phase: "defult",
+          phaseProp: {
+            key: "0",
+          },
+        },
+      };
     default:
       return state;
   }
