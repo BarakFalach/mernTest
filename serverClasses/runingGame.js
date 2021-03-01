@@ -348,9 +348,9 @@ class RuningGame {
         })
       );
     }
-    this.winners[0] = topUsers[0].userNumber;
-    this.winners[1] = topUsers[1].userNumber;
-    this.winners[2] = topUsers[2].userNumber;
+    for (var index in topUsers) {
+      this.winners[index] = topUsers[index].userNumber;
+    }
   }
   /**
    * @param {Array[User]} topUsers - 3 top users in arr
