@@ -95,10 +95,10 @@ const Bars = ({
     ],
   };
   return (
-    <div className='flex-container-main-bars'>
-      {knowledge ? <h1 className='header-bars'>{sentence}</h1> : <h1 />}
+    <div className="flex-container-main-bars">
+      {knowledge ? <h1 className="header-bars">{sentence}</h1> : <h1 />}
       {knowledge ? (
-        <h1 className='header-bars' style={{ marginTop: "0%" }}>
+        <h1 className="header-bars" style={{ marginTop: "0%" }}>
           {correctAns}
         </h1>
       ) : (
@@ -107,7 +107,7 @@ const Bars = ({
       <audio autoPlay>
         <source src={"assets/bars/" + audioKey + ".wav"} />
       </audio>
-      <div dir='ltr' className='bottom-bars'>
+      <div dir="ltr" className="bottom-bars">
         <Bar
           data={data}
           options={{
@@ -125,7 +125,7 @@ const Bars = ({
               labels: {
                 render: "image",
                 textMargin: 5,
-                images: imagesByResult,
+                images: knowledge ? imagesByResult : [],
               },
             },
             scales: {
@@ -166,7 +166,7 @@ const Bars = ({
 
 function imagesSetter(numOfAnswers, correctAnswer, userAnswer, knowledge) {
   let def_size = 30;
-  if (!knowledge) def_size = 0;
+  // if (!knowledge) def_size = 0;
   let imagesByResult = [];
   for (let index = 0; index < numOfAnswers; index++) {
     if (index + 1 === userAnswer || index + 1 === correctAnswer) {
