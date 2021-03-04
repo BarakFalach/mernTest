@@ -40,11 +40,8 @@ class RuningGame {
     this.curr_phase = {};
     this.pause = false;
     this.gameResult = [];
-    this.numberStack = [];
+    this.numberStack = 1;
     this.controller = new Controller();
-    for (var i = 30; i > 0; i--) {
-      this.numberStack.push(i);
-    }
     this.winners = [];
   }
 
@@ -144,11 +141,8 @@ class RuningGame {
     const phaseProp = this.gameStarted
       ? { ratio: this.curr_connected_users / this.num_of_participates }
       : { flag: false };
-    const curUser = new User(
-      gameKey,
-      this.getGroupNum(),
-      this.numberStack.pop()
-    );
+    const curUser = new User(gameKey, this.getGroupNum(), this.numberStack);
+    this.numberStack++;
     curUser.setConnection(connection);
     this.d_users[userID] = curUser;
     this.groups[curUser.group].participants++;
@@ -208,6 +202,7 @@ class RuningGame {
     } else if (this.curr_phase.type == "top3") {
       this.top3Users();
     } else if (this.curr_phase.type == "groups") this.topGroups();
+    else if (this.curr_phase.type === "goodBye") this.goodBye();
     else {
       for (key in this.d_users) {
         this.d_users[key].connection.send(
@@ -353,7 +348,9 @@ class RuningGame {
         })
       );
     }
-    this.winners = topUsers;
+    for (var index in topUsers) {
+      this.winners[index] = topUsers[index].userNumber;
+    }
   }
   /**
    * @param {Array[User]} topUsers - 3 top users in arr
@@ -368,6 +365,8 @@ class RuningGame {
     return users;
   }
   topGroups() {
+    this.groups[1].curr_score = Math.round(this.groups[1].curr_score);
+    this.groups[2].curr_score = Math.round(this.groups[2].curr_score);
     for (key in this.d_users) {
       this.d_users[key].connection.send(
         JSON.stringify({
@@ -470,10 +469,8 @@ class RuningGame {
           score: curUser.curr_score,
           gameKey: gameKey,
           group: curUser.group,
-          phase: "welcome",
-          phaseProp: {
-            ratio: this.curr_connected_users / this.num_of_participates,
-          },
+          phase: "default",
+          phaseProp: {},
         })
       );
       this.sendUserTable();
@@ -528,6 +525,25 @@ class RuningGame {
     this.groups[this.d_users[userID].group].participants--;
     this.d_users[userID].group = answer;
     this.groups[answer].participants++;
+  }
+  goodBye() {
+    var winner;
+    console.log(this.winners);
+    for (key in this.d_users) {
+      if (this.winners.indexOf(this.d_users[key].userNumber) > -1)
+        winner = true;
+      console.log(winner);
+      this.d_users[key].connection.send(
+        JSON.stringify({
+          type: PHASE,
+          phase: this.curr_phase.type,
+          phaseProp: { key: this.curr_phase.phaseProp.key, winner: winner },
+          score: this.d_users[key].curr_score,
+          group: this.d_users[key].group,
+        })
+      );
+      winner = false;
+    }
   }
 }
 module.exports = RuningGame;

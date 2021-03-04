@@ -34,7 +34,8 @@ const Bars = ({
   let imagesByResult = imagesSetter(
     Object.keys(distribution).length,
     correctAnswer,
-    userAnswer
+    userAnswer,
+    knowledge
   );
   let colorSet = [
     "#0ead69",
@@ -106,7 +107,6 @@ const Bars = ({
       <audio autoPlay>
         <source src={"assets/bars/" + audioKey + ".wav"} />
       </audio>
-      {console.log(audioKey)}
       <div dir="ltr" className="bottom-bars">
         <Bar
           data={data}
@@ -125,7 +125,7 @@ const Bars = ({
               labels: {
                 render: "image",
                 textMargin: 5,
-                images: imagesByResult,
+                images: knowledge ? imagesByResult : [],
               },
             },
             scales: {
@@ -164,7 +164,9 @@ const Bars = ({
   );
 };
 
-function imagesSetter(numOfAnswers, correctAnswer, userAnswer) {
+function imagesSetter(numOfAnswers, correctAnswer, userAnswer, knowledge) {
+  let def_size = 30;
+  // if (!knowledge) def_size = 0;
   let imagesByResult = [];
   for (let index = 0; index < numOfAnswers; index++) {
     if (index + 1 === userAnswer || index + 1 === correctAnswer) {
@@ -172,16 +174,16 @@ function imagesSetter(numOfAnswers, correctAnswer, userAnswer) {
         imagesByResult[index] = {
           //Wrong Answer
           src: incorrectSvg,
-          width: 30,
-          height: 30,
+          width: def_size,
+          height: def_size,
         };
       }
       if (correctAnswer === index + 1) {
         imagesByResult[index] = {
           //Correct Answer
           src: correctSvg,
-          width: 30,
-          height: 30,
+          width: def_size,
+          height: def_size,
         };
       }
     } else {

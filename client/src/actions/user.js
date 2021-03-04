@@ -1,4 +1,4 @@
-import { KEYGAME_FAIL } from "./types";
+import { KEYGAME_FAIL, PHASE } from "./types";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PATH, ServerPORT } from "../utils/ClientUtils";
 var client;
@@ -39,9 +39,8 @@ export const login = ({ number, gameKey }) => async (dispatch) => {
   }
 };
 
-//TODO MIGHT NEED =>async dispatch
 export const UserAnswer = (answerNum, time, quesNum) => async () => {
-  console.log(answerNum, time, quesNum);
+  // console.log(answerNum, time, quesNum);
   client.send(
     JSON.stringify({
       type: "USER_ANSWER",
@@ -52,12 +51,10 @@ export const UserAnswer = (answerNum, time, quesNum) => async () => {
   );
 };
 
-export const videoEnd = () => async () => {
-  client.send(
-    JSON.stringify({
-      type: "VIDEO_END",
-    })
-  );
+export const videoEnd = () => async (dispatch) => {
+  dispatch({
+    type: "GO_DEFUALT",
+  });
 };
 
 export const sendPicture = (imgSrc) => async () => {
