@@ -11,23 +11,37 @@ import { saveState } from "../../localStorage.js";
 
 const Game = ({ score, name, group, gameKey, login, isAuthenticated }) => {
   if (!isAuthenticated) {
-    return <Redirect to='/loginUser' />;
+    return <Redirect to="/loginUser" />;
   }
 
   saveState({ number: name, gameKey: gameKey });
 
   return (
     <div>
-      <div className='game-fullscreen'>
+      <div className="game-fullscreen">
         <Phase />
       </div>
-      <div className='bottomBar'>
-        <img alt='Your Score' className='game-icon' src={scoreLogo} />
-        <h1 className='game-text'>{score}</h1>
-        <img alt='Player Number' className='game-icon' src={playerNumLogo} />
-        <h1 className='game-text'>{name}</h1>
-        <img alt='Group' className='game-icon' src={groupLogo} />
-        <h1 className='game-text'>{group}</h1>
+      <div className="bottomBar">
+        <img alt="Player Number" className="game-icon" src={playerNumLogo} />
+        <h1 className="game-text" style={{ marginLeft: 6 }}>
+          מספר משתתף:
+        </h1>
+        <h1 className="game-text">{name}</h1>
+        <img alt="Your Score" className="game-icon" src={scoreLogo} />
+        <h1 className="game-text" style={{ marginLeft: 6 }}>
+          ניקודך:
+        </h1>
+        <h1 className="game-text">{score}</h1>
+
+        <img alt="Group" className="game-icon" src={groupLogo} />
+        <h1 className="game-text" style={{ marginLeft: 6 }}>
+          קבוצתך:
+        </h1>
+        <h1 className="game-text">{group}</h1>
+        <h1 className="game-text" style={{ marginLeft: 6 }}>
+          ניקוד קבוצתך:
+        </h1>
+        <h1 className="game-text">4526</h1>
       </div>
     </div>
   );
