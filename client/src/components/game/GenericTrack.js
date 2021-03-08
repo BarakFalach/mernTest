@@ -15,17 +15,7 @@ const GenericTrack = ({ mediaKey, paragraph }) => {
       }
     };
   }, []);
-  return (
-    <div className='generic-flexbox'>
-      <img
-        src={imagePath}
-        style={{ fontSize: "10px" }}
-        className='generic-image '
-        alt='not found'
-      />
-      <div className='generic-paragraph'>{paragraph}</div>
-    </div>
-  );
+  return <img src={imagePath} alt="not found" />;
 };
 GenericTrack.propTypes = {
   mediaKey: PropTypes.string.isRequired,

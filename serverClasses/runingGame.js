@@ -17,6 +17,8 @@ class RuningGame {
     this.phaseList = phaseList;
     this.gameDefenition = gameDefenition;
     this.nextPhase = 0;
+    this.showGroups = false;
+    this.showGroupScore = true;
     this.groups = {
       1: {
         participants: 0,
@@ -114,7 +116,9 @@ class RuningGame {
    */
   updateScoreForGroup(group, score) {
     if (this.groups[group].participants !== 0) {
-      this.groups[group].curr_score += score / this.groups[group].participants;
+      this.groups[group].curr_score += Math.round(
+        score / this.groups[group].participants
+      );
     }
   }
 
@@ -154,7 +158,7 @@ class RuningGame {
         name: curUser.userNumber,
         score: curUser.curr_score,
         gameKey: gameKey, //TODO:::  change this veriable in client
-        group: curUser.group,
+        group: this.showGroups ? curUser.group : 0,
         phase: phase,
         phaseProp: phaseProp,
       })
@@ -193,6 +197,7 @@ class RuningGame {
     } else {
       this.curr_phase = this.gameDefenition[phaseName];
     }
+    if (this.curr_phase.phaseProp.key === "174") this.showGroupScore = false;
     if (this.curr_phase.type == "question") {
       this.clean_arguments_for_question();
     }
@@ -211,7 +216,9 @@ class RuningGame {
             phase: this.curr_phase.type,
             phaseProp: this.curr_phase.phaseProp,
             score: this.d_users[key].curr_score,
-            group: this.d_users[key].group,
+            group: this.showGroups ? this.d_users[key].group : 0,
+            groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+            groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
           })
         );
       }
@@ -247,6 +254,8 @@ class RuningGame {
           ratio: this.curr_connected_users / this.num_of_participates,
         },
         score: this.d_users[key].curr_score,
+        groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+        groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
       })
     );
   }
@@ -273,6 +282,8 @@ class RuningGame {
             knowledge: this.curr_phase.phaseProp.knowledge,
           },
           score: this.d_users[key].curr_score,
+          groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+          groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
         })
       );
     }
@@ -345,6 +356,8 @@ class RuningGame {
             key: this.curr_phase.phaseProp.key,
           },
           score: this.d_users[key].curr_score,
+          groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+          groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
         })
       );
     }
@@ -378,6 +391,8 @@ class RuningGame {
             key: this.curr_phase.phaseProp.key,
           },
           score: this.d_users[key].curr_score,
+          groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+          groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
         })
       );
     }
@@ -410,6 +425,8 @@ class RuningGame {
               ratio: this.curr_connected_users / this.num_of_participates,
             },
             score: this.d_users[key].curr_score,
+            groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+            groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
           })
         );
       }
@@ -468,8 +485,8 @@ class RuningGame {
           name: curUser.userNumber,
           score: curUser.curr_score,
           gameKey: gameKey,
-          group: curUser.group,
-          phase: "default",
+          group: this.showGroups ? curUser.group : 0,
+          phase: "reconnect",
           phaseProp: {},
         })
       );
@@ -503,6 +520,8 @@ class RuningGame {
               flag: true,
             },
             score: this.d_users[key].curr_score,
+            groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+            groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
           })
         );
       }
@@ -522,6 +541,7 @@ class RuningGame {
     this.scheduler("goodbye");
   }
   groupQuestion(userID, answer) {
+    this.showGroups = true;
     this.groups[this.d_users[userID].group].participants--;
     this.d_users[userID].group = answer;
     this.groups[answer].participants++;
@@ -539,7 +559,9 @@ class RuningGame {
           phase: this.curr_phase.type,
           phaseProp: { key: this.curr_phase.phaseProp.key, winner: winner },
           score: this.d_users[key].curr_score,
-          group: this.d_users[key].group,
+          group: this.showGroups ? this.d_users[key].group : 0,
+          groupOne: this.showGroupScore ? this.groups[1].curr_score : 0,
+          groupTwo: this.showGroupScore ? this.groups[2].curr_score : 0,
         })
       );
       winner = false;

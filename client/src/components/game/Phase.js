@@ -13,6 +13,7 @@ import Welcome from "./Welcome";
 import GoodBye from "./GoodBye";
 import DefaultScreen from "./DefaultScreen";
 import GenericTrack from "./GenericTrack";
+import Reconnect from "./Reconnect";
 // import Goodbye from "./GoodBye";
 
 const Phase = ({ phase, keyOfPhase }) => {
@@ -39,6 +40,8 @@ const Phase = ({ phase, keyOfPhase }) => {
       return <GoodBye />;
     case "welcome":
       return <Welcome />;
+    case "reconnect":
+      return <Reconnect />;
     default:
       return <DefaultScreen />;
   }

@@ -10,6 +10,9 @@ const Goodbye = ({ winner }) => {
       {winner && <h1>כל הכובד את מנצח הכנס את הקוד לכתובת......</h1>}
       <div className="goodbye-label">תודה רבה שהשתתפתם,</div>
       <div className="goodbye-label">ניפגש בפעם הבאה !</div>
+      <a href={"https://forms.gle/hUZEis498EbyfF2W9"}>
+        אנא לחצו כאן על מנת למלא את הסקר{" "}
+      </a>
       <img
         style={{ marginTop: "3%" }}
         alt="mangerIcon"
