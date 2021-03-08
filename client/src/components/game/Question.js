@@ -258,7 +258,7 @@ class Question extends React.Component {
         let questDiv = (
           <button key={index} disabled={true} className={classNames[index]}>
             <div className='flexbox-row-single-ques'>
-              <div className={"numberCircle"}>{index + 1}</div>
+              <div className="numberCircle">{index + 1}</div>
               <div className='text-inside-ans'>{this.props.answers[index]}</div>
             </div>
           </button>

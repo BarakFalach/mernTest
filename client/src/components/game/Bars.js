@@ -8,35 +8,35 @@ import "chartjs-plugin-datalabels";
 import "chartjs-plugin-labels";
 import "../layouts/css/Bars.css";
 const Bars = ({
-  distribution,
-  correctAnswer,
-  correctTerm,
-  userAnswer,
-  audioKey,
-  knowledge,
-}) => {
-  const windowSize = useWindowSize();
-  let sentence;
-  if (correctAnswer === userAnswer) {
-    sentence = "כל הכבוד ! תשובתך נכונה.";
-  } else {
-    sentence = "טעית, בפעם הבאה תצליח";
-  }
-  let correctAns = (
-    <title style={{ display: "inline-block" }}>
-      התשובה הנכונה היא:{" "}
-      <title style={{ display: "inline-block", color: "green" }}>
-        {correctTerm}
-      </title>
-    </title>
-  );
-  let distributionPercent = castToPercent(distribution);
-  let imagesByResult = imagesSetter(
-    Object.keys(distribution).length,
+    distribution,
     correctAnswer,
+    correctTerm,
     userAnswer,
-    knowledge
-  );
+    audioKey,
+    knowledge,
+}) => {
+    const windowSize = useWindowSize();
+    let sentence;
+    if (correctAnswer === userAnswer) {
+        sentence = "כל הכבוד ! תשובתך נכונה.";
+    } else {
+        sentence = "טעית, בפעם הבאה תצליח";
+    }
+    let correctAns = (
+        <title style={{ display: "inline-block" }}>
+            התשובה הנכונה היא:{" "}
+            <title style={{ display: "inline-block", color: "green" }}>
+                {correctTerm}
+            </title>
+        </title>
+    );
+    let distributionPercent = castToPercent(distribution);
+    let imagesByResult = imagesSetter(
+        Object.keys(distribution).length,
+        correctAnswer,
+        userAnswer,
+        knowledge
+    );
   let colorSet = [
     "#0ead69",
     "#fdbd27",
@@ -132,8 +132,9 @@ const Bars = ({
               xAxes: [
                 {
                   display: true,
-                  ticks: {
-                    fontSize: 20,
+                      ticks: {
+                    reverse: true,
+                    fontSize: 16,
                     beginAtZero: true,
                   },
                   gridLines: {
@@ -209,6 +210,7 @@ function castToPercent(distribution) {
   });
   return distributionPercent;
 }
+
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
