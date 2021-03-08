@@ -1115,7 +1115,7 @@ gameDefenition["204"] = {
 // Top 3
 gameDefenition["207"] = {
   type: "top3",
-  duration: 23,
+  duration: 26,
   phaseProp: {
     key: "207",
   },

@@ -7,7 +7,12 @@ const Goodbye = ({ winner }) => {
   localStorage.removeItem("userState");
   return (
     <div className="wholescreen">
-      {winner && <h1>כל הכובד את מנצח הכנס את הקוד לכתובת......</h1>}
+      {winner && (
+        <h1>
+          כל הכבוד מבין כל המשתתפים קיבלת את הניקוד הגבוהה ביותר אראה למפעיל
+          המשחק את מסך זה.{" "}
+        </h1>
+      )}
       <div className="goodbye-label">תודה רבה שהשתתפתם,</div>
       <div className="goodbye-label">ניפגש בפעם הבאה !</div>
       <a href={"https://forms.gle/hUZEis498EbyfF2W9"}>

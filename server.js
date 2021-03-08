@@ -304,7 +304,8 @@ const handle_new_game_instance = (
     gameType,
     numOfParticipates,
     phaseList,
-    gameDefenition
+    gameDefenition,
+    gameKey
   );
   if (printLogs) {
     log_activeGames();

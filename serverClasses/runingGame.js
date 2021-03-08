@@ -10,8 +10,16 @@ const Controller = require("./controller");
 fs = require("fs");
 
 class RuningGame {
-  constructor(admin, gameType, numOfParticipates, phaseList, gameDefenition) {
+  constructor(
+    admin,
+    gameType,
+    numOfParticipates,
+    phaseList,
+    gameDefenition,
+    gameKey
+  ) {
     this.admin = admin;
+    this.gameKey = gameKey;
     this.gameStarted = false;
     this.game_type = gameType; //TODO:: what is gameType
     this.phaseList = phaseList;
