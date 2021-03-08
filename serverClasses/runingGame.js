@@ -45,6 +45,7 @@ class RuningGame {
     this.numberStack = 1;
     this.controller = new Controller();
     this.winners = [];
+    this.questionCounter = 1;
   }
 
   /** This function change the next group num
@@ -71,16 +72,6 @@ class RuningGame {
       this.archive_user_dict[item].last_answer = 0;
     }
     this.d_users_answers = [];
-    if (questionPhase) {
-      this.knowledge_question_dist[0] =
-        this.curr_connected_users -
-        this.sumValues(this.knowledge_question_dist);
-      const curQuestionDist = {
-        questionName: questionPhase.phaseProp.key,
-        distrebution: this.knowledge_question_dist,
-      };
-      this.gameResult.push(curQuestionDist);
-    }
   }
 
   /** this function sum the values of a given dict */
@@ -190,8 +181,10 @@ class RuningGame {
   /** time the next phase to be loaded to the uswers */
   handle_change_screen(phaseName = null) {
     if (phaseName == null) {
-      if (this.curr_phase.type === "question")
+      if (this.curr_phase.type === "question") {
         this.updateScoreForUsers(this.curr_phase);
+        this.pushToResult();
+      }
       this.curr_phase = this.gameDefenition[this.phaseList[this.nextPhase]];
       phaseName = this.curr_phase.phaseProp.key;
     } else {
@@ -500,7 +493,7 @@ class RuningGame {
       }
 
       // write CSV to a file
-      fs.writeFileSync("todos.csv", csv);
+      fs.writeFileSync(this.gameKey + ".csv", csv);
     });
   }
   admin_re_enter() {
@@ -566,6 +559,16 @@ class RuningGame {
       );
       winner = false;
     }
+  }
+  pushToResult() {
+    this.knowledge_question_dist[0] =
+      this.curr_connected_users - this.sumValues(this.knowledge_question_dist);
+    const curQuestionDist = {
+      questionName: this.questionCounter,
+      distrebution: this.knowledge_question_dist,
+    };
+    this.questionCounter++;
+    this.gameResult.push(curQuestionDist);
   }
 }
 module.exports = RuningGame;
