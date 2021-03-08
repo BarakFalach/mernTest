@@ -1,6 +1,7 @@
 .bottomBar {
   position: fixed;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   width: 100%;
   bottom: 0%;
@@ -15,10 +16,10 @@
   margin-left: 1%;
 }
 .game-text {
-  font-family: Montserrat;
+  /* font-family: Montserrat; */
   height: 50%;
-  font-weight: bold;
-  font-size: 5vh;
+  /* font-weight: bold; */
+  font-size: 4vh;
   line-height: 8vh;
   color: #273043;
   margin-left: 3%;
