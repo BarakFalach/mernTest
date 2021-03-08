@@ -41,9 +41,15 @@ class Top3 extends React.Component {
 			secondPlace: false,
 			thirdPlace: false,
 
-			firstAudio: 'assets/top3/first.wav',
-			secondAudio: 'assets/top3/second.wav',
-			thirdAudio: 'assets/top3/third.wav',
+			firstAudio: 'assets/top3/'+props.phaseKey+'/first.wav',
+			secondAudio: 'assets/top3/'+props.phaseKey+'/second.wav',
+			thirdAudio: 'assets/top3/'+props.phaseKey+'/third.wav',
+
+			topPhases: {
+				69: {3: 3, 2: 1 ,1: 2},
+				152: {3: 3, 2: 1,1: 1},
+				207: {3: 6, 2: 1 ,1: 2}
+			},
 		};
 		this.upWinDim = this.updateWindowDimensions.bind(this);
 	}
@@ -70,19 +76,19 @@ class Top3 extends React.Component {
 		this.setStatePromise({ third: false })
 			.then(() => this.sleep(1000))
 			.then(() => this.setStatePromise({ thirdPlace: true }))
-			.then(() => this.sleep(4900))
+			.then(() => this.sleep((this.state.topPhases[this.props.phaseKey][3] + 1) * 1000))
 			.then(() =>
 				this.setStatePromise({ thirdPlace: false, third: true, place: 3 })
 			)
 			.then(() => this.sleep(2000))
 			.then(() => this.setStatePromise({ third: false, secondPlace: true }))
-			.then(() => this.sleep(1800))
+			.then(() => this.sleep((this.state.topPhases[this.props.phaseKey][2] + 1) * 1000))
 			.then(() =>
 				this.setStatePromise({ secondPlace: false, second: true, place: 2 })
 			)
 			.then(() => this.sleep(2000))
 			.then(() => this.setStatePromise({ second: false, firstPlace: true }))
-			.then(() => this.sleep(2000))
+			.then(() => this.sleep((this.state.topPhases[this.props.phaseKey][1] + 1) * 1000))
 			.then(() =>
 				this.setStatePromise({ firstPlace: false, first: true, place: 1 })
 			)
@@ -138,7 +144,7 @@ class Top3 extends React.Component {
 		return (
 			<div className="unscroll-y">
 				<div>
-					<SpotlightTop coor={this.getCoordinatesTop} />
+					<SpotlightTop coor={this.getCoordinatesTop} keyP={this.props.phaseKey} />
 					{this.state.third && (
 						<audio autoPlay>
 							<source src={this.state.audio3} />
@@ -267,6 +273,7 @@ class Top3 extends React.Component {
 
 const mapStateToProps = (state) => ({
 	users: state.user.userState.phaseProp.users,
+	phaseKey: state.user.userState.phaseProp.key,
 });
 
 export default connect(mapStateToProps, {})(Top3);
