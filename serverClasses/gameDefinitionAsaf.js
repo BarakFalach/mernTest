@@ -1,7 +1,7 @@
 //const audioUrl = 'https://www.dropbox.com/s/sggi2zxzwfnur5w/sasfa.wav?raw=1';
 
 const gameDefenition = {};
-const clockTime = 6;
+const clockTime = 5;
 const questionOffset = 1.5;
 const barsOffset = 1;
 const videoOffset = 5;
@@ -30,7 +30,7 @@ const videosDict = {
   16: { link: "https://vimeo.com/517081812", duration: 22.08 },
   17: { link: "https://vimeo.com/517081839", duration: 14.28 },
   18: { link: "https://vimeo.com/517081872", duration: 7.8 },
-  19: { link: "https://vimeo.com/517081892", duration: 15.88 },
+  19: { link: "https://vimeo.com/519959442", duration: 68.36 },
   20: { link: "https://vimeo.com/517081916", duration: 52.48 },
 };
 
@@ -47,19 +47,19 @@ gameDefenition["1"] = {
 // Check Question (phases 2A-2B)
 gameDefenition["2"] = {
   type: "question",
-  duration: 10.34 + clockTime + questionOffset,
+  duration: 9.93 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "2",
     question: "מה שלומכם היום?",
     answers: ["מצב רוח טוב", "מצב רוח פחות טוב"],
-    time: clockTime,
+    time: 4,
   },
 };
 //rename from 2.5 -> to 3
 gameDefenition["3"] = {
   type: "bars",
-  duration: 4.24 + barsOffset,
+  duration: 4.21 + barsOffset,
   phaseProp: {
     key: "3",
     knowledge: false,
@@ -98,57 +98,57 @@ gameDefenition["20"] = {
   duration: 2.2 + genericOffset,
   phaseProp: {
     key: "20",
-    paragraph: "אני מזכיר לכם שזהותכם חסויה",
+    // paragraph: "אני מזכיר לכם שזהותכם חסויה",
   },
 };
 
 gameDefenition["21"] = {
   type: "question",
-  duration: 11.68 + clockTime + questionOffset,
+  duration: 11.68 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "21",
     question:
       "האם  אי פעם השתמשת בסם הקנאביס המכונה גם מריחואנה, גראס, ג'וינט, וויד ",
     answers: ["מעולם לא", "פעם בודדת", "פעמים בודדות (3-5)", "יותר מחמש פעמים"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["23"] = {
   type: "question",
-  duration: 12.37 + clockTime + questionOffset,
+  duration: 8.22 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "23",
     question:
       "האם אי פעם השתמשת בחומרים נדיפים כמו גז מזגנים, גז קצפות, דלק בכדי להתמסטל?",
     answers: ["מעולם לא", "פעם בודדת", "פעמים בודדות (3-5)", "יותר מחמש פעמים"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["25"] = {
   type: "question",
-  duration: 10.9 + clockTime + questionOffset,
+  duration: 6.76 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "25",
     question:
       "האם אי פעם השתמשת בסמי פיצוציות, אקסטזי, הרואין, קוקאין או תרופות מרשם?",
     answers: ["מעולם לא", "פעם בודדת", "פעמים בודדות (3-5)", "יותר מחמש פעמים"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["29"] = {
   type: "question",
-  duration: 8.46 + clockTime + questionOffset,
+  duration: 7.74 + clockTime + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "29",
     question: "כמה מסוכן לבני בנות גילכם להשתמש בסמים?",
-    answers: ["אין סיכוי", "סיכוי נמוך", "סיכון בינוני", "סיכון גבוה"],
+    answers: ["אין סיכון", "סיכון נמוך", "סיכון בינוני", "סיכון גבוה"],
     time: clockTime,
   },
 };
@@ -223,7 +223,7 @@ gameDefenition["45"] = {
 // Grouping - לאיזו קבוצה אתה משתייך?
 gameDefenition["57"] = {
   type: "question",
-  duration: 9.74 + clockTime + questionOffset,
+  duration: 9.47 + clockTime + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "57",
@@ -231,6 +231,17 @@ gameDefenition["57"] = {
     answers: ["קבוצת הבנים", "קבוצת הבנות"],
     time: clockTime,
   },
+};
+
+//NO AUDIO
+gameDefenition["58"] = {
+  type: "bars",
+  duration: 3 + barsOffset,
+  phaseProp: {
+    key: "58",
+    knowledge: false,
+  },
+  questionKey: "57",
 };
 
 // TODO: "grouping-2 ???";
@@ -247,12 +258,20 @@ gameDefenition["57"] = {
 
 TODO: "add movie 4";
 // Movie 4 (phases 59)
+// gameDefenition["59"] = {
+//   type: "video",
+//   duration: videosDict[4].duration + videoOffset,
+//   phaseProp: {
+//     key: "59",
+//     videoUrl: videosDict[4].link,
+//   },
+// };
+
 gameDefenition["59"] = {
-  type: "video",
-  duration: videosDict[4].duration + videoOffset,
+  type: "generic",
+  duration: 5.77 + genericOffset,
   phaseProp: {
     key: "59",
-    videoUrl: videosDict[4].link,
   },
 };
 
@@ -273,24 +292,31 @@ gameDefenition["60"] = {
   },
 };
 
-//inserted bars no audio
-// gameDefenition["61"] = {
-//   type: "bars",
-//   duration: 3,
+gameDefenition["61"] = {
+  type: "bars",
+  duration: 2.11 + barsOffset,
+  phaseProp: {
+    key: "61",
+  },
+  questionKey: "60",
+};
+
+// TODO: "add movie 5";
+// // Movie 5 (phases 62)
+// gameDefenition["62"] = {
+//   type: "video",
+//   duration: videosDict[5].duration + videoOffset,
 //   phaseProp: {
-//     key: "61",
+//     key: "62",
+//     videoUrl: videosDict[5].link,
 //   },
-//   questionKey: "60",
 // };
 
-TODO: "add movie 5";
-// Movie 5 (phases 62)
 gameDefenition["62"] = {
-  type: "video",
-  duration: videosDict[5].duration + videoOffset,
+  type: "generic",
+  duration: 8.5 + genericOffset,
   phaseProp: {
     key: "62",
-    videoUrl: videosDict[5].link,
   },
 };
 
@@ -311,20 +337,28 @@ gameDefenition["63"] = {
   },
 };
 
-//was audio 63, changed to 65
-gameDefenition["65"] = {
+//was audio 63, changed to 64
+gameDefenition["64"] = {
   type: "bars",
-  duration: 9.42 + barsOffset,
+  duration: 1.58 + barsOffset,
   phaseProp: {
-    key: "65",
+    key: "64",
     knowledge: true,
   },
   questionKey: "63",
 };
 
+gameDefenition["65"] = {
+  type: "generic",
+  duration: 7.98 + genericOffset,
+  phaseProp: {
+    key: "65",
+  },
+};
+
 gameDefenition["66"] = {
   type: "question",
-  duration: 9.42 + clockTime + questionOffset,
+  duration: 8.81 + clockTime + questionOffset,
   correct_answer: 4,
   phaseProp: {
     key: "66",
@@ -339,24 +373,31 @@ gameDefenition["66"] = {
   },
 };
 
-// //inserted bars no audio
-// gameDefenition["67"] = {
-//   type: "bars",
-//   duration: 3,
-//   phaseProp: {
-//     key: "67",
-//   },
-//   questionKey: "66",
-// };
+gameDefenition["67"] = {
+  type: "bars",
+  duration: 1.48 + barsOffset,
+  phaseProp: {
+    key: "67",
+  },
+  questionKey: "66",
+};
 
 TODO: "add movie 6";
 // Movie 6 (phases 68)
+// gameDefenition["68"] = {
+//   type: "video",
+//   duration: videosDict[6].duration + videoOffset,
+//   phaseProp: {
+//     key: "68",
+//     videoUrl: videosDict[6].link,
+//   },
+// };
+
 gameDefenition["68"] = {
-  type: "video",
-  duration: videosDict[6].duration + videoOffset,
+  type: "generic",
+  duration: 8.32 + genericOffset,
   phaseProp: {
     key: "68",
-    videoUrl: videosDict[6].link,
   },
 };
 
@@ -373,11 +414,9 @@ gameDefenition["69"] = {
 // Generic
 gameDefenition["70"] = {
   type: "generic",
-  duration: 10.12,
+  duration: 10.65 + genericOffset,
   phaseProp: {
     key: "70",
-    paragraph:
-      "שימו לב שהמיקום בטבלה הוא ביטוי למספר התשובות הנכונות שכל אחת ואחד מכם ענה והמהירות בה התשובה ניתנה. המהיר יותר מקבל כפל נקודות",
   },
 };
 
@@ -418,26 +457,33 @@ gameDefenition["99"] = {
   },
 };
 
-//inserted bars no audio
-// gameDefenition["100"] = {
-//   type: "bars",
-//   duration: 3,
-//   phaseProp: {
-//     key: "100",
-//   },
-//   questionKey: "99",
-// };
+gameDefenition["100"] = {
+  type: "bars",
+  duration: 1.6 + barsOffset,
+  phaseProp: {
+    key: "100",
+  },
+  questionKey: "99",
+};
+
+gameDefenition["101"] = {
+  type: "generic",
+  duration: 10.87 + genericOffset,
+  phaseProp: {
+    key: "101",
+  },
+};
 
 TODO: "fix";
 // Movie 8 (phases 101)
-gameDefenition["101"] = {
-  type: "video",
-  duration: videosDict[8].duration + videoOffset,
-  phaseProp: {
-    key: "101",
-    videoUrl: videosDict[8].link,
-  },
-};
+// gameDefenition["101"] = {
+//   type: "video",
+//   duration: videosDict[8].duration + videoOffset,
+//   phaseProp: {
+//     key: "101",
+//     videoUrl: videosDict[8].link,
+//   },
+// };
 
 gameDefenition["102"] = {
   type: "question",
@@ -459,7 +505,7 @@ gameDefenition["102"] = {
 
 gameDefenition["104"] = {
   type: "bars",
-  duration: 17.9 + barsOffset,
+  duration: 3.34 + barsOffset,
   phaseProp: {
     key: "104",
     knowledge: true,
@@ -470,24 +516,24 @@ gameDefenition["104"] = {
 TODO: "fix";
 //changed 104 -> 105
 // Movie 9 (phases 104 - 110)
-gameDefenition["105"] = {
-  type: "video",
-  duration: videosDict[9].duration + videoOffset,
-  phaseProp: {
-    key: "105",
-    videoUrl: videosDict[9].link,
-  },
-};
+// gameDefenition["105"] = {
+//   type: "video",
+//   duration: videosDict[9].duration + videoOffset,
+//   phaseProp: {
+//     key: "105",
+//     videoUrl: videosDict[9].link,
+//   },
+// };
 
 gameDefenition["111"] = {
   type: "question",
-  duration: 7.43 + clockTime + questionOffset,
+  duration: 7.43 + 3 + questionOffset,
   correct_answer: 2,
   phaseProp: {
     key: "111",
-    question: "סמים שמיוצרים מגידולי טבע ולא מכימקלים במעבדה הם בריאים ובטוחים",
+    question: "סמים המיוצרים מגידולי טבע ולא מכימקלים במעבדה הם בריאים ובטוחים",
     answers: ["אמת", "פייק"],
-    time: clockTime,
+    time: 3,
   },
 };
 
@@ -503,84 +549,101 @@ gameDefenition["113"] = {
 
 gameDefenition["114"] = {
   type: "question",
-  duration: 5.23 + clockTime + questionOffset,
+  duration: 5.23 + 3 + questionOffset,
   correct_answer: 2,
   phaseProp: {
     key: "114",
     question: "עישון ג'ינט מזיק באותה מידה כמו עישון סיגריה רגילה",
     answers: ["אמת", "פייק"],
-    time: clockTime,
+    time: 3,
   },
 };
 
 //inserted bars no audio
-// gameDefenition["115"] = {
-//   type: "bars",
-//   duration: 3,
-//   phaseProp: {
-//     key: "115",
-//   },
-//   questionKey: "114",
-// };
+gameDefenition["115"] = {
+  type: "bars",
+  duration: 1.5 + barsOffset,
+  phaseProp: {
+    key: "115",
+    knowledge: true,
+  },
+  questionKey: "114",
+};
 
-// Movie 10 (phases 116)
 gameDefenition["116"] = {
-  type: "video",
-  duration: videosDict[10].duration + videoOffset,
+  type: "generic",
+  duration: 8.45 + genericOffset,
   phaseProp: {
     key: "116",
-    videoUrl: videosDict[10].link,
   },
 };
 
+// Movie 10 (phases 116)
+// gameDefenition["116"] = {
+//   type: "video",
+//   duration: videosDict[10].duration + videoOffset,
+//   phaseProp: {
+//     key: "116",
+//     videoUrl: videosDict[10].link,
+//   },
+// };
+
 gameDefenition["117"] = {
   type: "question",
-  duration: 13.65 + clockTime + questionOffset,
+  duration: 8.58 + 3 + questionOffset,
   correct_answer: 2,
   phaseProp: {
     key: "117",
     question:
       "סם הקנאביס (המכונה גם מריחואנה, גראס, וויד ועוד) אינו ממכר ולכן אינו באמת מזיק",
     answers: ["אמת", "פייק"],
-    time: clockTime,
+    time: 3,
   },
 };
 
-//inserted bars no audio
-// gameDefenition["118"] = {
-//   type: "bars",
-//   duration: 3,
-//   phaseProp: {
-//     key: "118",
-//   },
-//   questionKey: "117",
-// };
+gameDefenition["118"] = {
+  type: "bars",
+  duration: 1.5 + barsOffset,
+  phaseProp: {
+    key: "118",
+    knowledge: true,
+  },
+  questionKey: "117",
+};
 
-// Movie 11 (phases 119)
 gameDefenition["119"] = {
-  type: "video",
-  duration: videosDict[11].duration + videoOffset,
+  type: "generic",
+  duration: 11.18 + genericOffset,
   phaseProp: {
     key: "119",
-    videoUrl: videosDict[11].link,
   },
 };
+
+// Movie 11 (phases 119)
+// gameDefenition["119"] = {
+//   type: "video",
+//   duration: videosDict[11].duration + videoOffset,
+//   phaseProp: {
+//     key: "119",
+//     videoUrl: videosDict[11].link,
+//   },
+// };
 
 gameDefenition["120"] = {
   type: "question",
-  duration: 6.44 + clockTime + questionOffset,
+  duration: 6.44 + 3 + questionOffset,
   correct_answer: 1,
   phaseProp: {
     key: "120",
     question: "שימוש בקנאביס עלול לפגוע בתפקוד המיני והפוריות של בני הנוער",
     answers: ["אמת", "פייק"],
-    time: clockTime,
+    time: 3,
   },
 };
 
 gameDefenition["121"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "121",
     knowledge: true,
@@ -590,19 +653,19 @@ gameDefenition["121"] = {
 
 gameDefenition["123"] = {
   type: "question",
-  duration: 6.44 + clockTime + questionOffset,
+  duration: 5.81 + 3 + questionOffset,
   correct_answer: 1,
   phaseProp: {
     key: "123",
     question: "השפעת הקנאביס על מבוגרים אינה זהה להשפעה על בני נוער",
     answers: ["אמת", "פייק"],
-    time: clockTime,
+    time: 3,
   },
 };
 
 gameDefenition["125"] = {
   type: "bars",
-  duration: 7,
+  duration: 3.41 + barsOffset,
   phaseProp: {
     key: "125",
     knowledge: true,
@@ -641,7 +704,7 @@ gameDefenition["153"] = {
 // Generic
 gameDefenition["154"] = {
   type: "generic",
-  duration: 5.8 + genericOffset,
+  duration: 5.4 + genericOffset,
   phaseProp: {
     key: "154",
     paragraph:
@@ -666,25 +729,34 @@ gameDefenition["155"] = {
   },
 };
 
-//inserted bars no audio
-// gameDefenition["156"] = {
-//   type: "bars",
-//   duration: 3,
-//   phaseProp: {
-//     key: "156",
-//   },
-//   questionKey: "155",
-// };
+//inserted bars
+gameDefenition["156"] = {
+  type: "bars",
+  duration: 1.51 + barsOffset,
+  phaseProp: {
+    key: "156",
+    knowledge: true,
+  },
+  questionKey: "155",
+};
 
-// Movie 13 (phase 157)
 gameDefenition["157"] = {
-  type: "video",
-  duration: videosDict[13].duration + videoOffset,
+  type: "generic",
+  duration: 10.8 + genericOffset,
   phaseProp: {
     key: "157",
-    videoUrl: videosDict[13].link,
   },
 };
+
+// Movie 13 (phase 157)
+// gameDefenition["157"] = {
+//   type: "video",
+//   duration: videosDict[13].duration + videoOffset,
+//   phaseProp: {
+//     key: "157",
+//     videoUrl: videosDict[13].link,
+//   },
+// };
 
 gameDefenition["158"] = {
   type: "question",
@@ -732,7 +804,7 @@ gameDefenition["161"] = {
 
 gameDefenition["163"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "163",
     knowledge: true,
@@ -756,7 +828,6 @@ gameDefenition["165"] = {
   duration: 4.98 + genericOffset,
   phaseProp: {
     key: "165",
-    paragraph: "בין 1 ל-4, עד כמה אתה מסכימים או לא מסכימים עם המשפטים האלה",
   },
 };
 
@@ -765,20 +836,20 @@ gameDefenition["165"] = {
 
 gameDefenition["166"] = {
   type: "question",
-  duration: 7.65 + clockTime + questionOffset,
+  duration: 7.65 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "166",
     question: "כל סם עלול להיות מסוכן",
     answers: ["לא מסכים בכלל", "לא כל כך מסכים", "די מסכים", "מסכים בהחלט"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 //survey Bars
 gameDefenition["167"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "167",
     knowledge: false,
@@ -788,20 +859,20 @@ gameDefenition["167"] = {
 
 gameDefenition["168"] = {
   type: "question",
-  duration: 9.7 + clockTime + questionOffset,
+  duration: 5.1 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "168",
     question: "מי שמשתמש בסמים פוגע רק בעצמו ואינו פוגע באחרים",
     answers: ["לא מסכים בכלל", "לא כל כך מסכים", "די מסכים", "מסכים בהחלט"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 //survey Bars
 gameDefenition["169"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "169",
     knowledge: false,
@@ -811,20 +882,20 @@ gameDefenition["169"] = {
 
 gameDefenition["170"] = {
   type: "question",
-  duration: 10.11 + clockTime + questionOffset,
+  duration: 5.57 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "170",
     question: "אני לא אשתמש בסם כלשהו אם אדע שהוא יגרום לי נזק גופני ונפשי",
     answers: ["לא מסכים בכלל", "לא כל כך מסכים", "די מסכים", "מסכים בהחלט"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 //survey Bars
 gameDefenition["171"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "171",
     knowledge: false,
@@ -834,20 +905,20 @@ gameDefenition["171"] = {
 
 gameDefenition["172"] = {
   type: "question",
-  duration: 8.32 + clockTime + questionOffset,
+  duration: 3.78 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "172",
     question: "זה  לא ענייני אם חברים שלי משתמשים בסמים",
     answers: ["לא מסכים בכלל", "לא כל כך מסכים", "די מסכים", "מסכים בהחלט"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 //survey Bars
 gameDefenition["173"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "173",
     knowledge: false,
@@ -880,7 +951,7 @@ gameDefenition["177"] = {
 
 gameDefenition["179"] = {
   type: "bars",
-  duration: 3,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "179",
     knowledge: true,
@@ -903,7 +974,7 @@ gameDefenition["180"] = {
 
 gameDefenition["182"] = {
   type: "bars",
-  duration: 7,
+  duration: 1.5 + barsOffset,
   phaseProp: {
     key: "182",
     knowledge: true,
@@ -925,19 +996,19 @@ gameDefenition["183"] = {
 
 gameDefenition["184"] = {
   type: "question",
-  duration: 8.46 + clockTime + questionOffset,
+  duration: 7.74 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "184",
     question: "כמה מסוכן לבני בנות גילכם להשתמש בסמים?",
     answers: ["אין סיכוי", "סיכוי נמוך", "סיכון בינוני", "סיכון גבוה"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["192"] = {
   type: "question",
-  duration: 7.7 + clockTime + questionOffset,
+  duration: 7.7 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "192",
@@ -948,62 +1019,62 @@ gameDefenition["192"] = {
       "נעשים עצובים",
       "על כל אחד זה משפיע באופן שונה",
     ],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["194"] = {
   type: "question",
-  duration: 9.69 + clockTime + questionOffset,
+  duration: 9.69 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "194",
     question: "כמה זמן משפיע סם הקאנביס על גוף האדם?",
     answers: ["פחות מ-8 שעות", "עד ל-24 שעות", "עד 7 ימים", "עד 30 יום"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["196"] = {
   type: "question",
-  duration: 4.81 + clockTime + questionOffset,
+  duration: 4.81 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "196",
     question: "האם בכוונתכם לצרוך קנאביס בעתיד?",
     answers: ["כן", "אולי", "לא"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["198"] = {
   type: "question",
-  duration: 10.02 + clockTime + questionOffset,
+  duration: 10.02 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "198",
     question:
-      "אם תדעו שאחיכם או אחותכם משתמשים בקאנביס האם תחששו שזה עלול לפגוע בקשר שלו עם הוריכם?",
+      "אם תדעו שאחד האחים שלכם משתמש בקאנביס האם תחששו שזה יפגע בקשר שלו עם הוריכם?",
     answers: ["לא", "אולי", "בהחלט כן"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["200"] = {
   type: "question",
-  duration: 6.87 + clockTime + questionOffset,
+  duration: 6.87 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "200",
     question: "האם קיבלתם מידע שלא היה ידוע לכם קודם לכן בפעילות זו?",
     answers: ["לא", "מעט", "הרבה"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["202"] = {
   type: "question",
-  duration: 9.1 + clockTime + questionOffset,
+  duration: 9.1 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "202",
@@ -1014,32 +1085,32 @@ gameDefenition["202"] = {
       "ההתנגדות שלי גברה",
       "ההתנגדות שלי גברה מאוד",
     ],
-    time: clockTime,
+    time: 4,
   },
 };
 
 gameDefenition["204"] = {
   type: "question",
-  duration: 8.86 + clockTime + questionOffset,
+  duration: 8.86 + 4 + questionOffset,
   correct_answer: -1,
   phaseProp: {
     key: "204",
     question:
       "האם אתם חושבים שעיסוק בנושאים משמעותיים לצעירים באמצעות חוויה כמו זו היא מעניינת?",
     answers: ["כן", "קצת", "לא"],
-    time: clockTime,
+    time: 4,
   },
 };
 
 // Movie 18 (phase 206)
-gameDefenition["206"] = {
-  type: "video",
-  duration: videosDict[18].duration + videoOffset,
-  phaseProp: {
-    key: "206",
-    videoUrl: videosDict[18].link,
-  },
-};
+// gameDefenition["206"] = {
+//   type: "video",
+//   duration: videosDict[18].duration + videoOffset,
+//   phaseProp: {
+//     key: "206",
+//     videoUrl: videosDict[18].link,
+//   },
+// };
 
 // Top 3
 gameDefenition["207"] = {
@@ -1071,14 +1142,14 @@ gameDefenition["209"] = {
 };
 
 // Movie 20 (phase 210 - 215)
-gameDefenition["210"] = {
-  type: "video",
-  duration: videosDict[20].duration + videoOffset,
-  phaseProp: {
-    key: "210",
-    videoUrl: videosDict[20].link,
-  },
-};
+// gameDefenition["210"] = {
+//   type: "video",
+//   duration: videosDict[20].duration + videoOffset,
+//   phaseProp: {
+//     key: "210",
+//     videoUrl: videosDict[20].link,
+//   },
+// };
 
 // Goodbye
 gameDefenition["goodbye"] = {

@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Vimeo from "@u-wave/react-vimeo";
 import useWindowDimensions from "./windeoResize";
 import { videoEnd } from "../../actions/user";
 import "../layouts/css/Video.css";
+import { url } from "gravatar";
 
 const Video = ({ videoUrl, videoEnd }) => {
   const { height, width } = useWindowDimensions();
+  const [isVideoEnd, setVideoEnd] = useState(false);
 
-  const onVideoEnd = () => videoEnd();
+  const onVideoEnd = () => {
+    setVideoEnd(true);
+  };
 
+  if (isVideoEnd) {
+    return <img src={"assets/video/afterVideo.png"}></img>;
+  }
   return (
     <div className="video">
       <Vimeo
