@@ -34,6 +34,11 @@ export default class SpotlightTop extends React.Component {
       width: 0,
       height: 0,
       placeText: ".playr-third",
+      topPhases: {
+				69: {3: 3, 2: 1 ,1: 2},
+				152: {3: 3, 2: 1,1: 1},
+				207: {3: 6, 2: 1 ,1: 2}
+			},
     };
     this.start = this.start.bind(this);
     this.upWinDim = this.updateWindowDimensions.bind(this);
@@ -79,7 +84,7 @@ export default class SpotlightTop extends React.Component {
       ...this.getCoordinates(".playr-third"),
       placeText: ".playr-third",
     })
-      .then(() => this.sleep(5900))
+      .then(() => this.sleep((this.state.topPhases[this.props.keyP][3] + 1) * 1000))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-third"),
@@ -89,7 +94,8 @@ export default class SpotlightTop extends React.Component {
           starting: true,
         })
       )
-      .then(() => this.sleep(3800))
+      .then(() => this.sleep(2000))
+      .then(() => this.sleep((this.state.topPhases[this.props.keyP][2] + 1) * 1000))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-second"),
@@ -97,7 +103,8 @@ export default class SpotlightTop extends React.Component {
           placeText: ".playr-second",
         })
       )
-      .then(() => this.sleep(4000))
+      .then(() => this.sleep(2000))
+      .then(() => this.sleep((this.state.topPhases[this.props.keyP][1] + 1) * 1000))
       .then(() =>
         this.setStatePromise({
           ...this.getCoordinates(".playr-first"),
